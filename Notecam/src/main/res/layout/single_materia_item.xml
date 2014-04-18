@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+        <FrameLayout
+            android:layout_width="145dp"
+            android:layout_height="155dp"
+            android:background="@drawable/album"
+            android:layout_centerInParent="true"
+            android:id="@+id/frameLayout">
+
+            <ImageView
+                android:src="@drawable/ma"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="18dp"
+                android:paddingTop="30dp"
+                android:paddingLeft="15dp"
+                android:background="@drawable/color_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/letra_inicial_image"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="5dp"
+            android:text="Matemática"
+            android:textColor="@color/text_color"
+            android:id="@+id/materia_nome_text"
+            android:layout_below="@+id/frameLayout"
+            android:layout_centerHorizontal="true"
+            android:textSize="22sp"
+            android:textStyle="bold|italic"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="3dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:text="3 fotos"
+            android:background="@drawable/oval_background"
+            android:textColor="@color/white"
+            android:id="@+id/materia_numero_fotos_text"
+            android:layout_below="@+id/frameLayout"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:textStyle="bold|italic"
+            android:layout_gravity="center" />
+        </LinearLayout>
+
+</RelativeLayout>
