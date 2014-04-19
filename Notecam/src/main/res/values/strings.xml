@@ -5,6 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_add_materia">Add Materia</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navigation_drawer_open">abrir menu</string>
+    <string name="navigation_drawer_close">fechar menu</string>
+    <string name="materias">Materias</string>
     <string-array name="letra">
         <item>A</item>
         <item>B</item>

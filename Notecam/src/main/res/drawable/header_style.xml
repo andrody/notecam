@@ -11,7 +11,7 @@
     <!-- Color of your action bar -->
     <item android:bottom="4dip">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/background_light" />
+            <solid android:color="@color/background_header" />
         </shape>
     </item>
 </layer-list>

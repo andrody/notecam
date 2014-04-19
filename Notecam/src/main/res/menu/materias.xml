@@ -6,12 +6,6 @@
     <item android:id="@+id/add_materia"
         android:title="@string/action_add_materia"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_action_new"
         app:showAsAction="ifRoom" />
-
-    <item android:id="@+id/call_menu"
-        android:title="Menu"
-        android:orderInCategory="0"
-        android:icon="@drawable/ic_menu"
-        app:showAsAction="always" />
 </menu>
