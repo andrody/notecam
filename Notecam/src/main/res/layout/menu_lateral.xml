@@ -3,11 +3,120 @@
     android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="@android:color/background_dark"
+    android:background="@color/background_menu"
     android:orientation="vertical"
-    android:padding="5dp" >
+     >
 
-    <TextView
+    <!-- Opção 1 - Materias -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_folder" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/materias"
+            android:textColor="@color/white"
+            android:textSize="22dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <include layout="@layout/separador_menu"/>
+
+    <!-- Opção 1 - EXPORTAR -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_salvar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/exportar_tudo"
+            android:textColor="@color/white"
+            android:textSize="22dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <include layout="@layout/separador_menu"/>
+
+    <!-- Opção 4 - Sobre -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sobre" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_us"
+            android:textColor="@color/white"
+            android:textSize="22dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+    <include layout="@layout/separador_menu"/>
+
+    <!-- Opção 1 - Premium -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_premium" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/versao_premium"
+            android:textColor="@color/white"
+            android:textSize="22dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <include layout="@layout/separador_menu"/>
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logo_koruja"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp" />
+
+
+
+    <!--TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Drawer 2" />
@@ -15,12 +124,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_launcher" /-->
 
     <Button
         android:id="@+id/closedrawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Close Drawer" />
+        android:text="Close Drawer"
+        android:visibility="invisible"/>
 
 </LinearLayout>

@@ -8,6 +8,10 @@
     <string name="navigation_drawer_open">abrir menu</string>
     <string name="navigation_drawer_close">fechar menu</string>
     <string name="materias">Materias</string>
+    <string name="exportar_tudo">Exportar Tudo</string>
+    <string name="versao_premium">Virar Premium</string>
+    <string name="about_us">Sobre Nós</string>
+    <string name="menu_do_notecam">Menu do Notecam</string>
     <string-array name="letra">
         <item>A</item>
         <item>B</item>

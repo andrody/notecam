@@ -2,6 +2,7 @@ package com.koruja.notecam;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.content.ContentValues;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -18,11 +19,14 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 
+import helper.Singleton;
+
 public class MainActivity extends ActionBarActivity implements MateriasFragment.OnFragmentInteractionListener {
 
     ActionBarDrawerToggle mDrawerToggle;
     DrawerLayout drawerLayout;
     View drawerView;
+    private String mTitle = "Notecam";
 
     //Referencia para colocar uma custom font
     private Typeface fontType;
@@ -88,14 +92,16 @@ public class MainActivity extends ActionBarActivity implements MateriasFragment.
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(getmTitle());
+                invalidateOptionsMenu(); // creates call to
+                // onPrepareOptionsMenu()
             }
 
-            @Override
             public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                getActionBar().setTitle(getString(R.string.menu_do_notecam));
+                invalidateOptionsMenu(); // creates call to
+                // onPrepareOptionsMenu()
             }
         };
 
@@ -188,12 +194,22 @@ public class MainActivity extends ActionBarActivity implements MateriasFragment.
         }};
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onFragmentInteraction(Uri uri, ContentValues content) {
+        if (content != null) {
+            mTitle = content.getAsString(Singleton.TITLE);
+        }
     }
 
     public void toggleMenu(View v) {
         drawerLayout.openDrawer(drawerView);
+    }
+
+    public String getmTitle() {
+        return mTitle;
+    }
+
+    public void setmTitle(String mTitle) {
+        this.mTitle = mTitle;
     }
 }
 

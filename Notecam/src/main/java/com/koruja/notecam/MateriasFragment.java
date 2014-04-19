@@ -2,6 +2,7 @@ package com.koruja.notecam;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import helper.Singleton;
 
 
 /**
@@ -35,6 +38,13 @@ public class MateriasFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //Adiciona titulo ao mTitle da Activity
+        if (mListener != null) {
+            ContentValues values = new ContentValues();
+            values.put(Singleton.TITLE, getActivity().getResources().getString(R.string.materias));
+            mListener.onFragmentInteraction(null, values);
+        }
         getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
         getActivity().getActionBar().setSubtitle("5 horas até a próxima aula");
         gridview = (GridView) getActivity().findViewById(R.id.materias_grid_view);
@@ -93,7 +103,7 @@ public class MateriasFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri, null);
         }
     }
 
@@ -126,7 +136,7 @@ public class MateriasFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction(Uri uri, ContentValues content);
     }
 
 }
