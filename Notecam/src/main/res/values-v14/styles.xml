@@ -1,0 +1,32 @@
+<resources>
+
+    <!--
+        Base application theme for API 14+. This theme completely replaces
+        AppBaseTheme from BOTH res/values/styles.xml and
+        res/values-v11/styles.xml on API 14+ devices.
+                <item name="android:background">@color/white</item>
+                        <item name="android:windowBackground">@color/white</item>
+
+
+    -->
+    <style name="AppBaseTheme" parent="Theme.Base.AppCompat.Light.DarkActionBar">
+        <!-- API 14 theme customizations can go here. -->
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+
+
+    <style name="MyActionBar" parent="Theme.Base.AppCompat.Light.DarkActionBar">
+        <item name="android:displayOptions">showTitle</item>
+        <item name="displayOptions">disableHome</item>
+        <item name="android:background">@drawable/header_style</item>
+        <item name="android:text">""</item>
+        <!--item name="android:textSize">@dimen/actionbar_text_size</item-->
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:height">45dp</item>
+
+        <!--item name="android:titleTextStyle">@style/MyTextAppearance</item-->
+    </style>
+
+
+</resources>
