@@ -9,24 +9,25 @@
 
 
     -->
-    <style name="AppBaseTheme" parent="Theme.Base.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- API 14 theme customizations can go here. -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
-
-
-    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
-
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:displayOptions">showHome|useLogo</item>
+        <item name="displayOptions">showHome|useLogo</item>
         <item name="android:background">@drawable/header_style</item>
         <item name="android:text">""</item>
         <item name="android:textSize">@dimen/actionbar_text_size</item>
-        <!--item name="android:textColor">@color/text_color</item-->
-        <item name="android:height">40dp</item>
+        <item name="android:textColor">@color/actionbar_title_color</item>
+        <item name="android:height">46dp</item>
 
-        <!--item name="android:titleTextStyle">@style/MyTextAppearance</item-->
+        <item name="android:titleTextStyle">@style/MyTextAppearance</item>
     </style>
 
-
+    <style name="MyTextAppearance" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#ffffff</item>
+    </style>
 
 </resources>

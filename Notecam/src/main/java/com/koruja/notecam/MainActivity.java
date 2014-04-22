@@ -1,217 +1,148 @@
 package com.koruja.notecam;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.Button;
 
-import helper.Singleton;
+import helper.DatabaseHelper;
+import view_fragment.HomeFragment;
 
-public class MainActivity extends ActionBarActivity implements MateriasFragment.OnFragmentInteractionListener {
+public class MainActivity extends FragmentActivity {
 
-    ActionBarDrawerToggle mDrawerToggle;
-    DrawerLayout drawerLayout;
-    View drawerView;
-    private String mTitle = "Notecam";
+    //Cria uma nova conexão com o Banco de Dados
+    private DatabaseHelper db = new DatabaseHelper(this);
 
     //Referencia para colocar uma custom font
     private Typeface fontType;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    // Activity request codes
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
 
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        drawerView = (View)findViewById(R.id.drawer);
+    // directory name to store captured images and videos
+    private static final String IMAGE_DIRECTORY_NAME = "Hello Camera";
 
-        Button buttonOpenDrawer = (Button)findViewById(R.id.opendrawer);
-        buttonOpenDrawer.setOnClickListener(new OnClickListener(){
-
-            @Override
-            public void onClick(View arg0) {
-                drawerLayout.openDrawer(drawerView);
-            }});
-
-        Button buttonCloseDrawer = (Button)findViewById(R.id.closedrawer);
-        buttonCloseDrawer.setOnClickListener(new OnClickListener(){
-
-            @Override
-            public void onClick(View arg0) {
-                drawerLayout.closeDrawers();
-            }});
-
-        drawerLayout.setDrawerListener(myDrawerListener);
-
-        drawerView.setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                return true;
-            }
-        });
-
-        //Criar botao de menu no actionbar
-        setUpDrawerToggle();
-
-        //Set custom font to comicneue
-        fontType = Typeface.createFromAsset(getAssets(),"fonts/ComicNeue-Bold.ttf");
-
-        MateriasFragment materias_fragment = new MateriasFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, materias_fragment, "materias").commit();
-
-    }
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private void setUpDrawerToggle(){
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                             /* host Activity */
-                drawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_navigation_drawer,  /* nav drawer image to replace 'Up' caret */
-                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
-                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(getmTitle());
-                invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(getString(R.string.menu_do_notecam));
-                invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
-            }
-        };
-
-        // Defer code dependent on restoration of previous instance state.
-        // NB: required for the drawer indicator to show up!
-        drawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
-
-        drawerLayout.setDrawerListener(mDrawerToggle);
-    }
+    // file url to store image/video
+    private Uri fileUri;
 
 
+    /**
+     * Cria as opções do header
+     **/
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*menu.add("Adicionar Materia")
-                .setIcon(R.drawable.ic_add)
+
+        menu.add("Subjects")
+                .setIcon(R.drawable.ic_action_collection)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        /*menu.add("Share")
+        menu.add("Share")
                 .setIcon(R.drawable.ic_action_new)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);*/
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        menu.add("About")
+                .setIcon(R.drawable.ic_action_new)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        menu.add("Pro Version")
+                .setIcon(R.drawable.ic_action_new)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //hiding default app icon
-        //ActionBar actionBar = getActionBar();
-        //actionBar.setDisplayShowHomeEnabled(false);
-        //displaying custom ActionBar
-        //View mActionBarView = getLayoutInflater().inflate(R.layout.custom_actionbar, null);
-        //actionBar.setCustomView(mActionBarView);
-        //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
-        getMenuInflater().inflate(R.menu.materias, menu);
         return true;
     }
 
+    /**
+     * Ao selecionar alguma opção do header
+     **/
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        super.onMenuItemSelected(featureId, item);
+        if(item.getTitle().equals("Subjects")){
+            Intent intent = new Intent(this, SubjectsActivity.class);
+            startActivity(intent);
         }
-        // Handle your other action bar items...
 
-        return super.onOptionsItemSelected(item);
-
+        return false;
     }
-
-    DrawerListener myDrawerListener = new DrawerListener(){
-
-        @Override
-        public void onDrawerClosed(View drawerView) {
-            //textPrompt.setText("onDrawerClosed");
-        }
-
-        @Override
-        public void onDrawerOpened(View drawerView) {
-            //textPrompt.setText("onDrawerOpened");
-        }
-
-        @Override
-        public void onDrawerSlide(View drawerView, float slideOffset) {
-            //textPrompt.setText("onDrawerSlide: " + String.format("%.2f", slideOffset));
-        }
-
-        @Override
-        public void onDrawerStateChanged(int newState) {
-            String state;
-            switch(newState){
-                case DrawerLayout.STATE_IDLE:
-                    state = "STATE_IDLE";
-                    break;
-                case DrawerLayout.STATE_DRAGGING:
-                    state = "STATE_DRAGGING";
-                    break;
-                case DrawerLayout.STATE_SETTLING:
-                    state = "STATE_SETTLING";
-                    break;
-                default:
-                    state = "unknown!";
-            }
-
-            //textPrompt2.setText(state);
-        }};
 
     @Override
-    public void onFragmentInteraction(Uri uri, ContentValues content) {
-        if (content != null) {
-            mTitle = content.getAsString(Singleton.TITLE);
+    protected void onResume() {
+        super.onResume();
+        criaFragment();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
+        //Por enquanto esquece esse if
+        if (savedInstanceState != null) {
+           boolean initiated = savedInstanceState.getBoolean("initiated");
+              if(initiated)
+                    //return;
+               ;
         }
+
+        //Set custom font to segoesc
+        fontType = Typeface.createFromAsset(getAssets(),"fonts/segoesc.ttf");
     }
 
-    public void toggleMenu(View v) {
-        drawerLayout.openDrawer(drawerView);
+    public void criaFragment(){
+        //Cria uma instância do Home Fragment
+        HomeFragment homeFragment = new HomeFragment();
+
+        // In case this activity was started with special instructions from an Intent,
+        // pass the Intent's extras to the fragment as arguments
+        homeFragment.setArguments(getIntent().getExtras());
+
+        int id;
+
+        //Verifica se está no modo portrait ou landscape e seleciona o layout adequado
+        if (findViewById(R.id.fragment_container) != null)
+            id = R.id.fragment_container;
+        else
+            id = R.id.fragment_container_land;
+
+        //Se o fragment ja existir faz um replace, senão, adiciona (Serve para editar subject da home)
+        if(getSupportFragmentManager().findFragmentById(id) != null)
+            getSupportFragmentManager().beginTransaction().replace(id, homeFragment).commit();
+        else
+            //Inicia o fragment
+            getSupportFragmentManager().beginTransaction().add(id, homeFragment).commit();
     }
 
-    public String getmTitle() {
-        return mTitle;
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putBoolean("initiated", true);
     }
 
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
+
+    public DatabaseHelper getDb() {
+        return db;
+    }
+
+    public void setDb(DatabaseHelper db) {
+        this.db = db;
+    }
+
+    public Typeface getFontType() {
+        return fontType;
+    }
+
+    public void setFontType(Typeface fontType) {
+        this.fontType = fontType;
     }
 }
-
-
-

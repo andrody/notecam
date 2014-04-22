@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -49,6 +50,11 @@ public class MateriasFragment extends Fragment {
         getActivity().getActionBar().setSubtitle("5 horas até a próxima aula");
         gridview = (GridView) getActivity().findViewById(R.id.materias_grid_view);
         gridview.setAdapter(new MateriasAdapter(getActivity()));
+        
+        //Marca a opção do menu
+        LinearLayout materias = (LinearLayout)getActivity().findViewById(R.id.menu_option_materias);
+        materias.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
+
     }
 
     // TODO: Rename parameter arguments, choose names that match

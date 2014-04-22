@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white">#FFFFFF</color>
+    <color name="actionbar_title_color">#2b8464</color>
+    <color name="black">#000000</color>
+    <color name="action_bar_line_color">#008a9d</color>
     <color name="red">#e45866</color>
     <color name="blue">#58aae2</color>
-    <color name="white">#ffffff</color>
     <color name="text_color">#818181</color>
     <color name="background_light">#eeeeee</color>
     <color name="background_menu">#303030</color>
+    <color name="background_menu_selected">#212121</color>
     <color name="background_header">#dddddd</color>
+
 </resources>
