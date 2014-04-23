@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
-import com.koruja.notecam.SubjectsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +55,9 @@ public class AddClassesFragment extends ListFragment implements View.OnClickList
         setListAdapter(getAdapter());
 
         //Se estamos no modo de edição, i.e. não estamos criando um novo subject
-        if(getSubject().getId() >=0) {
+        if(getSubject() != null && getSubject().getId() >=0) {
             //Pega referência do Banco de Dados
-            DatabaseHelper db = ((SubjectsActivity)getActivity()).getDb();
+            DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
             //Recupera do Banco as classes relativas ao Subject
             List<Aula> aulas = db.getAllClassesBySubject(getSubject().getId());

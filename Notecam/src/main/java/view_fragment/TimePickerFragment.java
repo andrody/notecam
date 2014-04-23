@@ -56,10 +56,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             Toast.makeText(getActivity(), "End Time set to " + hourOfDay + ":" + minute, Toast.LENGTH_SHORT).show();
         int id;
 
-        if (getActivity().findViewById(R.id.fragment_container) != null)
-            id = R.id.fragment_container;
-        else
-            id = R.id.fragment_container_land;
+        //if (getActivity().findViewById(R.id.mainLinearLayout) != null)
+            id = R.id.mainLinearLayout;
+        //else
+           // id = R.id.mainLinearLayout_land;
+         //  id = 0;
 
         OnOkDialogListener fragment = ((AddSubjectFragment) getActivity().getSupportFragmentManager().findFragmentById(id)).getAddClassesFragment();
         fragment.onOkDialog(hourOfDay,minute,position,startime);

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
+import view_fragment.AddSubjectFragment;
 import view_fragment.MateriasFragment;
 
 public class MateriasActivity extends ActionBarActivity implements MateriasFragment.OnFragmentInteractionListener {
@@ -38,6 +40,12 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
 
     //Cria uma nova conexão com o Banco de Dados
     private DatabaseHelper db = new DatabaseHelper(this);
+
+    //Armazena uma referência para o Fragmento de Adicionar Materias
+    private AddSubjectFragment addSubjectsFragment;
+
+    //Armazena uma referência para o Fragmento de Materias
+    private MateriasFragment materiasFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +90,8 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
         //Set custom font to comicneue
         fontType = Typeface.createFromAsset(getAssets(), "fonts/ComicNeue-Bold.ttf");
 
-        MateriasFragment materias_fragment = new MateriasFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, materias_fragment, "materias").commit();
+        setMateriasFragment(new MateriasFragment());
+        getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
 
     }
 
@@ -114,6 +122,8 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
 
         }
     }
+
+
 
     /*@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void menu_on_hover(final View view){
@@ -201,6 +211,22 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
         }
         // Handle your other action bar items...
 
+        if(item.getTitle().equals("Add Materia")){
+
+            //Cria uma nova instância do Fragment addSubjectsFragment
+            addSubjectsFragment = new AddSubjectFragment();
+
+            //Inicia a transação
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.mainLinearLayout, addSubjectsFragment);
+
+            //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
+            transaction.addToBackStack(null);
+
+            //Efetuar a transação do novo fragment
+            transaction.commit();
+        }
+
         return super.onOptionsItemSelected(item);
 
     }
@@ -267,6 +293,18 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
 
     public void setDb(DatabaseHelper db) {
         this.db = db;
+    }
+
+    public AddSubjectFragment getAddSubjectsFragment() {
+        return addSubjectsFragment;
+    }
+
+    public MateriasFragment getMateriasFragment() {
+        return materiasFragment;
+    }
+
+    public void setMateriasFragment(MateriasFragment materiasFragment) {
+        this.materiasFragment = materiasFragment;
     }
 }
 

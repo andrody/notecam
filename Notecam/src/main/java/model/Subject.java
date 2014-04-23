@@ -1,7 +1,8 @@
 package model;
 
-import android.graphics.Color;
 import android.text.format.Time;
+
+import com.koruja.notecam.R;
 
 import java.util.List;
 import java.util.Random;
@@ -22,8 +23,10 @@ public class Subject {
 
     private boolean checkboxSelecionada = false;
     private List<Aula> aulas;
-    private int color = -1;
+    private int color = R.color.red;
     private int id = -1;
+    private int image_id = 0;
+    private int numero_fotos = 0;
     private String name = "";
 
     public Subject(String name){
@@ -79,7 +82,8 @@ public class Subject {
     }
 
     public int getColor() {
-        switch (this.color){
+        return this.color;
+        /*switch (this.color){
             case 0:
                 return Color.rgb(245,85,95);
             case 1:
@@ -102,7 +106,7 @@ public class Subject {
                 return Color.rgb(209,209,209);
             default:
                 return Color.rgb(0,0,0);
-        }
+        }*/
     }
 
     public void setColor(int color) {
@@ -127,5 +131,21 @@ public class Subject {
 
     public int getNumberDays(DatabaseHelper db) {
         return db.getAllDaysBySubject(this.getId()).size();
+    }
+
+    public int getNumero_fotos() {
+        return numero_fotos;
+    }
+
+    public void setNumero_fotos(int numero_fotos) {
+        this.numero_fotos = numero_fotos;
+    }
+
+    public int getImage_id() {
+        return image_id;
+    }
+
+    public void setImage_id(int image_id) {
+        this.image_id = image_id;
     }
 }

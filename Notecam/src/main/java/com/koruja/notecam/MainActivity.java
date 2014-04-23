@@ -109,7 +109,8 @@ public class MainActivity extends FragmentActivity {
         if (findViewById(R.id.fragment_container) != null)
             id = R.id.fragment_container;
         else
-            id = R.id.fragment_container_land;
+            //id = R.id.fragment_container_land;
+            id = 0;
 
         //Se o fragment ja existir faz um replace, senão, adiciona (Serve para editar subject da home)
         if(getSupportFragmentManager().findFragmentById(id) != null)

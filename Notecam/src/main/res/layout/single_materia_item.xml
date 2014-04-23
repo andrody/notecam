@@ -30,19 +30,42 @@
                 android:layout_centerHorizontal="true" />
         </FrameLayout>
 
-        <TextView
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginTop="5dp"
-            android:text="Matemática"
-            android:textColor="@color/text_color"
-            android:id="@+id/materia_nome_text"
-            android:layout_below="@+id/frameLayout"
-            android:layout_centerHorizontal="true"
-            android:textSize="22sp"
-            android:textStyle="bold|italic"
-            android:layout_gravity="center" />
+            android:orientation="horizontal">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox_subject"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginTop="5dp"
+                android:text="M"
+                android:textColor="@color/text_color"
+                android:id="@+id/materia_nome_text"
+                android:layout_below="@+id/frameLayout"
+                android:layout_centerHorizontal="true"
+                android:textSize="22sp"
+                android:textStyle="bold|italic"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        </FrameLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -62,6 +85,7 @@
             android:textSize="14sp"
             android:textStyle="bold|italic"
             android:layout_gravity="center" />
+
         </LinearLayout>
 
 </RelativeLayout>

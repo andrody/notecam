@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
+import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.SubjectsActivity;
 import com.koruja.notecam.R;
 
@@ -171,7 +172,7 @@ public class SubjectsListFragment extends ListFragment {
     //Syncroniza com o banco de dados
     public void syncDB(){
         //Pega a referencia do banco da activity
-        DatabaseHelper db = ((SubjectsActivity)getActivity()).getDb();
+        DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
         //Pede todos os subjects do banco
         ArrayList<Subject> subjects =(ArrayList<Subject>) db.getAllSubjects();

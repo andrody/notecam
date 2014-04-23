@@ -14,12 +14,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.koruja.notecam.SubjectsActivity;
+import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.List;
 
 import helper.DatabaseHelper;
+import helper.Singleton;
 import model.Aula;
 import model.Subject;
 
@@ -43,7 +44,7 @@ public class AddSubjectFragment extends Fragment {
         View view = inflater.inflate(R.layout.add_subject, container, false);
 
         //Referencia para o banco de dados
-        DatabaseHelper db = ((SubjectsActivity)getActivity()).getDb();
+        DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
         //Cria novo subject
         subject = new Subject();
@@ -51,13 +52,13 @@ public class AddSubjectFragment extends Fragment {
         //Se foi passado algum parametro, adiciona no subject
         if (getArguments() != null) {
             //Se ele ta chamando o adicionar do menu principal
-            if(getArguments().getInt(SubjectsActivity.REDIRECT) == SubjectsActivity.DIRECT_ADD_SUBJECT)
+            if(getArguments().getInt(Singleton.REDIRECT) == Singleton.DIRECT_ADD_SUBJECT)
                 flagEditFromHome = true;
 
             //Se é edição
             else{
                 //Se veio do menu home
-                flagEditFromHome = getArguments().getInt(SubjectsActivity.REDIRECT) == 0 || getArguments().getInt(SubjectsActivity.REDIRECT) == 1;
+                flagEditFromHome = getArguments().getInt(Singleton.REDIRECT) == 0 || getArguments().getInt(Singleton.REDIRECT) == 1;
 
                 subject.setId(getArguments().getInt(Subject.ID));
                 subject = db.getSubject(subject.getId());
@@ -166,7 +167,7 @@ public class AddSubjectFragment extends Fragment {
                 List<Aula> aulas = addClassesFragment.getAdapter().getItems();
 
                 //Pega a referência do banco de dados
-                DatabaseHelper db = ((SubjectsActivity)getActivity()).getDb();
+                DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
                 //Se Não existe no DB ainda, então não possui ID
                 if(subject.getId() <= 0)

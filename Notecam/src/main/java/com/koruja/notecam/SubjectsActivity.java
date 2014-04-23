@@ -154,7 +154,8 @@ public class SubjectsActivity extends FragmentActivity {
         if (findViewById(R.id.fragment_container) != null)
             id = R.id.fragment_container;
         else
-            id = R.id.fragment_container_land;
+            //id = R.id.fragment_container_land;
+            id = 0;
 
         //Se não houver nenhum fragment, Inicia o subjectsFragment
         if(getSupportFragmentManager().findFragmentById(id) == null)

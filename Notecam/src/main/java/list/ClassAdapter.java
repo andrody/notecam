@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
-import com.koruja.notecam.SubjectsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,10 +71,10 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
             viewHolder.startTime.setText(item.getStartTime().format("%H:%M"));
             viewHolder.endTime.setText(item.getEndTime().format("%H:%M"));
 
-            viewHolder.letra.setOnClickListener(((SubjectsActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
-            viewHolder.weekday.setOnClickListener(((SubjectsActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
-            viewHolder.startTime.setOnClickListener(((SubjectsActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
-            viewHolder.endTime.setOnClickListener(((SubjectsActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
+            viewHolder.letra.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
+            viewHolder.weekday.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
+            viewHolder.startTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
+            viewHolder.endTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
 
         }
 
