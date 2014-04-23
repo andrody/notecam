@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
@@ -27,8 +28,9 @@ import helper.DatabaseHelper;
 import helper.Singleton;
 import view_fragment.AddSubjectFragment;
 import view_fragment.MateriasFragment;
+import view_fragment.SingleMateriaFragment;
 
-public class MateriasActivity extends ActionBarActivity implements MateriasFragment.OnFragmentInteractionListener {
+public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener {
 
     ActionBarDrawerToggle mDrawerToggle;
     DrawerLayout drawerLayout;
@@ -46,6 +48,9 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
 
     //Armazena uma referência para o Fragmento de Materias
     private MateriasFragment materiasFragment;
+
+    //Armazena uma referência para o Fragmento de Materias
+    private SingleMateriaFragment singleMateriasFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,15 +221,7 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
             //Cria uma nova instância do Fragment addSubjectsFragment
             addSubjectsFragment = new AddSubjectFragment();
 
-            //Inicia a transação
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.mainLinearLayout, addSubjectsFragment);
-
-            //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
-            transaction.addToBackStack(null);
-
-            //Efetuar a transação do novo fragment
-            transaction.commit();
+            changeFragments(addSubjectsFragment);
         }
 
         return super.onOptionsItemSelected(item);
@@ -271,8 +268,36 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
     @Override
     public void onFragmentInteraction(Uri uri, ContentValues content) {
         if (content != null) {
-            mTitle = content.getAsString(Singleton.TITLE);
+            if(content.containsKey(Singleton.TITLE))
+                mTitle = content.getAsString(Singleton.TITLE);
+
+            //É para trocar de fragmento?
+            if(content.containsKey(Singleton.REPLACE_FRAGMENT)){
+                //Sim? Mas para qual fragmento?
+                //Materia?
+                if(content.getAsString(Singleton.REPLACE_FRAGMENT).equals(Singleton.MATERIA)) {
+                    int materia_id = content.getAsInteger(Singleton.MATERIA_ID);
+                    singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
+
+                    //TrocaFragments
+                    changeFragments(singleMateriasFragment);
+                }
+            }
         }
+    }
+
+    public void changeFragments(Fragment fragment){
+        //TrocaFragments
+        //Inicia a transação
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainLinearLayout, fragment);
+
+
+        //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
+        transaction.addToBackStack(null);
+
+        //Efetuar a transação do novo fragment
+        transaction.commit();
     }
 
     public void toggleMenu(View v) {
@@ -305,6 +330,14 @@ public class MateriasActivity extends ActionBarActivity implements MateriasFragm
 
     public void setMateriasFragment(MateriasFragment materiasFragment) {
         this.materiasFragment = materiasFragment;
+    }
+
+    public SingleMateriaFragment getSingleMateriasFragment() {
+        return singleMateriasFragment;
+    }
+
+    public void setSingleMateriasFragment(SingleMateriaFragment singleMateriasFragment) {
+        this.singleMateriasFragment = singleMateriasFragment;
     }
 }
 

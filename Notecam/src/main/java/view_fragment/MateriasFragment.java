@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
-import com.koruja.notecam.SubjectsActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,15 +35,6 @@ import helper.Singleton;
 import model.Subject;
 
 
-/**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link view_fragment.MateriasFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link view_fragment.MateriasFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class MateriasFragment extends Fragment {
 
     GridView gridview;
@@ -89,6 +79,20 @@ public class MateriasFragment extends Fragment {
                     CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkBox_subject));
                     checkbox.setChecked(!checkbox.isChecked());
                 }
+                else {
+                    //Pede ao Activity para mudar fragment (Materia)
+                    if (mListener != null) {
+
+                        //Pega a materia selecionada
+                        Subject subject = (Subject)materiasAdapter.getItem(position);
+
+                        ContentValues values = new ContentValues();
+                        values.put(Singleton.REPLACE_FRAGMENT, Singleton.MATERIA);
+                        values.put(Singleton.MATERIA_ID, subject.getId());
+
+                        mListener.onFragmentInteraction(null, values);
+                    }
+                }
             }
         });
 
@@ -130,7 +134,7 @@ public class MateriasFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private Singleton.OnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -181,7 +185,7 @@ public class MateriasFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (Singleton.OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -202,20 +206,7 @@ public class MateriasFragment extends Fragment {
         this.checkboxFlag = checkboxFlag;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri, ContentValues content);
-    }
+
 
     //Syncroniza com o banco de dados
     public void syncDB(){
