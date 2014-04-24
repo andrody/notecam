@@ -93,8 +93,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ")";
 
 
+    Context context;
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+
     }
 
     @Override
@@ -187,7 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        Subject sb = new Subject();
+        Subject sb = new Subject(context);
         sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
         sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
@@ -211,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Subject sb = new Subject();
+                Subject sb = new Subject(context);
                 sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
                 sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));

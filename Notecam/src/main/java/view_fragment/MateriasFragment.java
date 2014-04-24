@@ -282,8 +282,11 @@ public class MateriasFragment extends Fragment {
                         db.deleteSubjectAndClasses(subject);
                     }
                 }
-            }
+                getActivity().recreate();
+                syncDB();
 
+
+            }
             mode.finish();
             return true;
         }

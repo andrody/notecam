@@ -7,9 +7,12 @@
     <color name="red">#e45866</color>
     <color name="blue">#58aae2</color>
     <color name="text_color">#818181</color>
+    <color name="darker_text_color">#303030</color>
     <color name="background_light">#eeeeee</color>
     <color name="background_menu">#303030</color>
     <color name="background_menu_selected">#212121</color>
     <color name="background_header">#dddddd</color>
+    <color name="background_aula_box">#FFF</color>
+    <color name="background_newaula_box">#83d4a9</color>
 
 </resources>

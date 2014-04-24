@@ -1,11 +1,20 @@
 package view_fragment;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -62,7 +71,48 @@ public class SingleMateriaFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_materia, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
+        //Setando cor da materia aos graficos
+        final Drawable camera = getResources().getDrawable( R.drawable.compact_camera );
+        final ColorFilter filter = new LightingColorFilter(materia.getColor(), Color.BLACK);
+        final ColorFilter filter_branco = new LightingColorFilter(Color.WHITE, Color.WHITE);
+        camera.setColorFilter(filter);
+
+        //Referencia da camera
+        final ImageView image_camera = (ImageView) view.findViewById(R.id.camera_dentro_circulo);
+
+        //Cor do circulo da camera
+        final GradientDrawable background = (GradientDrawable) view.findViewById(R.id.camera_circulo).getBackground();
+        background.setStroke(12, materia.getColor());
+
+        //Cor e texto do nome da materia
+        TextView nome_materia = ((TextView)view.findViewById(R.id.nome_materia));
+        nome_materia.setText(materia.getName());
+        nome_materia.setTextColor(materia.getColor());
+
+        View v = view.findViewById(R.id.camera_circulo);
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("teste", event.toString());
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    background.setColor(0);
+                    image_camera.setColorFilter(filter);
+                }
+                else if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    background.setColor(materia.getColor());
+                    image_camera.setColorFilter(filter_branco);
+                }
+
+                return true;
+            }
+        });
+
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     @Override
     public void onAttach(Activity activity) {

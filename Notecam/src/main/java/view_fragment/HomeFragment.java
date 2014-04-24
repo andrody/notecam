@@ -108,8 +108,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         //Se for a primeira vez que abre o aplicativo cria um subject "Other"
         List<Subject> sbs = db.getAllSubjects();
+
         if (sbs.isEmpty()) {
-            Subject sub = new Subject("Other");
+            Subject sub = new Subject("Other", getActivity());
             sub.setRandomColor();
             int sub_id = db.createSubjectAndClasses(sub, null);
 

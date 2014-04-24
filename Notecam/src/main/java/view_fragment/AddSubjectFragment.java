@@ -47,7 +47,7 @@ public class AddSubjectFragment extends Fragment {
         DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
         //Cria novo subject
-        subject = new Subject();
+        subject = new Subject(getActivity());
 
         //Se foi passado algum parametro, adiciona no subject
         if (getArguments() != null) {
@@ -160,7 +160,7 @@ public class AddSubjectFragment extends Fragment {
                 //Atualiza o nome do subject no model do subject
                 subject.setName(name);
 
-                if(!subject.isColored())
+                //if(!subject.isColored())
                     subject.setRandomColor();
 
                 //Pega as classes que foram adicionadas/alteradas

@@ -142,7 +142,7 @@ public class ClassesListFragment extends ListFragment  {
         adapter = new DayAdapter(getActivity(),layout, new ArrayList<Day>());
 
         //Cria novo subject
-        subject = new Subject();
+        subject = new Subject(getActivity());
 
         //Se foi passado algum parametro, adiciona no subject
         if (getArguments() != null) {

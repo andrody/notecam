@@ -1,5 +1,6 @@
 package model;
 
+import android.content.Context;
 import android.text.format.Time;
 
 import com.koruja.notecam.R;
@@ -23,16 +24,18 @@ public class Subject {
 
     private boolean checkboxSelecionada = false;
     private List<Aula> aulas;
-    private int color = R.color.red;
+    private int color;
     private int id = -1;
     private int image_id = 0;
     private int numero_fotos = 0;
     private String name = "";
+    Context context;
 
-    public Subject(String name){
+    public Subject(String name, Context context){
         this.name = name;
+        this.context = context;
     }
-    public Subject(){}
+    public Subject(Context context){ this.context = context; }
 
     public String getName() {
         return name;
@@ -68,7 +71,31 @@ public class Subject {
 
     public void setRandomColor() {
         Random random = new Random();
-        this.setColor(random.nextInt(10));
+        int color = (random.nextInt(10));
+        switch (this.color){
+            case 0:
+                setColor(context.getResources().getColor(R.color.red));
+            case 1:
+                setColor( context.getResources().getColor(R.color.red));
+            case 2:
+                setColor( context.getResources().getColor(R.color.red));
+            case 3:
+                setColor( context.getResources().getColor(R.color.red));
+            case 4:
+                setColor( context.getResources().getColor(R.color.red));
+            case 5:
+                setColor( context.getResources().getColor(R.color.blue));
+            case 6:
+                setColor( context.getResources().getColor(R.color.blue));
+            case 7:
+                setColor( context.getResources().getColor(R.color.blue));
+            case 8:
+                setColor( context.getResources().getColor(R.color.blue));
+            case 9:
+                setColor( context.getResources().getColor(R.color.blue));
+            default:
+                setColor( context.getResources().getColor(R.color.blue));
+        };
     }
 
     public boolean isColored(){
@@ -124,8 +151,8 @@ public class Subject {
         Time time = new Time();
         time.setToNow();
         for (Aula cl : aulas)
-                if(time.after(cl.getStartTime()) && time.before(cl.getEndTime()) && cl.getWeekday() == time.weekDay)
-                    return cl;
+            if(time.after(cl.getStartTime()) && time.before(cl.getEndTime()) && cl.getWeekday() == time.weekDay)
+                return cl;
         return null;
     }
 
