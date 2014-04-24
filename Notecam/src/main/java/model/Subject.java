@@ -71,30 +71,44 @@ public class Subject {
 
     public void setRandomColor() {
         Random random = new Random();
-        int color = (random.nextInt(10));
-        switch (this.color){
+        int r = (random.nextInt(11));
+        switch (r){
             case 0:
                 setColor(context.getResources().getColor(R.color.red));
+                break;
             case 1:
-                setColor( context.getResources().getColor(R.color.red));
+                setColor( context.getResources().getColor(R.color.blue));
+                break;
             case 2:
-                setColor( context.getResources().getColor(R.color.red));
+                setColor( context.getResources().getColor(R.color.green));
+                break;
             case 3:
-                setColor( context.getResources().getColor(R.color.red));
+                setColor( context.getResources().getColor(R.color.yellow));
+                break;
             case 4:
-                setColor( context.getResources().getColor(R.color.red));
+                setColor( context.getResources().getColor(R.color.pink));
+                break;
             case 5:
-                setColor( context.getResources().getColor(R.color.blue));
+                setColor( context.getResources().getColor(R.color.orange));
+                break;
             case 6:
-                setColor( context.getResources().getColor(R.color.blue));
+                setColor( context.getResources().getColor(R.color.roxo));
+                break;
             case 7:
-                setColor( context.getResources().getColor(R.color.blue));
+                setColor( context.getResources().getColor(R.color.purple));
+                break;
             case 8:
-                setColor( context.getResources().getColor(R.color.blue));
+                setColor( context.getResources().getColor(R.color.gray));
+                break;
             case 9:
-                setColor( context.getResources().getColor(R.color.blue));
+                setColor( context.getResources().getColor(R.color.amarelo));
+                break;
+            case 10:
+                setColor( context.getResources().getColor(R.color.verde));
+                break;
             default:
-                setColor( context.getResources().getColor(R.color.blue));
+                setColor( context.getResources().getColor(R.color.azul));
+                break;
         };
     }
 

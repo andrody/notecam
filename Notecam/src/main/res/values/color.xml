@@ -6,6 +6,16 @@
     <color name="action_bar_line_color">#008a9d</color>
     <color name="red">#e45866</color>
     <color name="blue">#58aae2</color>
+    <color name="green">#59ea93</color>
+    <color name="yellow">#ebb05c</color>
+    <color name="pink">#ea5998</color>
+    <color name="orange">#e9784e</color>
+    <color name="roxo">#5965ea</color>
+    <color name="purple">#b16deb</color>
+    <color name="gray">#a4a4a4</color>
+    <color name="amarelo">#eadb58</color>
+    <color name="azul">#50bfea</color>
+    <color name="verde">#1abc9c</color>
     <color name="text_color">#818181</color>
     <color name="darker_text_color">#303030</color>
     <color name="background_light">#eeeeee</color>

@@ -1,15 +1,17 @@
 package view_fragment;
 
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +36,7 @@ public class SingleMateriaFragment extends Fragment {
 
     private Singleton.OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param materia_id Parameter 1.
-     * @return A new instance of fragment MateriaFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static SingleMateriaFragment newInstance(int materia_id) {
         SingleMateriaFragment fragment = new SingleMateriaFragment();
         Bundle args = new Bundle();
@@ -62,6 +57,9 @@ public class SingleMateriaFragment extends Fragment {
             db = ((MateriasActivity)getActivity()).getDb();
             materia = db.getSubject((long)materia_id);
         }
+
+        //Tem de habilitar para mudar o ActionBar
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -96,7 +94,6 @@ public class SingleMateriaFragment extends Fragment {
         v.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.i("teste", event.toString());
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     background.setColor(0);
@@ -114,9 +111,18 @@ public class SingleMateriaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * Cria as opções do header
+     **/
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflater.inflate(R.menu.main, menu);
+        //super.onCreateOptionsMenu(menu, inflater);
+
+        menu.clear();
+        inflater.inflate(R.menu.single_materia, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

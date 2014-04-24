@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -125,6 +125,20 @@ public class MateriasFragment extends Fragment {
 
     }
 
+    /**
+     * Cria as opções do header
+     **/
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflater.inflate(R.menu.main, menu);
+        //super.onCreateOptionsMenu(menu, inflater);
+
+        menu.clear();
+        inflater.inflate(R.menu.materias, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -164,6 +178,10 @@ public class MateriasFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //Tem de habilitar para mudar o ActionBar
+        setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -355,15 +373,17 @@ class MateriasAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        ImageView myInitialLetter;
+        TextView myInitialLetter;
         TextView nome_materia;
+        View back_color;
         TextView numero_fotos;
         CheckBox checkbox;
         ViewHolder(View v) {
-            myInitialLetter = (ImageView) v.findViewById(R.id.letra_inicial_image);
+            myInitialLetter = (TextView) v.findViewById(R.id.letra_inicial_image);
             nome_materia = (TextView) v.findViewById(R.id.materia_nome_text);
             numero_fotos = (TextView) v.findViewById(R.id.materia_numero_fotos_text);
             checkbox = (CheckBox) v.findViewById(R.id.checkBox_subject);
+            back_color = v.findViewById(R.id.materia_back_color);
         }
     }
 
@@ -385,9 +405,10 @@ class MateriasAdapter extends BaseAdapter {
         final Subject item = (Subject) getItem(position);
 
         //holder.myInitialLetter.setImageResource(materias.get(position).image_id);
-        holder.myInitialLetter.setBackgroundResource(R.color.red);//materias.get(position).getColor());
+        holder.myInitialLetter.setText(materias.get(position).getName().substring(0,1));//materias.get(position).getColor());
         holder.nome_materia.setText(materias.get(position).getName());
         holder.numero_fotos.setText(materias.get(position).getNumero_fotos() + " fotos");
+        holder.back_color.setBackgroundColor(materias.get(position).getColor());
 
         views.put(item.getId(), row);
 

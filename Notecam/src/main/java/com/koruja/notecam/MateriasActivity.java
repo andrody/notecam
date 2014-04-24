@@ -52,6 +52,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     //Armazena uma referência para o Fragmento de Materias
     private SingleMateriaFragment singleMateriasFragment;
 
+    //Lista de opções do menu
+    final ArrayList<LinearLayout> lista_options_menu = new ArrayList<LinearLayout>();;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,20 +109,24 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         final LinearLayout sobre = (LinearLayout)findViewById(R.id.menu_option_sobre);
         final LinearLayout premium = (LinearLayout)findViewById(R.id.menu_option_premium);
 
-        final ArrayList<LinearLayout> list = new ArrayList<LinearLayout>();
-        list.add(materias);
-        list.add(exportar_tudo);
-        list.add(sobre);
-        list.add(premium);
+        lista_options_menu.add(materias);
+        lista_options_menu.add(exportar_tudo);
+        lista_options_menu.add(sobre);
+        lista_options_menu.add(premium);
 
-        for(final LinearLayout view : list) {
+        for(final LinearLayout view : lista_options_menu) {
             view.setOnClickListener(new OnClickListener(){
                 @Override
                 public void onClick(View arg0) {
-                    for(LinearLayout v : list)
+                    for(LinearLayout v : lista_options_menu)
                         v.setBackgroundColor(0);
                     view.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
                     drawerLayout.closeDrawers();
+
+                    //Se clicou na opção Matérias, troca de fragmentos para Materias
+                    if(view.equals(materias)) {
+                        changeFragments(materiasFragment);
+                    }
 
                 }});
 
@@ -202,7 +209,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         //actionBar.setCustomView(mActionBarView);
         //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
-        getMenuInflater().inflate(R.menu.materias, menu);
+        //getMenuInflater().inflate(R.menu.materias, menu);
         return true;
     }
 
@@ -286,7 +293,22 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         }
     }
 
+    public void seleciona_option_certo_no_menu(Fragment fragment){
+        //Limpa seleção
+        for(LinearLayout v : lista_options_menu)
+            v.setBackgroundColor(0);
+
+        //Se novo fragmento for o materiasFragment
+        if(materiasFragment != null && fragment.equals(materiasFragment)) {
+            //Seleciona a opção Materia
+            lista_options_menu.get(0).setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
+        }
+
+    }
+
     public void changeFragments(Fragment fragment){
+        seleciona_option_certo_no_menu(fragment);
+
         //TrocaFragments
         //Inicia a transação
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

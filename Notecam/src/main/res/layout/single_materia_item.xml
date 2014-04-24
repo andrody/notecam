@@ -14,9 +14,24 @@
             android:layout_height="155dp"
             android:background="@drawable/album"
             android:layout_centerInParent="true"
-            android:id="@+id/frameLayout">
+            android:id="@+id/frameLayout"
+            android:padding="20dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/materia_back_color"
+            android:background="@color/red">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:textSize="90dp"
+                android:id="@+id/letra_inicial_image"
+                android:textColor="@color/white"
+                android:layout_gravity="center" />
 
-            <ImageView
+            </FrameLayout>
+            <!--ImageView
                 android:src="@drawable/ma"
                 android:layout_marginLeft="11dp"
                 android:layout_marginTop="18dp"
@@ -27,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/letra_inicial_image"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true" /-->
         </FrameLayout>
 
     <FrameLayout

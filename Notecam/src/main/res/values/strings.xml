@@ -16,6 +16,9 @@
     <string name="menu_do_notecam">Menu do Notecam</string>
     <string name="deletar">Deletar</string>
     <string name="exportar">Exportar</string>
+    <string name="action_editar_materia">Editar Materia</string>
+    <string name="action_exportar_materia">Exportar Materia</string>
+    <string name="action_go_folder">Aulas</string>
     <string-array name="letra">
         <item>A</item>
         <item>B</item>

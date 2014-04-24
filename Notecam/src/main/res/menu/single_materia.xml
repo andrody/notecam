@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.koruja.notecam.MainActivity" >
+    
+    <item android:id="@+id/folder"
+        android:title="@string/action_go_folder"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_collection"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/editar"
+        android:title="@string/action_editar_materia"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_edit_dark"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/exportar_materia"
+        android:title="@string/action_exportar_materia"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_share"
+        app:showAsAction="never" />
+</menu>
