@@ -3,6 +3,9 @@ package helper;
 import android.content.ContentValues;
 import android.net.Uri;
 
+import view_fragment.MateriasFragment;
+import view_fragment.SingleMateriaFragment;
+
 /**
  * Created by Andrew on 19-Apr-14.
  */
@@ -15,6 +18,9 @@ public class Singleton {
 
     public static int DIRECT_EDIT_SUBJECT = 0;
     public static int DIRECT_ADD_SUBJECT = 1;
+
+    public static MateriasFragment materiasFragment = null;
+    public static SingleMateriaFragment singleMateriaFragment = null;
 
     /**
      * This interface must be implemented by activities that contain this

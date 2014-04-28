@@ -3,13 +3,17 @@ package com.koruja.notecam;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
@@ -26,16 +30,23 @@ import java.util.ArrayList;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
+import model.Subject;
 import view_fragment.AddSubjectFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 
 public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener {
 
+    ViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
     DrawerLayout drawerLayout;
     View drawerView;
     private String mTitle = "Notecam";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     //Referencia para colocar uma custom font
     private Typeface fontType;
@@ -62,6 +73,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerView = (View)findViewById(R.id.drawer);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
 
         setUpClickListenersMenu();
 
@@ -98,8 +111,13 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         //Set custom font to comicneue
         fontType = Typeface.createFromAsset(getAssets(), "fonts/ComicNeue-Bold.ttf");
 
-        setMateriasFragment(new MateriasFragment());
-        getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
+        if(Singleton.materiasFragment != null) {
+            this.setMateriasFragment(Singleton.materiasFragment);
+            this.setSingleMateriasFragment(Singleton.singleMateriaFragment);
+        }
+
+        //setMateriasFragment(new MateriasFragment());
+        //getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
 
     }
 
@@ -352,6 +370,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     public void setMateriasFragment(MateriasFragment materiasFragment) {
         this.materiasFragment = materiasFragment;
+        Singleton.materiasFragment = materiasFragment;
     }
 
     public SingleMateriaFragment getSingleMateriasFragment() {
@@ -360,6 +379,35 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     public void setSingleMateriasFragment(SingleMateriaFragment singleMateriasFragment) {
         this.singleMateriasFragment = singleMateriasFragment;
+        Singleton.singleMateriaFragment = singleMateriasFragment;
+    }
+}
+
+class PagerAdapter extends FragmentPagerAdapter {
+    Context context;
+    public PagerAdapter(FragmentManager fm, Context context) {
+        super(fm);
+        this.context = context;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        Fragment fragment = null;
+        if(position == 0){
+            fragment = new MateriasFragment();
+            ((MateriasActivity)context).setMateriasFragment((MateriasFragment) fragment);
+        }
+        else if(position == 1){
+            Subject subject = (Subject) ((MateriasActivity)context).getDb().getAllSubjects().get(0);
+            fragment = SingleMateriaFragment.newInstance(subject.getId());
+            ((MateriasActivity)context).setSingleMateriasFragment((SingleMateriaFragment) fragment);
+        }
+        return fragment;
+    }
+
+    @Override
+    public int getCount() {
+        return 2;
     }
 }
 
