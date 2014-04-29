@@ -159,11 +159,10 @@ public class MateriasFragment extends Fragment {
      * @return A new instance of fragment MateriasFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MateriasFragment newInstance(String param1, String param2) {
+    public static MateriasFragment newInstance() {
         MateriasFragment fragment = new MateriasFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(Singleton.FRAGMENT_TYPE, Singleton.FRAGMENT_TYPE_MATERIAS);
         fragment.setArguments(args);
         return fragment;
     }

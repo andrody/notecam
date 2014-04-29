@@ -48,6 +48,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onSaveInstanceState(outState);
     }
 
+
+
+
     //Referencia para colocar uma custom font
     private Typeface fontType;
 
@@ -72,19 +75,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         setContentView(R.layout.activity_main);
 
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        drawerView = (View)findViewById(R.id.drawer);
+        drawerView = findViewById(R.id.drawer);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
 
         setUpClickListenersMenu();
-
-        Button buttonOpenDrawer = (Button)findViewById(R.id.opendrawer);
-        buttonOpenDrawer.setOnClickListener(new OnClickListener(){
-
-            @Override
-            public void onClick(View arg0) {
-                drawerLayout.openDrawer(drawerView);
-            }});
 
         Button buttonCloseDrawer = (Button)findViewById(R.id.closedrawer);
         buttonCloseDrawer.setOnClickListener(new OnClickListener(){
@@ -143,7 +138,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
                     //Se clicou na opção Matérias, troca de fragmentos para Materias
                     if(view.equals(materias)) {
-                        changeFragments(materiasFragment);
+                        changeFragments(materiasFragment, null);
                     }
 
                 }});
@@ -246,7 +241,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             //Cria uma nova instância do Fragment addSubjectsFragment
             addSubjectsFragment = new AddSubjectFragment();
 
-            changeFragments(addSubjectsFragment);
+            changeFragments(addSubjectsFragment, null);
         }
 
         return super.onOptionsItemSelected(item);
@@ -302,10 +297,12 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 //Materia?
                 if(content.getAsString(Singleton.REPLACE_FRAGMENT).equals(Singleton.MATERIA)) {
                     int materia_id = content.getAsInteger(Singleton.MATERIA_ID);
-                    singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
-
+                    //singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
+                    singleMateriasFragment.reload(materia_id);
+                    viewPager.getAdapter().notifyDataSetChanged();
+                    viewPager.setCurrentItem(1, true);
                     //TrocaFragments
-                    changeFragments(singleMateriasFragment);
+                    //changeFragments(singleMateriasFragment, null);
                 }
             }
         }
@@ -324,20 +321,38 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     }
 
-    public void changeFragments(Fragment fragment){
+    public void changeFragments(Fragment fragment, Fragment fragment_origin){
         seleciona_option_certo_no_menu(fragment);
-
-        //TrocaFragments
         //Inicia a transação
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainLinearLayout, fragment);
 
+        if(fragment instanceof MateriasFragment){
+            //Se clicou no menu Materias (enquanto estava com o viewpager invisivel)
+            if(!(viewPager.getVisibility() == View.VISIBLE)){
+                viewPager.setVisibility(View.VISIBLE);
+                transaction.remove(fragment_origin);
+            }
+            viewPager.setCurrentItem(0, true);
+        }
+        else if(fragment instanceof SingleMateriaFragment){
 
-        //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
-        transaction.addToBackStack(null);
+        }
+        else {
+            viewPager.setVisibility(View.GONE);
+
+            //TrocaFragments
+            transaction.replace(R.id.mainLinearLayout, fragment);
+
+            //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
+            transaction.addToBackStack(null);
+        }
 
         //Efetuar a transação do novo fragment
         transaction.commit();
+    }
+
+    public void moveFragmentPager(int position){
+
     }
 
     public void toggleMenu(View v) {
@@ -384,23 +399,47 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 }
 
 class PagerAdapter extends FragmentPagerAdapter {
+    /*private final class MateriaPageListener implements
+            MateriaPageFragmentListener {
+        public void onSwitchToNextFragment(int materia_id) {
+            mFragmentManager.beginTransaction().remove(mFragmentAtPos1)
+                    .commit();
+            mFragmentAtPos1 = NextFragment.newInstance(listener);
+
+            notifyDataSetChanged();
+        }
+    }*/
+
     Context context;
+    private Fragment mFragmentAtPos1 = null;
+    final private FragmentManager mFragmentManager;
+
+    //ListaDeFragmentos
+    //private ArrayList<Task> fragments = new ArrayList<Task>();
+
+
     public PagerAdapter(FragmentManager fm, Context context) {
         super(fm);
+        mFragmentManager = fm;
         this.context = context;
     }
 
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
+        Bundle args = new Bundle();
         if(position == 0){
-            fragment = new MateriasFragment();
+            fragment = MateriasFragment.newInstance();
             ((MateriasActivity)context).setMateriasFragment((MateriasFragment) fragment);
         }
         else if(position == 1){
-            Subject subject = (Subject) ((MateriasActivity)context).getDb().getAllSubjects().get(0);
-            fragment = SingleMateriaFragment.newInstance(subject.getId());
-            ((MateriasActivity)context).setSingleMateriasFragment((SingleMateriaFragment) fragment);
+            Subject subject;
+            if (mFragmentAtPos1 == null) {
+                subject = (Subject) ((MateriasActivity)context).getDb().getAllSubjects().get(0);
+                mFragmentAtPos1 = SingleMateriaFragment.newInstance(subject.getId());
+            }
+            ((MateriasActivity)context).setSingleMateriasFragment((SingleMateriaFragment) mFragmentAtPos1);
+            return mFragmentAtPos1;
         }
         return fragment;
     }
@@ -409,6 +448,10 @@ class PagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return 2;
     }
+}
+
+interface MateriaPageFragmentListener {
+    void onSwitchToNextFragment(int materia_id);
 }
 
 

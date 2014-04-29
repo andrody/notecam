@@ -26,6 +26,12 @@ import model.Subject;
 
 
 public class AddSubjectFragment extends Fragment {
+    @Override
+    public void onDetach() {
+        MateriasActivity activity = ((MateriasActivity)getActivity());
+        activity.changeFragments(activity.getMateriasFragment(),this);
+        super.onDetach();
+    }
 
     //Armazena o model do Subject em questão
     private Subject subject;

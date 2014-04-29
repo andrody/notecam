@@ -33,6 +33,7 @@ public class SingleMateriaFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private Subject materia;
     private DatabaseHelper db;
+    private View view_do_onViewCreated;
 
     private Singleton.OnFragmentInteractionListener mListener;
 
@@ -41,6 +42,7 @@ public class SingleMateriaFragment extends Fragment {
         SingleMateriaFragment fragment = new SingleMateriaFragment();
         Bundle args = new Bundle();
         args.putInt(MATERIA_ID, materia_id);
+        args.putString(Singleton.FRAGMENT_TYPE, Singleton.FRAGMENT_TYPE_MATERIA);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,7 +73,12 @@ public class SingleMateriaFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        view_do_onViewCreated = view;
+        criarUI(view);
+        super.onViewCreated(view, savedInstanceState);
+    }
 
+    public void criarUI(View view){
         //Setando cor da materia aos graficos
         final Drawable camera = getResources().getDrawable( R.drawable.compact_camera );
         final ColorFilter filter = new LightingColorFilter(materia.getColor(), Color.BLACK);
@@ -107,8 +114,8 @@ public class SingleMateriaFragment extends Fragment {
                 return true;
             }
         });
-
-        super.onViewCreated(view, savedInstanceState);
+        background.setColor(0);
+        image_camera.setColorFilter(filter);
     }
 
     /**
@@ -132,5 +139,8 @@ public class SingleMateriaFragment extends Fragment {
     }
 
 
-
+    public void reload(int materia_id) {
+        materia = db.getSubject((long)materia_id);
+        criarUI(view_do_onViewCreated);
+    }
 }

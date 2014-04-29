@@ -16,6 +16,10 @@ public class Singleton {
     public static String MATERIA_ID = "materia_id";
     public static String REDIRECT = "redirect";
 
+    public static String FRAGMENT_TYPE = "fragment_type";
+    public static String FRAGMENT_TYPE_MATERIAS = "fragment_materias";
+    public static String FRAGMENT_TYPE_MATERIA = "fragment_materia";
+
     public static int DIRECT_EDIT_SUBJECT = 0;
     public static int DIRECT_ADD_SUBJECT = 1;
 
