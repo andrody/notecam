@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -68,9 +70,29 @@ public class TopicosFragment extends Fragment {
     public TopicosFragment() {
     }
 
+    /**
+     * Cria as opções do header
+     **/
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflater.inflate(R.menu.main, menu);
+        //super.onCreateOptionsMenu(menu, inflater);
+
+        menu.clear();
+        inflater.inflate(R.menu.materias, menu);
+
+        getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
+        getActivity().getActionBar().setSubtitle("Sem aulas hoje");
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Tem de habilitar para mudar o ActionBar
+        setHasOptionsMenu(true);
 
         if (getArguments() != null) {
             int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
@@ -80,7 +102,6 @@ public class TopicosFragment extends Fragment {
 
 
     }
-
 
     @Override
     public void onDetach() {

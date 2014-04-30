@@ -74,6 +74,7 @@ public class SingleMateriaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+
     public void criarUI(View view){
         //Setando cor da materia aos graficos
         final Drawable camera = getResources().getDrawable( R.drawable.compact_camera );
@@ -125,6 +126,9 @@ public class SingleMateriaFragment extends Fragment {
 
         menu.clear();
         inflater.inflate(R.menu.single_materia, menu);
+
+        getActivity().getActionBar().setTitle(materia.getName());
+        getActivity().getActionBar().setSubtitle("Sem aulas hoje");
         super.onCreateOptionsMenu(menu, inflater);
     }
 

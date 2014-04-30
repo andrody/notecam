@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:horizontalSpacing="0dp"
-        android:verticalSpacing="20dp"
+        android:verticalSpacing="15dp"
         android:columnWidth="145dp"
         android:numColumns="auto_fit"
         android:stretchMode="spacingWidthUniform" />

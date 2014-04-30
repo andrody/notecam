@@ -45,6 +45,13 @@ public class MateriasFragment extends Fragment {
 
     Resources resources;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
+        getActivity().getActionBar().setSubtitle("5 horas até a próxima aula");
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -57,10 +64,9 @@ public class MateriasFragment extends Fragment {
         if (mListener != null) {
             ContentValues values = new ContentValues();
             values.put(Singleton.TITLE, getActivity().getResources().getString(R.string.materias));
-            mListener.onFragmentInteraction(null, values);
+            //mListener.onFragmentInteraction(null, values);
         }
-        getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
-        getActivity().getActionBar().setSubtitle("5 horas até a próxima aula");
+
 
         //Cria o adapter
         materiasAdapter = new MateriasAdapter(getActivity());
@@ -136,6 +142,8 @@ public class MateriasFragment extends Fragment {
 
         menu.clear();
         inflater.inflate(R.menu.materias, menu);
+        getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
+        getActivity().getActionBar().setSubtitle("5 horas até a próxima aula");
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -208,6 +216,8 @@ public class MateriasFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
 
     @Override
     public void onDetach() {
