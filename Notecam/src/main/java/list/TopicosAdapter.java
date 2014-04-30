@@ -17,10 +17,12 @@ import java.util.ArrayList;
 
 import model.Subject;
 import model.Topico;
+import view_fragment.FotosFragment;
 
 public class TopicosAdapter extends BaseExpandableListAdapter {
 
     ArrayList<Topico> topicos;
+    ArrayList<FotosFragment> fotos_fragments;
     Subject materia;
 
     String[] listaPai = { "Categoria 1", "Categoria 2", "Categoria 3" };
@@ -67,6 +69,18 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
         topicos.add(new Topico("Funções exponenciais"));
         topicos.add(new Topico("Funções exponenciais"));
         topicos.add(new Topico("Funções exponenciais"));
+
+        fotos_fragments = new ArrayList<FotosFragment>();
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
+        fotos_fragments.add(FotosFragment.newInstance(0, 0));
     }
 
     @Override
@@ -76,7 +90,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return listafilho[groupPosition].length;
+        return fotos_fragments.size();
     }
 
     @Override
@@ -86,7 +100,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return listafilho[groupPosition][childPosition];
+        return fotos_fragments.get(groupPosition);
     }
 
     @Override
@@ -158,13 +172,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        // Criamos um TextView que conterá as informações da listafilho que criamos
-        TextView textViewSubLista = new TextView(context);
-        textViewSubLista.setText(listafilho[groupPosition][childPosition]);
-        // Definimos um alinhamento
-        textViewSubLista.setPadding(10, 5, 0, 5);
-
-        return textViewSubLista;
+        return fotos_fragments.get(groupPosition).getView();
     }
 
     @Override

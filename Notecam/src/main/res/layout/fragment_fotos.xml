@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="fragment_materias"
+    tools:context="com.koruja.notecam.FotosFragment">
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fotos_grid_view"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:horizontalSpacing="0dp"
+        android:verticalSpacing="20dp"
+        android:columnWidth="145dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="spacingWidthUniform" />
+
+</RelativeLayout>

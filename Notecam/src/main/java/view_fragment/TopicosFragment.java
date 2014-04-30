@@ -1,5 +1,7 @@
 package view_fragment;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,14 +32,16 @@ public class TopicosFragment extends Fragment {
         list.setAdapter(new TopicosAdapter(getActivity(), materia));
 
         list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 if (list.isGroupExpanded(groupPosition)) {
                     list.collapseGroup(groupPosition);
                 } else {
                     list.expandGroup(groupPosition);
+                    list.smoothScrollToPositionFromTop(groupPosition,0);
+
                 }
-                list.smoothScrollToPositionFromTop(groupPosition,0);
 
                 return true;
             }

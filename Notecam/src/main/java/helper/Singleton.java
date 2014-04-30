@@ -14,6 +14,7 @@ public class Singleton {
     public static String REPLACE_FRAGMENT = "replace_fragment";
     public static String MATERIA = "materia";
     public static String MATERIA_ID = "materia_id";
+    public static String TOPICO_ID = "topico_id";
     public static String REDIRECT = "redirect";
 
     public static String FRAGMENT_TYPE = "fragment_type";
