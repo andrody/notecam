@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,12 +18,10 @@ import java.util.ArrayList;
 
 import model.Subject;
 import model.Topico;
-import view_fragment.FotosFragment;
 
 public class TopicosAdapter extends BaseExpandableListAdapter {
 
     ArrayList<Topico> topicos;
-    ArrayList<FotosFragment> fotos_fragments;
     Subject materia;
 
     String[] listaPai = { "Categoria 1", "Categoria 2", "Categoria 3" };
@@ -70,17 +69,6 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
         topicos.add(new Topico("Funções exponenciais"));
         topicos.add(new Topico("Funções exponenciais"));
 
-        fotos_fragments = new ArrayList<FotosFragment>();
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
-        fotos_fragments.add(FotosFragment.newInstance(0, 0));
     }
 
     @Override
@@ -90,7 +78,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return fotos_fragments.size();
+        return 1;
     }
 
     @Override
@@ -100,7 +88,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return fotos_fragments.get(groupPosition);
+        return null;
     }
 
     @Override
@@ -170,9 +158,56 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
         return row;
     }
 
+    class ViewHolderChild {
+        GridView gridview;
+
+        ViewHolderChild(View v) {
+            gridview = (GridView) v.findViewById(R.id.fotos_grid_view);
+        }
+    }
+
+
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        return fotos_fragments.get(groupPosition).getView();
+        View row = convertView;
+        ViewHolderChild holder = null;
+
+        //Se estamos chamando o getView pela primeira vez (Operações custosas)
+        if(row == null){
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.fragment_fotos, parent, false);
+            holder = new ViewHolderChild(row);
+            row.setTag(holder);
+        }
+        else {
+            holder = (ViewHolderChild) row.getTag();
+        }
+
+        holder.gridview.setAdapter(new FotoAdapter(context));
+
+        // initialize the following variables (i've done it based on your layout
+        // note: rowHeightDp is based on my grid_cell.xml, that is the height i've
+        //    assigned to the items in the grid.
+        final int spacingDp = 10;
+        final int colWidthDp = 100;
+        final int rowHeightDp = 160;
+
+        // convert the dp values to pixels
+        final float COL_WIDTH = context.getResources().getDisplayMetrics().density * colWidthDp;
+        final float ROW_HEIGHT = context.getResources().getDisplayMetrics().density * rowHeightDp;
+        final float SPACING = context.getResources().getDisplayMetrics().density * spacingDp;
+
+        // calculate the column and row counts based on your display
+        final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
+        final int rowCount = (int)Math.ceil((6 + 0d) / colCount);
+
+        // calculate the height for the current grid
+        final int GRID_HEIGHT = Math.round(rowCount * (ROW_HEIGHT + SPACING));
+
+        // set the height of the current grid
+        holder.gridview.getLayoutParams().height = GRID_HEIGHT;
+
+        return row;
     }
 
     @Override

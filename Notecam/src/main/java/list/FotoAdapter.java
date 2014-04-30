@@ -88,7 +88,7 @@ public class FotoAdapter extends BaseAdapter {
         final Foto item = (Foto) getItem(position);
 
         //holder.foto_imagem.setImageResource(materias.get(position).image_id);
-        holder.foto_numero.setText(position);
+        holder.foto_numero.setText(position + 1 + "");
 
         views.put(item.getId(), row);
 
