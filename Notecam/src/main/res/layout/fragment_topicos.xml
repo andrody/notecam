@@ -7,7 +7,11 @@
     <ExpandableListView
         android:id="@+id/expandableListView_aulas"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:footerDividersEnabled="false"
+        android:groupIndicator="@null"
+        android:paddingTop="5dp"
+        android:divider="@null">
     </ExpandableListView>
 
 </RelativeLayout>

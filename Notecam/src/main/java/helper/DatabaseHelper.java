@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import model.Aula;
-import model.Day;
+import model.Topico;
 import model.Subject;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -367,16 +367,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * Creating day
     */
-    public long createDay(Day day){//Day day, long subject_id) {
+    public long createDay(Topico topico){//Day day, long subject_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
 
         ContentValues values = new ContentValues();
-        values.put(KEY_DAY_NAME, day.getName());
-        values.put(KEY_DAY_SUBJECT, day.getSubject_id());
-        values.put(KEY_DAY_NUMBER, day.getNumber());
-        values.put(KEY_DAY_WEEKDAY, day.getWeekday());
+        values.put(KEY_DAY_NAME, topico.getName());
+        values.put(KEY_DAY_SUBJECT, topico.getSubject_id());
+        values.put(KEY_DAY_NUMBER, topico.getNumber());
+        values.put(KEY_DAY_WEEKDAY, topico.getWeekday());
 
         Time time = new Time();
         time.setToNow();
@@ -391,20 +391,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * Updating day
     */
-    public int updateDay(Day day) {
+    public int updateDay(Topico topico) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_DAY_NAME, day.getName());
-        values.put(KEY_DAY_SUBJECT, day.getSubject_id());
-        values.put(KEY_DAY_NUMBER, day.getNumber());
-        values.put(KEY_DAY_WEEKDAY, day.getWeekday());
+        values.put(KEY_DAY_NAME, topico.getName());
+        values.put(KEY_DAY_SUBJECT, topico.getSubject_id());
+        values.put(KEY_DAY_NUMBER, topico.getNumber());
+        values.put(KEY_DAY_WEEKDAY, topico.getWeekday());
 
 
         // updating day
         assert db != null;
         return db.update(TABLE_DAY, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(day.getId()) });
+                new String[] { String.valueOf(topico.getId()) });
     }
 
     /*
@@ -420,7 +420,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * get single day
     */
-    public Day getDay(long day_id) {
+    public Topico getDay(long day_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_DAY + " WHERE "
@@ -433,24 +433,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        Day day = new Day();
-        day.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        day.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
-        day.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
-        day.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
-        day.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
-        day.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+        Topico topico = new Topico();
+        topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        topico.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
+        topico.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
+        topico.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
+        topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
+        topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
 
-        return day;
+        return topico;
     }
 
     /*
     * getting all days
     *
      */
-    public List<Day> getAllDays() {
-        List<Day> days = new ArrayList<Day>();
+    public List<Topico> getAllDays() {
+        List<Topico> topicos = new ArrayList<Topico>();
         String selectQuery = "SELECT  * FROM " + TABLE_DAY;
 
         Log.e(LOG, selectQuery);
@@ -461,21 +461,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Day day = new Day();
-                day.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                day.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
-                day.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
-                day.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
-                day.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
-                day.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+                Topico topico = new Topico();
+                topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                topico.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
+                topico.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
+                topico.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
+                topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
+                topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to subject list
-                days.add(day);
+                topicos.add(topico);
             } while (c.moveToNext());
         }
         closeDB();
 
-        return days;
+        return topicos;
     }
 
     /*
@@ -491,8 +491,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
    * getting all days under single subject
    */
-    public List<Day> getAllDaysBySubject(long subject_id) {
-        List<Day> days = new ArrayList<Day>();
+    public List<Topico> getAllDaysBySubject(long subject_id) {
+        List<Topico> topicos = new ArrayList<Topico>();
 
         String selectQuery = "SELECT  * FROM "
                 + TABLE_DAY + " WHERE "
@@ -506,20 +506,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Day day = new Day();
-                day.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                day.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
-                day.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
-                day.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
-                day.setSubject_id((c.getInt(c.getColumnIndex(KEY_DAY_SUBJECT))));
-                day.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+                Topico topico = new Topico();
+                topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                topico.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
+                topico.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
+                topico.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
+                topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_DAY_SUBJECT))));
+                topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to subject list
-                days.add(day);
+                topicos.add(topico);
             } while (c.moveToNext());
         }
 
-        return days;
+        return topicos;
     }
 
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 import helper.DatabaseHelper;
 import list.DayAdapter;
-import model.Day;
+import model.Topico;
 import model.Subject;
 
 // A ListFragment is used to display a list of items
@@ -139,7 +139,7 @@ public class ClassesListFragment extends ListFragment  {
         int layout = R.layout.list;
 
         //Cria o adapter
-        adapter = new DayAdapter(getActivity(),layout, new ArrayList<Day>());
+        adapter = new DayAdapter(getActivity(),layout, new ArrayList<Topico>());
 
         //Cria novo subject
         subject = new Subject(getActivity());
@@ -184,14 +184,14 @@ public class ClassesListFragment extends ListFragment  {
         DatabaseHelper db = ((SubjectsActivity)getActivity()).getDb();
 
         //Pede todos os days do subject do banco
-        ArrayList<Day> days =(ArrayList<Day>) db.getAllDaysBySubject(this.subject.getId());
+        ArrayList<Topico> topicos =(ArrayList<Topico>) db.getAllDaysBySubject(this.subject.getId());
 
         //Limpa o adapter
         //adapter.clear();
 
         //Se existir pelo menos um subject, adiciona no adapter
-        if(!days.isEmpty())
-            adapter.setData(days);
+        if(!topicos.isEmpty())
+            adapter.setData(topicos);
 
         //Atualiza tela
         adapter.notifyDataSetChanged();
@@ -225,16 +225,16 @@ public class ClassesListFragment extends ListFragment  {
             if(item.getTitle().equals("Delete")){
 
                 //Pede todos os days do adapter e põe numa lista
-                List<Day> days = adapter.getItems();
+                List<Topico> topicos = adapter.getItems();
 
                 //Pega a referencia do banco da activity
                 DatabaseHelper db = ((SubjectsActivity)getActivity()).getDb();
 
                 //Para cada day da lista
-                for(Day day : days){
+                for(Topico topico : topicos){
 
                     //Descobre em qual a view corresponde a este day
-                    View view = adapter.getView(day.getId());
+                    View view = adapter.getView(topico.getId());
 
                     //Pega uma referência para o checkbox dele
                     CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox_subject);

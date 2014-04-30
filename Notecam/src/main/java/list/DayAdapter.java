@@ -21,21 +21,21 @@ import java.util.List;
 import model.*;
 
 
-public class DayAdapter extends ArrayAdapter<Day> {
+public class DayAdapter extends ArrayAdapter<Topico> {
     private LayoutInflater mInflater;
-    private List<Day> items;
+    private List<Topico> items;
     private HashMap<Integer, View> views = new HashMap<Integer, View>();
 
-    public DayAdapter(Context context, int layout, List<Day> items) {
+    public DayAdapter(Context context, int layout, List<Topico> items) {
         super(context, layout, items);
         this.items = items;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setData(ArrayList<Day> data) {
+    public void setData(ArrayList<Topico> data) {
         clear();
         if (data != null) {
-            for (Day appEntry : data) {
+            for (Topico appEntry : data) {
                 add(appEntry);
             }
         }
@@ -71,7 +71,7 @@ public class DayAdapter extends ArrayAdapter<Day> {
         else
             viewHolder = (ViewHolder) convertView.getTag();
 
-        Day item = getItem(position);
+        Topico item = getItem(position);
 
         views.put(item.getId(), convertView);
 
@@ -117,7 +117,7 @@ public class DayAdapter extends ArrayAdapter<Day> {
         return ((ListView)v.getParent()).getPositionForView(v);
     }
 
-    public List<Day> getItems() {
+    public List<Topico> getItems() {
         return items;
     }
 

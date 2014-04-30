@@ -26,11 +26,7 @@ import helper.Singleton;
 import model.Subject;
 
 public class SingleMateriaFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String MATERIA_ID = "materia_id";
 
-    // TODO: Rename and change types of parameters
     private Subject materia;
     private DatabaseHelper db;
     private View view_do_onViewCreated;
@@ -41,7 +37,7 @@ public class SingleMateriaFragment extends Fragment {
     public static SingleMateriaFragment newInstance(int materia_id) {
         SingleMateriaFragment fragment = new SingleMateriaFragment();
         Bundle args = new Bundle();
-        args.putInt(MATERIA_ID, materia_id);
+        args.putInt(Singleton.MATERIA_ID, materia_id);
         args.putString(Singleton.FRAGMENT_TYPE, Singleton.FRAGMENT_TYPE_MATERIA);
         fragment.setArguments(args);
         return fragment;
@@ -55,7 +51,7 @@ public class SingleMateriaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            int materia_id = getArguments().getInt(MATERIA_ID);
+            int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
             db = ((MateriasActivity)getActivity()).getDb();
             materia = db.getSubject((long)materia_id);
         }

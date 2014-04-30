@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Andrew on 10/24/13.
  */
-public class Day {
+public class Topico {
     public static String ID = "id";
     public static String NAME = "name";
 
@@ -14,19 +14,19 @@ public class Day {
     private int color = -1;
     private int id = -1;
     private int weekday = 0;
-    private int number;
+    private int number = 0;
     private int subject_id;
     private String name = "";
     private int createdAt;
 
-    public Day(String name){
+    public Topico(String name){
         this.name = name;
     }
-    public Day(int subject_id, int color){
+    public Topico(int subject_id, int color){
         this.setSubject_id(subject_id);
         this.setColor(color);
     }
-    public Day(){}
+    public Topico(){}
 
     public String getName() {
         return name;

@@ -27,7 +27,7 @@ import java.util.List;
 
 import helper.DatabaseHelper;
 import model.Aula;
-import model.Day;
+import model.Topico;
 import model.Subject;
 
 
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Aula classeAtual = null;
 
     //Aula atual
-    Day dayAtual = null;
+    Topico topicoAtual = null;
 
     //Flag se mudou de subject
     boolean flagMudouSubject = true;
@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             sub.setRandomColor();
             int sub_id = db.createSubjectAndClasses(sub, null);
 
-            Day d = new Day(sub_id, sub.getColorNumber());
+            Topico d = new Topico(sub_id, sub.getColorNumber());
             d.setWeekday(0);
 
             //Salva no banco
@@ -248,29 +248,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 //Checa se já existe aula criada nesse horario
                 if(classeAtual != null)
-                    dayAtual = ChecaSeDayExiste();
+                    topicoAtual = ChecaSeDayExiste();
 
                 //Se ele mudou de maneira manual, não cria nova aula, pega a ultima
                 if(flagMudouSubjectManual) {
-                    List<Day> day = db.getAllDaysBySubject(subjectAtual.getId());
-                    if(!day.isEmpty())
-                        dayAtual = day.get(day.size() - 1);
+                    List<Topico> topico = db.getAllDaysBySubject(subjectAtual.getId());
+                    if(!topico.isEmpty())
+                        topicoAtual = topico.get(topico.size() - 1);
                 }
 
 
                 //Se não existe a aula no banco
-                if(dayAtual == null && classeAtual != null){
+                if(topicoAtual == null && classeAtual != null){
 
                     //Cria nova aula
-                    dayAtual = new Day(subjectAtual.getId(), subjectAtual.getColorNumber());
+                    topicoAtual = new Topico(subjectAtual.getId(), subjectAtual.getColorNumber());
                     if(classeAtual != null)
-                        dayAtual.setWeekday(classeAtual.getWeekday());
+                        topicoAtual.setWeekday(classeAtual.getWeekday());
                     else
-                        dayAtual.setWeekday(0);
+                        topicoAtual.setWeekday(0);
 
 
                     //Salva no banco
-                    dayAtual.setId((int) db.createDay(dayAtual));
+                    topicoAtual.setId((int) db.createDay(topicoAtual));
                 }
 
                 //Letra Background
@@ -291,7 +291,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 ((TextView)getView().findViewById(R.id.home_letra)).setText(subjectAtual.getName().substring(0,1));
 
                 //Topico do dia
-                ((TextView)getView().findViewById(R.id.topicOfDay)).setText(dayAtual.getName());
+                ((TextView)getView().findViewById(R.id.topicOfDay)).setText(topicoAtual.getName());
 
                 //Hora inicial e final da etiqueta
                 ((TextView)getView().findViewById(R.id.home_hour)).setText(classeAtual.getStartTime().format("%H:%M") + " - " + classeAtual.getEndTime().format("%H:%M"));
@@ -347,15 +347,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     /*
     Para evitar criar varias aulas para o mesmo horario, checa se já existe no banco
      */
-    private Day ChecaSeDayExiste() {
-        List<Day> days = db.getAllDaysBySubject(subjectAtual.getId());
-        if(!days.isEmpty()){
+    private Topico ChecaSeDayExiste() {
+        List<Topico> topicos = db.getAllDaysBySubject(subjectAtual.getId());
+        if(!topicos.isEmpty()){
             long endTime = classeAtual.getEndTime().toMillis(true);
             long startTime = classeAtual.getStartTime().toMillis(true);
-            if(days.size() > 0) {
-                Day day = days.get(days.size() - 1);
-                if(((int)startTime) <= day.getCreatedAt() && day.getCreatedAt() <= ((int)endTime))
-                    return day;
+            if(topicos.size() > 0) {
+                Topico topico = topicos.get(topicos.size() - 1);
+                if(((int)startTime) <= topico.getCreatedAt() && topico.getCreatedAt() <= ((int)endTime))
+                    return topico;
             }
         }
 
@@ -363,11 +363,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void save() {
-        if(dayAtual != null){
+        if(topicoAtual != null){
             try {
                 String topic = ((TextView)getView().findViewById(R.id.topicOfDay)).getText().toString();
-                dayAtual.setName(topic);
-                db.updateDay(dayAtual);
+                topicoAtual.setName(topic);
+                db.updateDay(topicoAtual);
             }
             catch (NullPointerException e) {
 
@@ -412,7 +412,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             subjectAtual = null;
         }
         this.classeAtual = null;
-        this.dayAtual = null;
+        this.topicoAtual = null;
     }
 
     /*

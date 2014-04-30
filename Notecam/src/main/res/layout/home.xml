@@ -904,7 +904,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="topic of the day"
+                            android:text="topic of the topico"
                             android:id="@+id/textView"
                             android:layout_gravity="left|top"
                             android:textColor="#a09d9d"

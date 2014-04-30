@@ -32,6 +32,7 @@ import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Subject;
 import view_fragment.AddSubjectFragment;
+import view_fragment.TopicosFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 
@@ -63,8 +64,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     //Armazena uma referência para o Fragmento de Materias
     private MateriasFragment materiasFragment;
 
-    //Armazena uma referência para o Fragmento de Materias
+    //Armazena uma referência para o Fragmento de uma Materia
     private SingleMateriaFragment singleMateriasFragment;
+
+    //Armazena uma referência para o Fragmento de topicos de uma Materia
+    private TopicosFragment topicosFragment;
 
     //Lista de opções do menu
     final ArrayList<LinearLayout> lista_options_menu = new ArrayList<LinearLayout>();;
@@ -396,6 +400,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         this.singleMateriasFragment = singleMateriasFragment;
         Singleton.singleMateriaFragment = singleMateriasFragment;
     }
+
+    public TopicosFragment getTopicosFragment() {
+        return topicosFragment;
+    }
+
+    public void setTopicosFragment(TopicosFragment topicosFragment) {
+        this.topicosFragment = topicosFragment;
+    }
 }
 
 class PagerAdapter extends FragmentPagerAdapter {
@@ -412,6 +424,7 @@ class PagerAdapter extends FragmentPagerAdapter {
 
     Context context;
     private Fragment mFragmentAtPos1 = null;
+    private Fragment mFragmentAtPos2 = null;
     final private FragmentManager mFragmentManager;
 
     //ListaDeFragmentos
@@ -441,12 +454,21 @@ class PagerAdapter extends FragmentPagerAdapter {
             ((MateriasActivity)context).setSingleMateriasFragment((SingleMateriaFragment) mFragmentAtPos1);
             return mFragmentAtPos1;
         }
+        else if(position == 2){
+            Subject subject;
+            if (mFragmentAtPos2 == null) {
+                subject = (Subject) ((MateriasActivity)context).getDb().getAllSubjects().get(0);
+                mFragmentAtPos2 = TopicosFragment.newInstance(subject.getId());
+            }
+            ((MateriasActivity)context).setTopicosFragment((TopicosFragment) mFragmentAtPos2);
+            return mFragmentAtPos2;
+        }
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }
 
