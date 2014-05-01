@@ -126,6 +126,6 @@ public class Materia {
     }
 
     public int getNumberDays(DatabaseHelper db) {
-        return db.getAllDaysBySubject(this.getId()).size();
+        return db.getAllTopicosBySubject(this.getId()).size();
     }
 }

@@ -97,7 +97,8 @@ public class TopicosFragment extends Fragment {
         if (getArguments() != null) {
             int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
             db = ((MateriasActivity)getActivity()).getDb();
-            materia = db.getSubject((long) materia_id);
+            if(!db.getAllSubjects().isEmpty())
+                materia = db.getSubject((long) materia_id);
         }
 
 

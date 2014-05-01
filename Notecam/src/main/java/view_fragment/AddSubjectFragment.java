@@ -190,6 +190,7 @@ public class AddSubjectFragment extends Fragment {
                 //Volta pra tela anterior
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
 
+
         }
     };
 

@@ -114,11 +114,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             sub.setRandomColor();
             int sub_id = db.createSubjectAndClasses(sub, null);
 
-            Topico d = new Topico(sub_id, sub.getColorNumber());
-            d.setWeekday(0);
+            //Topico d = new Topico(sub_id, sub.getColorNumber());
+            //d.setWeekday(0);
 
             //Salva no banco
-            db.createDay(d);
+            //db.createTopico(d);
 
         }
 
@@ -252,7 +252,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 //Se ele mudou de maneira manual, não cria nova aula, pega a ultima
                 if(flagMudouSubjectManual) {
-                    List<Topico> topico = db.getAllDaysBySubject(subjectAtual.getId());
+                    List<Topico> topico = db.getAllTopicosBySubject(subjectAtual.getId());
                     if(!topico.isEmpty())
                         topicoAtual = topico.get(topico.size() - 1);
                 }
@@ -262,15 +262,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if(topicoAtual == null && classeAtual != null){
 
                     //Cria nova aula
-                    topicoAtual = new Topico(subjectAtual.getId(), subjectAtual.getColorNumber());
+                    //topicoAtual = new Topico(subjectAtual.getId(), subjectAtual.getColorNumber());
                     if(classeAtual != null)
-                        topicoAtual.setWeekday(classeAtual.getWeekday());
-                    else
-                        topicoAtual.setWeekday(0);
+                    //    topicoAtual.setWeekday(classeAtual.getWeekday());
+                   // else
+                     //   topicoAtual.setWeekday(0);
 
 
                     //Salva no banco
-                    topicoAtual.setId((int) db.createDay(topicoAtual));
+                    topicoAtual.setId((int) db.createTopico(topicoAtual));
                 }
 
                 //Letra Background
@@ -348,7 +348,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Para evitar criar varias aulas para o mesmo horario, checa se já existe no banco
      */
     private Topico ChecaSeDayExiste() {
-        List<Topico> topicos = db.getAllDaysBySubject(subjectAtual.getId());
+        List<Topico> topicos = db.getAllTopicosBySubject(subjectAtual.getId());
         if(!topicos.isEmpty()){
             long endTime = classeAtual.getEndTime().toMillis(true);
             long startTime = classeAtual.getStartTime().toMillis(true);
@@ -367,7 +367,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             try {
                 String topic = ((TextView)getView().findViewById(R.id.topicOfDay)).getText().toString();
                 topicoAtual.setName(topic);
-                db.updateDay(topicoAtual);
+                db.updateTopico(topicoAtual);
             }
             catch (NullPointerException e) {
 

@@ -38,11 +38,12 @@ import view_fragment.SingleMateriaFragment;
 
 public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener {
 
-    ViewPager viewPager = null;
+    private ViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
     DrawerLayout drawerLayout;
     View drawerView;
     private String mTitle = "Notecam";
+    private boolean emptyFragments = false;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -50,7 +51,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
 
-
+    @Override
+    protected void onResume() {
+        getViewPager().getAdapter().notifyDataSetChanged();
+        super.onResume();
+    }
 
     //Referencia para colocar uma custom font
     private Typeface fontType;
@@ -80,8 +85,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerView = findViewById(R.id.drawer);
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
+        setViewPager((ViewPager) findViewById(R.id.pager));
+        getViewPager().setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
 
         setUpClickListenersMenu();
 
@@ -302,9 +307,10 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 if(content.getAsString(Singleton.REPLACE_FRAGMENT).equals(Singleton.MATERIA)) {
                     int materia_id = content.getAsInteger(Singleton.MATERIA_ID);
                     //singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
+
                     singleMateriasFragment.reload(materia_id);
-                    viewPager.getAdapter().notifyDataSetChanged();
-                    viewPager.setCurrentItem(1, true);
+                    getViewPager().getAdapter().notifyDataSetChanged();
+                    getViewPager().setCurrentItem(1, true);
                     //TrocaFragments
                     //changeFragments(singleMateriasFragment, null);
                 }
@@ -332,17 +338,17 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         if(fragment instanceof MateriasFragment){
             //Se clicou no menu Materias (enquanto estava com o viewpager invisivel)
-            if(!(viewPager.getVisibility() == View.VISIBLE)){
-                viewPager.setVisibility(View.VISIBLE);
+            if(!(getViewPager().getVisibility() == View.VISIBLE)){
+                getViewPager().setVisibility(View.VISIBLE);
                 transaction.remove(fragment_origin);
             }
-            viewPager.setCurrentItem(0, true);
+            getViewPager().setCurrentItem(0, true);
         }
         else if(fragment instanceof SingleMateriaFragment){
 
         }
         else {
-            viewPager.setVisibility(View.GONE);
+            getViewPager().setVisibility(View.GONE);
 
             //TrocaFragments
             transaction.replace(R.id.mainLinearLayout, fragment);
@@ -408,6 +414,22 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     public void setTopicosFragment(TopicosFragment topicosFragment) {
         this.topicosFragment = topicosFragment;
     }
+
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
+    }
+
+    public boolean isEmptyFragments() {
+        return emptyFragments;
+    }
+
+    public void setEmptyFragments(boolean emptyFragments) {
+        this.emptyFragments = emptyFragments;
+    }
 }
 
 class PagerAdapter extends FragmentPagerAdapter {
@@ -468,7 +490,22 @@ class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        if(((MateriasActivity)context).isEmptyFragments()){
+            /*if(mFragmentAtPos1 != null)
+                ((MateriasActivity)context).getSupportFragmentManager().beginTransaction().remove(mFragmentAtPos1).commit();
+
+            SingleMateriaFragment fragment = ((MateriasActivity)context).getSingleMateriasFragment();
+            if(fragment != null)
+                ((MateriasActivity)context).getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+
+            if(mFragmentAtPos2 != null)
+                ((MateriasActivity)context).getSupportFragmentManager().beginTransaction().remove(mFragmentAtPos2).commit();*/
+
+
+            return 1;
+        }
+        else
+            return 3;
     }
 }
 

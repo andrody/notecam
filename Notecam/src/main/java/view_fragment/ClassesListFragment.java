@@ -184,7 +184,7 @@ public class ClassesListFragment extends ListFragment  {
         DatabaseHelper db = ((SubjectsActivity)getActivity()).getDb();
 
         //Pede todos os days do subject do banco
-        ArrayList<Topico> topicos =(ArrayList<Topico>) db.getAllDaysBySubject(this.subject.getId());
+        ArrayList<Topico> topicos =(ArrayList<Topico>) db.getAllTopicosBySubject(this.subject.getId());
 
         //Limpa o adapter
         //adapter.clear();

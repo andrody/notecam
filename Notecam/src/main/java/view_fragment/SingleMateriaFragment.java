@@ -24,10 +24,12 @@ import com.koruja.notecam.R;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Subject;
+import model.Topico;
 
 public class SingleMateriaFragment extends Fragment {
 
     private Subject materia;
+    private Topico topico;
     private DatabaseHelper db;
     private View view_do_onViewCreated;
 
@@ -50,11 +52,23 @@ public class SingleMateriaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int materia_id = -1;
         if (getArguments() != null) {
-            int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
-            db = ((MateriasActivity)getActivity()).getDb();
-            materia = db.getSubject((long)materia_id);
+            materia_id = getArguments().getInt(Singleton.MATERIA_ID);
         }
+
+
+        db = ((MateriasActivity) getActivity()).getDb();
+        if (!db.getAllSubjects().isEmpty()) {
+            materia = db.getSubject((long) materia_id);
+
+            //Se não houver topicos criados na materia, cria um
+            if (materia.getTopicos().isEmpty()) {
+                materia.addTopico("Geral");
+            }
+            this.topico = materia.getTopicos().get(materia.getTopicos().size() -1);
+        }
+
 
         //Tem de habilitar para mudar o ActionBar
         setHasOptionsMenu(true);
@@ -70,7 +84,8 @@ public class SingleMateriaFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         view_do_onViewCreated = view;
-        criarUI(view);
+        if(!db.getAllSubjects().isEmpty())
+            criarUI(view);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -93,6 +108,10 @@ public class SingleMateriaFragment extends Fragment {
         TextView nome_materia = ((TextView)view.findViewById(R.id.nome_materia));
         nome_materia.setText(materia.getName());
         nome_materia.setTextColor(materia.getColor());
+
+        //Texto do Topico
+        TextView nome_topico = ((TextView)view.findViewById(R.id.nome_topico));
+        nome_topico.setText(topico.getName());
 
         View v = view.findViewById(R.id.camera_circulo);
         v.setOnTouchListener(new View.OnTouchListener() {
@@ -127,8 +146,13 @@ public class SingleMateriaFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.single_materia, menu);
 
-        getActivity().getActionBar().setTitle(materia.getName());
-        getActivity().getActionBar().setSubtitle("Sem aulas hoje");
+        try {
+            getActivity().getActionBar().setTitle(materia.getName());
+            getActivity().getActionBar().setSubtitle("Sem aulas hoje");
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

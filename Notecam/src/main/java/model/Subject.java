@@ -24,6 +24,7 @@ public class Subject {
 
     private boolean checkboxSelecionada = false;
     private List<Aula> aulas;
+    private List<Topico> topicos;
     private int color;
     private int id = -1;
     private int image_id = 0;
@@ -67,6 +68,12 @@ public class Subject {
 
     public void setAulas(List<Aula> aulas) {
         this.aulas = aulas;
+    }
+
+    public void addTopico(String nome) {
+        Topico novo_topico = new Topico(nome, this.getId());
+        novo_topico.save(context);
+        topicos.add(novo_topico);
     }
 
     public void setRandomColor() {
@@ -124,30 +131,6 @@ public class Subject {
 
     public int getColor() {
         return this.color;
-        /*switch (this.color){
-            case 0:
-                return Color.rgb(245,85,95);
-            case 1:
-                return Color.rgb(120,210,132);
-            case 2:
-                return Color.rgb(241,150,61);
-            case 3:
-                return Color.rgb(95,135,237);
-            case 4:
-                return Color.rgb(248,191,80);
-            case 5:
-                return Color.rgb(177,230,88);
-            case 6:
-                return Color.rgb(98,215,208);
-            case 7:
-                return Color.rgb(222,127,243);
-            case 8:
-                return Color.rgb(249,143,233);
-            case 9:
-                return Color.rgb(209,209,209);
-            default:
-                return Color.rgb(0,0,0);
-        }*/
     }
 
     public void setColor(int color) {
@@ -171,7 +154,7 @@ public class Subject {
     }
 
     public int getNumberDays(DatabaseHelper db) {
-        return db.getAllDaysBySubject(this.getId()).size();
+        return db.getAllTopicosBySubject(this.getId()).size();
     }
 
     public int getNumero_fotos() {
@@ -188,5 +171,13 @@ public class Subject {
 
     public void setImage_id(int image_id) {
         this.image_id = image_id;
+    }
+
+    public List<Topico> getTopicos() {
+        return topicos;
+    }
+
+    public void setTopicos(List<Topico> topicos) {
+        this.topicos = topicos;
     }
 }

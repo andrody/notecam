@@ -158,14 +158,7 @@ public class MateriasFragment extends Fragment {
 
     private Singleton.OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MateriasFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static MateriasFragment newInstance() {
         MateriasFragment fragment = new MateriasFragment();
@@ -237,27 +230,34 @@ public class MateriasFragment extends Fragment {
 
     //Syncroniza com o banco de dados
     public void syncDB(){
-        //Pega a referencia do banco da activity
-        DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
+        try {
+            //Pega a referencia do banco da activity
+            DatabaseHelper db = ((MateriasActivity) getActivity()).getDb();
 
-        //Pede todos os subjects do banco
-        ArrayList<Subject> subjects =(ArrayList<Subject>) db.getAllSubjects();
+            //Pede todos os subjects do banco
+            ArrayList<Subject> subjects = (ArrayList<Subject>) db.getAllSubjects();
 
-        //Pede toda as classes desse subject e armazena nele
-        for(Subject subject : subjects){
-            subject.setAulas(db.getAllClassesBySubject(subject.getId()));
+            //Pede toda as classes desse subject e armazena nele
+            for (Subject subject : subjects) {
+                subject.setAulas(db.getAllClassesBySubject(subject.getId()));
+            }
+
+            //Limpa o adapter
+            //materiasAdapter.clear();
+
+            //Se existir pelo menos um subject, adiciona no adapter
+            if (!subjects.isEmpty())
+                materiasAdapter.materias = subjects;
+            //materiasAdapter.setData(subjects);
+
+            //Atualiza tela
+            materiasAdapter.notifyDataSetChanged();
+
+            ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
         }
-
-        //Limpa o adapter
-        //materiasAdapter.clear();
-
-        //Se existir pelo menos um subject, adiciona no adapter
-        if(!subjects.isEmpty())
-            materiasAdapter.materias = subjects;
-        //materiasAdapter.setData(subjects);
-
-        //Atualiza tela
-        materiasAdapter.notifyDataSetChanged();
+        catch (NullPointerException e){
+            e.printStackTrace();
+        };
     }
 
     //Callback para quando clica nos ícones do header no ActionMode (Modo de edição)
@@ -284,6 +284,10 @@ public class MateriasFragment extends Fragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
+            if(item.getTitle().equals("sync")){
+                syncDB();
+            }
+
             //Se o botão selecionado pelo usuario for o de deletar
             if(item.getTitle().equals("Deletar")){
 
@@ -309,7 +313,6 @@ public class MateriasFragment extends Fragment {
                         db.deleteSubjectAndClasses(subject);
                     }
                 }
-                getActivity().recreate();
                 syncDB();
 
 

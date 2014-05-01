@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.koruja.notecam.MateriasActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     // Database Name
     private static final String DATABASE_NAME = "subjectsManager";
@@ -33,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_SUBJECT = "subjects";
     private static final String TABLE_CLASS = "classes";
+    private static final String TABLE_TOPICO = "topicos";
     private static final String TABLE_DAY = "days";
 
     // Common column names
@@ -59,6 +62,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_DAY_NAME = "day_name";
     private static final String KEY_DAY_NUMBER = "day_number";
     private static final String KEY_DAY_WEEKDAY = "day_weekday";
+
+    // TOPICOS Table - column names
+    private static final String KEY_TOPICO_SUBJECT = "topico_subjectID";
+    private static final String KEY_TOPICO_NAME = "topico_name";
+    private static final String KEY_TOPICO_NUMBER = "topico_number";
 
 
     // Table Create Statements
@@ -92,6 +100,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_CREATED_AT + " INTEGER"
             + ")";
 
+    // Topico table create statement
+    private static final String CREATE_TABLE_TOPICO = "CREATE TABLE "
+            + TABLE_TOPICO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_TOPICO_NAME + " TEXT,"
+            + KEY_TOPICO_SUBJECT + " INTEGER,"
+            + KEY_TOPICO_NUMBER + " INTEGER,"
+            + KEY_CREATED_AT + " INTEGER"
+            + ")";
+
 
     Context context;
 
@@ -107,7 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // creating required tables
         db.execSQL(CREATE_TABLE_SUBJECT);
         db.execSQL(CREATE_TABLE_CLASS);
-        db.execSQL(CREATE_TABLE_DAY);
+        db.execSQL(CREATE_TABLE_TOPICO);
 
     }
 
@@ -116,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBJECT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOPICO);
 
         // create new tables
         onCreate(db);
@@ -140,7 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteSubjectAndClasses(Subject subject){
         deleteSubject(subject.getId());
         deleteAllClassesBySubject(subject.getId());
-        deleteAllDaysBySubject(subject.getId());
+        deleteAllTopicosBySubject(subject.getId());
         //closeDB();
     }
 
@@ -172,6 +189,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //for (long class_id : classes_ids) {
         //    createTodoTag(subject_id, class_id);
         // }
+
+        ((MateriasActivity)context).getViewPager().getAdapter().notifyDataSetChanged();
+        ((MateriasActivity)context).getMateriasFragment().syncDB();
         return subject_id;
     }
 
@@ -195,6 +215,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
         sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
+
+        sb.setTopicos(getAllTopicosBySubject(subject_id));
 
 
         return sb;
@@ -248,10 +270,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * Deleting subject
     */
-    private void deleteSubject(long subject_id) {
+    private int deleteSubject(long subject_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_SUBJECT, KEY_ID + " = ?",
+        int retorno = db.delete(TABLE_SUBJECT, KEY_ID + " = ?",
                 new String[] { String.valueOf(subject_id) });
+
+        ((MateriasActivity)context).getViewPager().getAdapter().notifyDataSetChanged();
+        ((MateriasActivity)context).getMateriasFragment().syncDB();
+        return retorno;
+
     }
 
 
@@ -360,71 +387,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ----------------------------------------------------------//
-    // ------------------------ Day table  methods ----------------//
+    // ------------------------ Topico table  methods ----------------//
     // ----------------------------------------------------------//
 
 
     /*
-    * Creating day
+    * Creating Topico
     */
-    public long createDay(Topico topico){//Day day, long subject_id) {
+    public long createTopico(Topico topico) {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
 
         ContentValues values = new ContentValues();
-        values.put(KEY_DAY_NAME, topico.getName());
-        values.put(KEY_DAY_SUBJECT, topico.getSubject_id());
-        values.put(KEY_DAY_NUMBER, topico.getNumber());
-        values.put(KEY_DAY_WEEKDAY, topico.getWeekday());
+        values.put(KEY_TOPICO_NAME, topico.getName());
+        values.put(KEY_TOPICO_SUBJECT, topico.getSubject_id());
+        values.put(KEY_TOPICO_NUMBER, topico.getNumber());
 
         Time time = new Time();
         time.setToNow();
         values.put(KEY_CREATED_AT, time.toMillis(true));
 
         // insert row
-        long day_id = db.insert(TABLE_DAY, null, values);
+        long topico_id = db.insert(TABLE_TOPICO, null, values);
 
-        return day_id;
+        return topico_id;
     }
 
     /*
-    * Updating day
+    * Updating Topico
     */
-    public int updateDay(Topico topico) {
+    public int updateTopico(Topico topico) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_DAY_NAME, topico.getName());
-        values.put(KEY_DAY_SUBJECT, topico.getSubject_id());
-        values.put(KEY_DAY_NUMBER, topico.getNumber());
-        values.put(KEY_DAY_WEEKDAY, topico.getWeekday());
+        values.put(KEY_TOPICO_NAME, topico.getName());
+        values.put(KEY_TOPICO_SUBJECT, topico.getSubject_id());
+        values.put(KEY_TOPICO_NUMBER, topico.getNumber());
 
 
-        // updating day
+        // updating topico
         assert db != null;
-        return db.update(TABLE_DAY, values, KEY_ID + " = ?",
+        return db.update(TABLE_TOPICO, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(topico.getId()) });
     }
 
     /*
-    * Deleting day
+    * Deleting topico
     */
-    private void deleteDay(long day_id) {
+    private void deleteTopico(long topico_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;
-        db.delete(TABLE_DAY, KEY_ID + " = ?",
-                new String[] { String.valueOf(day_id) });
+        db.delete(TABLE_TOPICO, KEY_ID + " = ?",
+                new String[] { String.valueOf(topico_id) });
     }
 
     /*
-    * get single day
+    * get single topico
     */
-    public Topico getDay(long day_id) {
+    public Topico getTopico(long topico_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_DAY + " WHERE "
-                + KEY_ID + " = " + day_id;
+        String selectQuery = "SELECT  * FROM " + TABLE_TOPICO + " WHERE "
+                + KEY_ID + " = " + topico_id;
 
         Log.e(LOG, selectQuery);
 
@@ -435,9 +460,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Topico topico = new Topico();
         topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        topico.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
-        topico.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
-        topico.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
+        topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
+        topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
         topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
         topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
@@ -446,12 +470,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
-    * getting all days
+    * getting all topicos
     *
      */
-    public List<Topico> getAllDays() {
+    public List<Topico> getAllTopicos() {
         List<Topico> topicos = new ArrayList<Topico>();
-        String selectQuery = "SELECT  * FROM " + TABLE_DAY;
+        String selectQuery = "SELECT  * FROM " + TABLE_TOPICO;
 
         Log.e(LOG, selectQuery);
 
@@ -463,9 +487,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 Topico topico = new Topico();
                 topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                topico.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
-                topico.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
-                topico.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
+                topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
+                topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
                 topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
                 topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
@@ -479,24 +502,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
-    * delete all days of a subject
+    * delete all topicos of a subject
     */
-    private void deleteAllDaysBySubject(long subject_id) {
+    private void deleteAllTopicosBySubject(long subject_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;
-        db.delete(TABLE_DAY, KEY_DAY_SUBJECT + " = ?",
+        db.delete(TABLE_TOPICO, KEY_TOPICO_SUBJECT + " = ?",
                 new String[] { String.valueOf(subject_id) });
     }
 
     /*
-   * getting all days under single subject
+   * getting all topicos under single subject
    */
-    public List<Topico> getAllDaysBySubject(long subject_id) {
+    public List<Topico> getAllTopicosBySubject(long subject_id) {
         List<Topico> topicos = new ArrayList<Topico>();
 
         String selectQuery = "SELECT  * FROM "
-                + TABLE_DAY + " WHERE "
-                + KEY_DAY_SUBJECT + " = " + subject_id;
+                + TABLE_TOPICO + " WHERE "
+                + KEY_TOPICO_SUBJECT + " = " + subject_id;
 
         Log.e(LOG, selectQuery);
 
@@ -508,10 +531,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 Topico topico = new Topico();
                 topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                topico.setName((c.getString(c.getColumnIndex(KEY_DAY_NAME))));
-                topico.setNumber((c.getInt(c.getColumnIndex(KEY_DAY_NUMBER))));
-                topico.setWeekday((c.getInt(c.getColumnIndex(KEY_DAY_WEEKDAY))));
-                topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_DAY_SUBJECT))));
+                topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
+                topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
+                topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_TOPICO_SUBJECT))));
                 topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to subject list

@@ -1,5 +1,9 @@
 package model;
 
+import android.content.Context;
+
+import com.koruja.notecam.MateriasActivity;
+
 import java.util.List;
 
 /**
@@ -11,22 +15,25 @@ public class Topico {
 
     private boolean checkboxSelecionada = false;
     private List<Aula> aulas;
-    private int color = -1;
     private int id = -1;
-    private int weekday = 0;
     private int number = 0;
     private int subject_id;
     private String name = "";
     private int createdAt;
 
-    public Topico(String name){
+    public Topico(String name, int subject_id){
         this.name = name;
+        this.subject_id = subject_id;
     }
-    public Topico(int subject_id, int color){
-        this.setSubject_id(subject_id);
-        this.setColor(color);
-    }
+
     public Topico(){}
+    public Topico(String nome){
+        this.name = nome;
+    }
+
+    public void save(Context context){
+        this.id = (int) ((MateriasActivity) context).getDb().createTopico(this);
+    }
 
     public String getName() {
         return name;
@@ -68,22 +75,6 @@ public class Topico {
         this.number = number;
     }
 
-    public int getWeekday() {
-        return weekday;
-    }
-
-    public void setWeekday(int weekday) {
-        this.weekday = weekday;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
-    }
-
     public int getCreatedAt() {
         return createdAt;
     }
@@ -92,22 +83,12 @@ public class Topico {
         this.createdAt = createdAt;
     }
 
+    //TODO: deletar depois
     public String getWeekDayLong(int i){
-        if(i == 0)
-            return "Sunday";
-        if(i == 1)
-            return "Monday";
-        if(i == 2)
-            return "Tuesday";
-        if(i == 3)
-            return "Wednesday";
-        if(i == 4)
-            return "Thursday";
-        if(i == 5)
-            return "Friday";
-        if(i == 6)
-            return "Saturday" ;
         return "";
-
     }
+    public int getWeekday(){
+        return 0;
+    }
+
 }

@@ -59,7 +59,7 @@ public class ClassesFragment extends Fragment implements View.OnClickListener {
 
 
         //Pega numero de classes e coloca na textview classessNumber
-        int classesNumber = db.getAllDaysBySubject(subject.getId()).size();
+        int classesNumber = db.getAllTopicosBySubject(subject.getId()).size();
         ((TextView)v.findViewById(R.id.classesNumber)).setText(classesNumber + " classes");
 
         //Contador
