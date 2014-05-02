@@ -182,6 +182,9 @@ public class AddSubjectFragment extends Fragment {
                 //Se já existe no Banco, apenas da um update
                 else
                     db.updateSubjectAndClasses(subject, aulas);
+
+                ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
+                ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
             }
 
             if (flagEditFromHome)

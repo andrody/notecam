@@ -152,6 +152,7 @@ public class SingleMateriaFragment extends Fragment {
         }
         catch (NullPointerException e){
             e.printStackTrace();
+
         }
         super.onCreateOptionsMenu(menu, inflater);
     }

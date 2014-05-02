@@ -61,7 +61,8 @@
             android:textColor="@color/text_color"
             android:background="@color/background_aula_box"
             android:paddingLeft="7dp"
-            android:paddingRight="7dp">
+            android:paddingRight="7dp"
+            android:minWidth="250dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -78,13 +79,15 @@
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center"
                 android:textColor="@color/darker_text_color"
-                android:id="@+id/nome_topico" />
+                android:id="@+id/nome_topico"
+                android:singleLine="true"
+                android:layout_weight="1" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_expand"
-                android:layout_gravity="center" />
+                android:layout_gravity="center_vertical|right" />
         </LinearLayout>
 
         <!-- Novo Tópico -->

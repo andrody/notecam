@@ -254,6 +254,10 @@ public class MateriasFragment extends Fragment {
             materiasAdapter.notifyDataSetChanged();
 
             ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
+            ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+
+            //Atualiza tela
+            materiasAdapter.notifyDataSetChanged();
         }
         catch (NullPointerException e){
             e.printStackTrace();

@@ -83,6 +83,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.setEmptyFragments(db.getAllSubjects().isEmpty());
+
+
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerView = findViewById(R.id.drawer);
         setViewPager((ViewPager) findViewById(R.id.pager));
