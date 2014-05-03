@@ -256,6 +256,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             changeFragments(addSubjectsFragment, null);
         }
 
+        //Se o botão selecionado pelo usuario for o de ver as fotos (icone pasta)
+        if(item.getTitle().equals(getResources().getString(R.string.action_go_folder))){
+            viewPager.setCurrentItem(2);
+        }
+
         return super.onOptionsItemSelected(item);
 
     }
@@ -345,7 +350,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 getViewPager().setVisibility(View.VISIBLE);
                 transaction.remove(fragment_origin);
             }
-            getViewPager().setCurrentItem(0, true);
+            getViewPager().setCurrentItem(0);
         }
         else if(fragment instanceof SingleMateriaFragment){
 

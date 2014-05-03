@@ -103,7 +103,7 @@ public class AddSubjectFragment extends Fragment {
         transaction.replace(R.id.fragment_container, getAddClassesFragment());
         transaction.commit();
 
-        //Inicia o modo ActionMode (Header fica azul e com opções especializadas)
+        //Inicia o modo ActionMode (Header fica branco e com opções especializadas)
         getActivity().startActionMode(mActionModeCallback);
 
         //Fazer teclado desaparecer ao EditText perder foco (Por algum motivo ele não perde sozinho)

@@ -131,10 +131,10 @@ public class AddClassesFragment extends ListFragment implements View.OnClickList
             AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
 
             //Coloca o titulo
-            b.setTitle("Day of the Week");
+            b.setTitle("Dia da semana");
 
             //Especifica as opções do dialog
-            String[] types = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"};
+            String[] types = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta","Sexta", "Sabado"};
 
             //Coloca as opções e um ClickListener
             b.setItems(types, new DialogInterface.OnClickListener() {

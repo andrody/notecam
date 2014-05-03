@@ -53,6 +53,7 @@
 
         <!-- Aula -->
         <LinearLayout
+            android:id="@+id/topicos_box"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:orientation="horizontal"
@@ -92,6 +93,7 @@
 
         <!-- Novo Tópico -->
         <LinearLayout
+            android:id="@+id/novo_topico"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:orientation="horizontal"

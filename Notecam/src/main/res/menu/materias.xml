@@ -9,9 +9,4 @@
         android:icon="@drawable/ic_action_new"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/sync"
-        android:title="sync"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_action_new"
-        app:showAsAction="ifRoom" />
 </menu>

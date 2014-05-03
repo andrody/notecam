@@ -288,10 +288,6 @@ public class MateriasFragment extends Fragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-            if(item.getTitle().equals("sync")){
-                syncDB();
-            }
-
             //Se o botão selecionado pelo usuario for o de deletar
             if(item.getTitle().equals("Deletar")){
 

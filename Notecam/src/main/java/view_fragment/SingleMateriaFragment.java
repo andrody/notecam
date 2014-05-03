@@ -1,6 +1,8 @@
 package view_fragment;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
@@ -57,21 +59,13 @@ public class SingleMateriaFragment extends Fragment {
             materia_id = getArguments().getInt(Singleton.MATERIA_ID);
         }
 
-
         db = ((MateriasActivity) getActivity()).getDb();
         if (!db.getAllSubjects().isEmpty()) {
-            materia = db.getSubject((long) materia_id);
+            setMateria(db.getSubject((long) materia_id));
 
-            //Se não houver topicos criados na materia, cria um
-            if (materia.getTopicos().isEmpty()) {
-                materia.addTopico("Geral");
-            }
-            this.topico = materia.getTopicos().get(materia.getTopicos().size() -1);
+            //Tem de habilitar para mudar o ActionBar
+            setHasOptionsMenu(true);
         }
-
-
-        //Tem de habilitar para mudar o ActionBar
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -86,14 +80,26 @@ public class SingleMateriaFragment extends Fragment {
         view_do_onViewCreated = view;
         if(!db.getAllSubjects().isEmpty())
             criarUI(view);
+
         super.onViewCreated(view, savedInstanceState);
     }
 
 
     public void criarUI(View view){
+        //Se não houver topicos criados na materia, cria um
+        if (getMateria().getTopicos().isEmpty()) {
+            getMateria().addTopico("Geral");
+            getMateria().addTopico("topico 1");
+            getMateria().addTopico("topico 2");
+            getMateria().addTopico("topico 3");
+        }
+        this.topico = getMateria().getTopicos().get(0);
+
+
+
         //Setando cor da materia aos graficos
         final Drawable camera = getResources().getDrawable( R.drawable.compact_camera );
-        final ColorFilter filter = new LightingColorFilter(materia.getColor(), Color.BLACK);
+        final ColorFilter filter = new LightingColorFilter(getMateria().getColor(), Color.BLACK);
         final ColorFilter filter_branco = new LightingColorFilter(Color.WHITE, Color.WHITE);
         camera.setColorFilter(filter);
 
@@ -102,12 +108,12 @@ public class SingleMateriaFragment extends Fragment {
 
         //Cor do circulo da camera
         final GradientDrawable background = (GradientDrawable) view.findViewById(R.id.camera_circulo).getBackground();
-        background.setStroke(12, materia.getColor());
+        background.setStroke(12, getMateria().getColor());
 
         //Cor e texto do nome da materia
         TextView nome_materia = ((TextView)view.findViewById(R.id.nome_materia));
-        nome_materia.setText(materia.getName());
-        nome_materia.setTextColor(materia.getColor());
+        nome_materia.setText(getMateria().getName());
+        nome_materia.setTextColor(getMateria().getColor());
 
         //Texto do Topico
         TextView nome_topico = ((TextView)view.findViewById(R.id.nome_topico));
@@ -123,13 +129,69 @@ public class SingleMateriaFragment extends Fragment {
                     image_camera.setColorFilter(filter);
                 }
                 else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    background.setColor(materia.getColor());
+                    background.setColor(getMateria().getColor());
                     image_camera.setColorFilter(filter_branco);
                 }
 
                 return true;
             }
         });
+        View view_f = view;
+
+        //Botao de topicos
+        View topicos_box = view.findViewById(R.id.topicos_box);
+        topicos_box.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Coloca o view como final para ser acessível dentro da inner class
+                final View view_f = v;
+
+                //Cria um dialog para escolher os dias da semana
+                AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+
+                //Coloca o titulo
+                b.setTitle("Topicos");
+
+                String[] types = new String[getMateria().getTopicos().size()];
+
+                for(int i = 0; i< getMateria().getTopicos().size(); i++ )
+                    types[i] = getMateria().getTopicos().get(i).getName();
+
+                //Coloca as opções e um ClickListener
+                b.setItems(types, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int position) {
+                        //Quando clica em alguma opção, Fecha o dialog
+                        dialog.dismiss();
+
+                        //Altera no model do adapter a semana selecionada
+                        SingleMateriaFragment.this.topico = getMateria().getTopicos().get(position);
+
+                        //Texto do Topico
+                        TextView nome_topico = ((TextView)view_f.findViewById(R.id.nome_topico));
+                        nome_topico.setText(topico.getName());
+                    }
+
+                });
+
+                //Mostra o dialog
+                b.show();
+
+            }
+        });
+
+        //Botao de adicioar novo topico
+        View novo_topico = view.findViewById(R.id.novo_topico);
+        novo_topico.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddTopicoFragment addTopicoFragment = AddTopicoFragment.newInstance(materia.getId(), -1);
+                ((MateriasActivity)getActivity()).changeFragments(addTopicoFragment, null);
+            }
+        });
+
         background.setColor(0);
         image_camera.setColorFilter(filter);
     }
@@ -147,7 +209,7 @@ public class SingleMateriaFragment extends Fragment {
         inflater.inflate(R.menu.single_materia, menu);
 
         try {
-            getActivity().getActionBar().setTitle(materia.getName());
+            getActivity().getActionBar().setTitle(getMateria().getName());
             getActivity().getActionBar().setSubtitle("Sem aulas hoje");
         }
         catch (NullPointerException e){
@@ -157,6 +219,7 @@ public class SingleMateriaFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -165,7 +228,15 @@ public class SingleMateriaFragment extends Fragment {
 
 
     public void reload(int materia_id) {
-        materia = db.getSubject((long)materia_id);
+        setMateria(db.getSubject((long)materia_id));
         criarUI(view_do_onViewCreated);
+    }
+
+    public Subject getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Subject materia) {
+        this.materia = materia;
     }
 }

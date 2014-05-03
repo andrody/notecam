@@ -519,7 +519,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT  * FROM "
                 + TABLE_TOPICO + " WHERE "
-                + KEY_TOPICO_SUBJECT + " = " + subject_id;
+                + KEY_TOPICO_SUBJECT + " = " + subject_id + " ORDER BY " + KEY_CREATED_AT + " DESC";
 
         Log.e(LOG, selectQuery);
 
@@ -535,6 +535,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
                 topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_TOPICO_SUBJECT))));
                 topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+                Log.e(LOG, "Topico " + topico.getName() + " - Criado em " + topico.getCreatedAt());
 
                 // adding to subject list
                 topicos.add(topico);
