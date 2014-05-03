@@ -43,6 +43,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     ActionBarDrawerToggle mDrawerToggle;
     DrawerLayout drawerLayout;
     View drawerView;
+    PagerAdapter pagerAdapter;
     private String mTitle = "Notecam";
     private boolean emptyFragments = false;
 
@@ -90,7 +91,10 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerView = findViewById(R.id.drawer);
         setViewPager((ViewPager) findViewById(R.id.pager));
-        getViewPager().setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
+
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), this);
+
+        getViewPager().setAdapter(pagerAdapter);
 
         setUpClickListenersMenu();
 
@@ -262,14 +266,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         if(item.getTitle().equals("Add Materia")){
 
             //Cria uma nova instância do Fragment addSubjectsFragment
-            addSubjectsFragment = new AddSubjectFragment();
+            setAddSubjectsFragment(new AddSubjectFragment());
 
-            changeFragments(addSubjectsFragment, null);
-        }
-
-        //Se o botão selecionado pelo usuario for o de ver as fotos (icone pasta)
-        if(item.getTitle().equals(getResources().getString(R.string.action_go_folder))){
-            viewPager.setCurrentItem(2);
+            changeFragments(getAddSubjectsFragment(), null);
         }
 
         return super.onOptionsItemSelected(item);
@@ -359,7 +358,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             //Se clicou no menu Materias (enquanto estava com o viewpager invisivel)
             if(!(getViewPager().getVisibility() == View.VISIBLE)){
                 getViewPager().setVisibility(View.VISIBLE);
-                transaction.remove(fragment_origin);
+                if(fragment_origin != null)
+                    transaction.remove(fragment_origin);
             }
             getViewPager().setCurrentItem(0);
         }
@@ -376,8 +376,21 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             transaction.addToBackStack(null);
         }
 
+
         //Efetuar a transação do novo fragment
         transaction.commit();
+
+    }
+
+    public void reload(){
+        //Fragment fragment = MateriasFragment.newInstance();
+        //setMateriasFragment((MateriasFragment) fragment);
+        //changeFragments(fragment, null);
+        //getViewPager().setAdapter(null);
+        //getViewPager().getAdapter().notifyDataSetChanged();
+        getViewPager().setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
+        changeFragments(getMateriasFragment(), null);
+
     }
 
     public void moveFragmentPager(int position){
@@ -448,6 +461,10 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     public void setEmptyFragments(boolean emptyFragments) {
         this.emptyFragments = emptyFragments;
+    }
+
+    public void setAddSubjectsFragment(AddSubjectFragment addSubjectsFragment) {
+        this.addSubjectsFragment = addSubjectsFragment;
     }
 }
 

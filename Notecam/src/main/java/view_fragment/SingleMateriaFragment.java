@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,15 @@ import model.Topico;
 
 public class SingleMateriaFragment extends Fragment {
 
+
     private Subject materia;
     private Topico topico;
     private DatabaseHelper db;
     private View view_do_onViewCreated;
 
     private Singleton.OnFragmentInteractionListener mListener;
+
+
 
 
     public static SingleMateriaFragment newInstance(int materia_id) {
@@ -49,6 +53,28 @@ public class SingleMateriaFragment extends Fragment {
 
     public SingleMateriaFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Se o botão selecionado pelo usuario for o de ver as fotos (icone pasta)
+        if(item.getTitle().equals(getResources().getString(R.string.action_go_folder))){
+            ((MateriasActivity)getActivity()).getViewPager().setCurrentItem(2);
+        }
+
+        //Se o botão selecionado pelo usuario for o de editar materia
+        if(item.getTitle().equals(getResources().getString(R.string.action_editar_materia))){
+            //Cria uma nova instância do Fragment addSubjectsFragment
+            AddSubjectFragment addSubjectFragment = AddSubjectFragment.newInstance(materia.getId());
+
+            ((MateriasActivity)getActivity()).setAddSubjectsFragment(addSubjectFragment);
+
+            ((MateriasActivity)getActivity()).changeFragments(((MateriasActivity) getActivity()).getAddSubjectsFragment(), null);
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
