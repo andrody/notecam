@@ -3,8 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="#2c2c2c"/>
-    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="#292929"/>
-    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="#292929"/>
-    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="#2c2c2c"/>
+    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="@color/separador_menu_1_b"/>
+    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="@color/separador_menu_2_b"/>
+    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="@color/separador_menu_2_b"/>
+    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="@color/separador_menu_1_b"/>
 </LinearLayout>

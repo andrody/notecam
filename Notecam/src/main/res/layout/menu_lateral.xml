@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer"
-    android:layout_width="240dp"
+    android:layout_width="275dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="@color/background_menu"
+    android:background="@color/background_menu_b"
     android:orientation="vertical"
      >
 
@@ -14,8 +14,8 @@
         android:layout_height="60dp"
         android:layout_gravity="start"
         android:orientation="horizontal"
-        android:paddingTop="13dp"
-        android:paddingBottom="13dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
 
         <ImageView
             android:layout_width="35dp"
@@ -28,8 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/materias"
-            android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textColor="@color/menu_text_b"
+            android:textSize="18dp"
             android:layout_gravity="center" />
     </LinearLayout>
 
@@ -42,8 +42,8 @@
         android:layout_height="60dp"
         android:layout_gravity="start"
         android:orientation="horizontal"
-        android:paddingTop="13dp"
-        android:paddingBottom="13dp" >
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp" >
 
         <ImageView
             android:layout_width="35dp"
@@ -56,8 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/exportar_tudo"
-            android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textColor="@color/menu_text_b"
+            android:textSize="18dp"
             android:layout_gravity="center" />
     </LinearLayout>
 
@@ -84,8 +84,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_us"
-            android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textColor="@color/menu_text_b"
+            android:textSize="18dp"
             android:layout_gravity="center" />
     </LinearLayout>
     <include layout="@layout/separador_menu"/>
@@ -111,20 +111,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/versao_premium"
-            android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textColor="@color/menu_text_b"
+            android:textSize="18dp"
             android:layout_gravity="center" />
     </LinearLayout>
 
     <include layout="@layout/separador_menu"/>
 
 
-    <ImageView
+    <!--ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/logo_koruja"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp" /-->
 
 
 
