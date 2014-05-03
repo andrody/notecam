@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -32,9 +33,9 @@ import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Subject;
 import view_fragment.AddSubjectFragment;
-import view_fragment.TopicosFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
+import view_fragment.TopicosFragment;
 
 public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener {
 
@@ -132,11 +133,13 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         final LinearLayout materias = (LinearLayout)findViewById(R.id.menu_option_materias);
         final LinearLayout exportar_tudo = (LinearLayout)findViewById(R.id.menu_option_exportar);
         final LinearLayout sobre = (LinearLayout)findViewById(R.id.menu_option_sobre);
+        final LinearLayout ajuda = (LinearLayout)findViewById(R.id.menu_option_ajuda);
         final LinearLayout premium = (LinearLayout)findViewById(R.id.menu_option_premium);
 
         lista_options_menu.add(materias);
         lista_options_menu.add(exportar_tudo);
         lista_options_menu.add(sobre);
+        lista_options_menu.add(ajuda);
         lista_options_menu.add(premium);
 
         for(final LinearLayout view : lista_options_menu) {
@@ -152,6 +155,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     if(view.equals(materias)) {
                         changeFragments(materiasFragment, null);
                     }
+
+                    //Se clicou na opção Sobre nós, vai para o site da koruja
+                    if(view.equals(sobre) || view.equals(premium)|| view.equals(ajuda) ) {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("http://koruja.herokuapp.com/")));
+                    }
+
+
 
                 }});
 
