@@ -17,6 +17,7 @@ import android.widget.EditText;
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import helper.DatabaseHelper;
@@ -28,13 +29,25 @@ import model.Subject;
 public class AddSubjectFragment extends Fragment {
     @Override
     public void onDetach() {
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         MateriasActivity activity = ((MateriasActivity)getActivity());
-        activity.changeFragments(activity.getMateriasFragment(),this);
+        activity.reload();
+        //activity.changeFragments(activity.getMateriasFragment(),this);
         super.onDetach();
     }
 
     //Armazena o model do Subject em questão
-    private Subject subject;
+    private Subject materia;
 
     //Guarda uma referência ao fragment das classes
     private AddClassesFragment addClassesFragment;
@@ -45,6 +58,14 @@ public class AddSubjectFragment extends Fragment {
     //Flag para saber se ele está editando da home
     private boolean flagEditFromHome = false;
 
+    public static AddSubjectFragment newInstance(int materia_id) {
+        AddSubjectFragment fragment = new AddSubjectFragment();
+        Bundle args = new Bundle();
+        args.putInt(Singleton.MATERIA_ID, materia_id);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_subject, container, false);
@@ -52,26 +73,25 @@ public class AddSubjectFragment extends Fragment {
         //Referencia para o banco de dados
         DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
-        //Cria novo subject
-        subject = new Subject(getActivity());
+        //Cria novo materia
+        materia = new Subject(getActivity());
 
-        //Se foi passado algum parametro, adiciona no subject
+        //Se foi passado algum parametro, adiciona no materia
         if (getArguments() != null) {
-            //Se ele ta chamando o adicionar do menu principal
-            if(getArguments().getInt(Singleton.REDIRECT) == Singleton.DIRECT_ADD_SUBJECT)
+
+            //Se é modo edição
+            if(getArguments().containsKey(Singleton.MATERIA_ID)){
                 flagEditFromHome = true;
+                int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
 
-            //Se é edição
-            else{
-                //Se veio do menu home
-                flagEditFromHome = getArguments().getInt(Singleton.REDIRECT) == 0 || getArguments().getInt(Singleton.REDIRECT) == 1;
+                materia.setId(getArguments().getInt(Subject.ID));
+                materia = db.getSubject(materia_id);
 
-                subject.setId(getArguments().getInt(Subject.ID));
-                subject = db.getSubject(subject.getId());
+                assert view != null;
+                ((EditText)view.findViewById(R.id.editText_subject)).setText(materia.getName());
             }
 
-            assert view != null;
-            ((EditText)view.findViewById(R.id.editText_subject)).setText(subject.getName());
+
         }
 
         return view;
@@ -96,7 +116,7 @@ public class AddSubjectFragment extends Fragment {
 
         //Cria novo Fragmento de Classes
         setAddClassesFragment(new AddClassesFragment());
-        getAddClassesFragment().setSubject(subject);
+        getAddClassesFragment().setSubject(materia);
 
         //Faz as transactions do fragmento das classes
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -154,7 +174,7 @@ public class AddSubjectFragment extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            //Pega o nome do subject digitado pelo usuario
+            //Pega o nome do materia digitado pelo usuario
             String subjectName = ((EditText)getView().findViewById(R.id.editText_subject)).getText().toString();
 
             //Se ele clicou no icone de OK e digitou um nome com mais de 1 letra, salva mudanças
@@ -163,11 +183,11 @@ public class AddSubjectFragment extends Fragment {
                 //Primeira letra maiuscula
                 String name = Character.toUpperCase(subjectName.charAt(0)) + subjectName.substring(1).toLowerCase();
 
-                //Atualiza o nome do subject no model do subject
-                subject.setName(name);
+                //Atualiza o nome do materia no model do materia
+                materia.setName(name);
 
-                //if(!subject.isColored())
-                    subject.setRandomColor();
+                //if(!materia.isColored())
+                materia.setRandomColor();
 
                 //Pega as classes que foram adicionadas/alteradas
                 List<Aula> aulas = addClassesFragment.getAdapter().getItems();
@@ -176,22 +196,22 @@ public class AddSubjectFragment extends Fragment {
                 DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
                 //Se Não existe no DB ainda, então não possui ID
-                if(subject.getId() <= 0)
-                    db.createSubjectAndClasses(subject, aulas);
+                if(materia.getId() <= 0)
+                    db.createSubjectAndClasses(materia, aulas);
 
-                //Se já existe no Banco, apenas da um update
+                    //Se já existe no Banco, apenas da um update
                 else
-                    db.updateSubjectAndClasses(subject, aulas);
+                    db.updateSubjectAndClasses(materia, aulas);
 
                 ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
                 ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
             }
 
-            if (flagEditFromHome)
+            //if (flagEditFromHome)
                 getActivity().onBackPressed();
-            else
+            //else
                 //Volta pra tela anterior
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
+            //    getActivity().getSupportFragmentManager().popBackStackImmediate();
 
 
         }
