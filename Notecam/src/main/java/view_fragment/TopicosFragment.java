@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -25,6 +26,20 @@ public class TopicosFragment extends Fragment {
 
 
     private Subject materia;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //Se o botão selecionado pelo usuario for o de ver as fotos (icone pasta)
+        if(item.getTitle().equals(getResources().getString(R.string.add_topico))){
+
+            AddTopicoFragment addTopicoFragment = AddTopicoFragment.newInstance(materia.getId(), -1);
+
+            ((MateriasActivity)getActivity()).changeFragments(addTopicoFragment, null);
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,7 +95,7 @@ public class TopicosFragment extends Fragment {
         //super.onCreateOptionsMenu(menu, inflater);
 
         menu.clear();
-        inflater.inflate(R.menu.materias, menu);
+        inflater.inflate(R.menu.topicos, menu);
 
         getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
         getActivity().getActionBar().setSubtitle("Sem aulas hoje");
