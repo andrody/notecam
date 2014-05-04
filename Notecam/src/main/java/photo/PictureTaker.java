@@ -1,21 +1,13 @@
 package photo;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.util.Log;
 
-import com.koruja.notecam.R;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -43,69 +35,68 @@ public class PictureTaker {
     //Use esse método para tirar uma foto e salvá-la na pasta FolderName
     public void TakePicture(String folderName, String photoName)
     {
-        //Guarda o nome do arquivo
-        this.photoName = photoName;
+        //guarda o nome do arquivo
+        //(garante que tenha 3 caracteres)
+        if (photoName.length() == 1)
+            this.photoName = "00" + photoName;
+        else if (photoName.length() == 2)
+            this.photoName = "0" + photoName;
+        else
+            this.photoName = photoName;
         //Guarda o nome da pasta
         this.folderName = folderName;
-        //salva o intent
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //Chama a camera
-        activity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+        dispatchTakePictureIntent();
     }
 
-    //Chame obrigatoriamente esse método dentro do OnActivityResult da mesma activity
-    //na qual vc chamou o takePicture
-    public void OnActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_OK) {
-            // Determina o caminho e os metadados da foto
-            final long currentTimeMillis = System.currentTimeMillis();
-            final String appName = activity.getString(R.string.app_name);
-            final String galleryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-            final String albumPath = galleryPath + "/" + appName + "/" + folderName;
-            final String photoPath = albumPath + "/" + photoName + ".png";
-            final ContentValues values = new ContentValues();
-            values.put(MediaStore.MediaColumns.DATA, photoPath);
-            values.put(MediaStore.Images.Media.MIME_TYPE, PHOTO_MIME_TYPE);
-            values.put(Images.Media.TITLE, appName);
-            values.put(Images.Media.DESCRIPTION, appName);
-            values.put(Images.Media.DATE_TAKEN, currentTimeMillis);
-            // Cria o diretório
-            File album = new File(albumPath);
-            if (!album.isDirectory() && !album.mkdirs()) {
-                Log.e(TAG, "Failed to create album directory at " + albumPath);
-                return;
-            }
-            // Pega a foto
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-            //Salva a foto no arquivo
-            try {
-                File photo = new File(photoPath);
-                photo.createNewFile();
-                FileOutputStream fo = new FileOutputStream(photo);
-                fo.write(bytes.toByteArray());
-                fo.close();
-            } catch (IOException e) {
-                Log.e(TAG, "Failed to save image in " + albumPath);
-                Log.e(TAG, e.getMessage());
-            }
+    String mCurrentPhotoPath;
 
-            // Salva na MediaStore
-            Uri uri;
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        final String imagesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        final String appname = "Notecam";
+        final String photoFolder = imagesFolder + "/" + appname + "/" + folderName;
+        File storageDir = new File(photoFolder);
+        if (!storageDir.isDirectory())
+        {
+            storageDir.mkdirs();
+        }
+        File image = File.createTempFile(
+                photoName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
             try {
-                uri = activity.getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
-            } catch (final Exception e) {
-                Log.e(TAG, "Failed to insert photo into MediaStore");
-                e.printStackTrace();
-                // Since the insertion failed, delete the photo.
-                File photo = new File(photoPath);
-                if (!photo.delete()) {
-                    Log.e(TAG, "Failed to delete non-inserted photo");
-                }
-                return;
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.e(TAG, "Erro ao criar arquivo...");
+                Log.e(TAG, ex.getMessage());
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
+    }
+
+    public void OnActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
     }
 }
