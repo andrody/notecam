@@ -118,6 +118,10 @@ public class SingleMateriaFragment extends Fragment {
         }
         this.topico = getMateria().getTopicos().get(0);
 
+        if(!Singleton.getMateria_selecionada().equals(getMateria())) Singleton.setMateria_selecionada(getMateria());
+
+
+
 
 
         //Setando cor da materia aos graficos

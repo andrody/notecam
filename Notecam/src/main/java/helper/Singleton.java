@@ -7,6 +7,7 @@ import model.Subject;
 import photo.PictureTaker;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
+import view_fragment.TopicosFragment;
 
 /**
  * Created by Andrew on 19-Apr-14.
@@ -28,6 +29,7 @@ public class Singleton {
 
     public static MateriasFragment materiasFragment = null;
     public static SingleMateriaFragment singleMateriaFragment = null;
+    public static TopicosFragment topicosFragment = null;
 
     private static Subject materia_selecionada = null;
 

@@ -228,7 +228,10 @@ public class MateriasFragment extends Fragment {
         this.checkboxFlag = checkboxFlag;
     }
 
-
+    private void reload() {
+        materiasAdapter = new MateriasAdapter(getActivity());
+        gridview.setAdapter(materiasAdapter);
+    }
 
     //Syncroniza com o banco de dados
     public void syncDB(){
@@ -316,12 +319,16 @@ public class MateriasFragment extends Fragment {
                     }
                 }
                 syncDB();
+                if(db.getAllSubjects().isEmpty())
+                    MateriasFragment.this.reload();
 
 
             }
             mode.finish();
             return true;
         }
+
+
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {

@@ -29,6 +29,12 @@ public class TopicosFragment extends Fragment {
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        reload(Singleton.getMateria_selecionada());
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         //Se o botão selecionado pelo usuario for o de ver as fotos (icone pasta)
@@ -102,7 +108,7 @@ public class TopicosFragment extends Fragment {
         getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
         getActivity().getActionBar().setSubtitle("Sem aulas hoje");
 
-        reload(Singleton.getMateria_selecionada());
+
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -121,8 +127,6 @@ public class TopicosFragment extends Fragment {
             //    materia = db.getSubject((long) materia_id);
             this.materia = Singleton.getMateria_selecionada();
         }
-
-
     }
 
     public void reload(Subject nova_materia){
