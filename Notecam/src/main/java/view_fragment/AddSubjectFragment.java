@@ -196,16 +196,20 @@ public class AddSubjectFragment extends Fragment {
                 DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
                 //Se Não existe no DB ainda, então não possui ID
-                if(materia.getId() <= 0)
+                if(materia.getId() <= 0){
                     db.createSubjectAndClasses(materia, aulas);
+                    List<Subject> materias = db.getAllSubjects();
+                    Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
+                }
 
-                    //Se já existe no Banco, apenas da um update
-                else
+                //Se já existe no Banco, apenas da um update
+                else {
                     db.updateSubjectAndClasses(materia, aulas);
+                }
 
                 //Coloca a matéria criada como a selecionada
-                List<Subject> materias = db.getAllSubjects();
-                Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
+
+                Singleton.singleMateriaFragment.reload(Singleton.getMateria_selecionada().getId());
 
                 ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
                 ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
@@ -214,9 +218,9 @@ public class AddSubjectFragment extends Fragment {
             }
 
             //if (flagEditFromHome)
-                getActivity().onBackPressed();
+            getActivity().onBackPressed();
             //else
-                //Volta pra tela anterior
+            //Volta pra tela anterior
             //    getActivity().getSupportFragmentManager().popBackStackImmediate();
 
 

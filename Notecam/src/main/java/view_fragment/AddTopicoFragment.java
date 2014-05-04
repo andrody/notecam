@@ -162,6 +162,7 @@ public class AddTopicoFragment extends Fragment {
             //getActivity().getSupportFragmentManager().beginTransaction().replace(AddTopicoFragment.this);
             getActivity().getSupportFragmentManager().popBackStackImmediate();
             Singleton.singleMateriaFragment.reload(materia.getId());
+            Singleton.singleMateriaFragment.reload(materia.getId());
         }
     };
 

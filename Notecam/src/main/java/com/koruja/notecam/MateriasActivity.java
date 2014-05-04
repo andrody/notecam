@@ -75,13 +75,13 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     private AddSubjectFragment addSubjectsFragment;
 
     //Armazena uma referência para o Fragmento de Materias
-    private MateriasFragment materiasFragment;
+    //private MateriasFragment materiasFragment;
 
     //Armazena uma referência para o Fragmento de uma Materia
-    private SingleMateriaFragment singleMateriasFragment;
+    //private SingleMateriaFragment singleMateriasFragment;
 
     //Armazena uma referência para o Fragmento de topicos de uma Materia
-    private TopicosFragment topicosFragment;
+    //private TopicosFragment topicosFragment;
 
     //Lista de opções do menu
     final ArrayList<LinearLayout> lista_options_menu = new ArrayList<LinearLayout>();;
@@ -171,7 +171,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
                     //Se clicou na opção Matérias, troca de fragmentos para Materias
                     if(view.equals(materias)) {
-                        changeFragments(materiasFragment, null);
+                        changeFragments(Singleton.materiasFragment, null);
                     }
 
                     //Se clicou na opção Sobre nós, vai para o site da koruja
@@ -340,7 +340,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     int materia_id = content.getAsInteger(Singleton.MATERIA_ID);
                     //singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
 
-                    singleMateriasFragment.reload(materia_id);
+                    Singleton.singleMateriaFragment.reload(materia_id);
                     getViewPager().getAdapter().notifyDataSetChanged();
                     getViewPager().setCurrentItem(1, true);
                     //TrocaFragments
@@ -356,7 +356,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             v.setBackgroundColor(0);
 
         //Se novo fragmento for o materiasFragment
-        if(materiasFragment != null && fragment.equals(materiasFragment)) {
+        if(Singleton.materiasFragment != null && fragment.equals(Singleton.materiasFragment)) {
             //Seleciona a opção Materia
             lista_options_menu.get(0).setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
         }
@@ -432,29 +432,27 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
     public MateriasFragment getMateriasFragment() {
-        return materiasFragment;
+        return Singleton.materiasFragment;
     }
 
     public void setMateriasFragment(MateriasFragment materiasFragment) {
-        this.materiasFragment = materiasFragment;
         Singleton.materiasFragment = materiasFragment;
     }
 
     public SingleMateriaFragment getSingleMateriasFragment() {
-        return singleMateriasFragment;
+        return Singleton.singleMateriaFragment;
     }
 
     public void setSingleMateriasFragment(SingleMateriaFragment singleMateriasFragment) {
-        this.singleMateriasFragment = singleMateriasFragment;
         Singleton.singleMateriaFragment = singleMateriasFragment;
     }
 
     public TopicosFragment getTopicosFragment() {
-        return topicosFragment;
+        return Singleton.topicosFragment;
     }
 
     public void setTopicosFragment(TopicosFragment topicosFragment) {
-        this.topicosFragment = topicosFragment;
+        Singleton.topicosFragment = topicosFragment;
     }
 
     public ViewPager getViewPager() {
@@ -512,20 +510,20 @@ class PagerAdapter extends FragmentPagerAdapter {
         Bundle args = new Bundle();
         if(position == 0){
             fragment = MateriasFragment.newInstance();
-            ((MateriasActivity)context).setMateriasFragment((MateriasFragment) fragment);
+            Singleton.materiasFragment = (MateriasFragment) fragment;
         }
         else if(position == 1){
             if (mFragmentAtPos1 == null) {
                 mFragmentAtPos1 = SingleMateriaFragment.newInstance(Singleton.getMateria_selecionada().getId());
             }
-            ((MateriasActivity)context).setSingleMateriasFragment((SingleMateriaFragment) mFragmentAtPos1);
+            Singleton.singleMateriaFragment = (SingleMateriaFragment) mFragmentAtPos1;
             return mFragmentAtPos1;
         }
         else if(position == 2){
             if (mFragmentAtPos2 == null) {
                 mFragmentAtPos2 = TopicosFragment.newInstance(Singleton.getMateria_selecionada().getId());
             }
-            ((MateriasActivity)context).setTopicosFragment((TopicosFragment) mFragmentAtPos2);
+            Singleton.topicosFragment = (TopicosFragment) mFragmentAtPos2;
             return mFragmentAtPos2;
         }
         return fragment;
