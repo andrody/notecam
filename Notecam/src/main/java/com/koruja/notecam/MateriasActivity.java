@@ -449,7 +449,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     moveFragmentPager(1);
                 }
                 else
-                    Toast.makeText(this, "Em aula de " + m.getName(), Toast.LENGTH_SHORT);
+                    Toast.makeText(this, "Em aula de " + m.getName(), Toast.LENGTH_SHORT).show();
                 break;
             }
         }
