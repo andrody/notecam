@@ -49,7 +49,10 @@ public class MateriasFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
-        getActivity().getActionBar().setSubtitle("5 horas até a próxima aula");
+        if(Singleton.getMateria_em_aula() != null)
+            getActivity().getActionBar().setSubtitle("Em aula de " + Singleton.getMateria_em_aula().getName());
+        else
+            getActivity().getActionBar().setSubtitle("Horário livre");
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -144,8 +147,13 @@ public class MateriasFragment extends Fragment {
 
         menu.clear();
         inflater.inflate(R.menu.materias, menu);
+
         getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
-        getActivity().getActionBar().setSubtitle("5 horas até a próxima aula");
+        if(Singleton.getMateria_em_aula() != null)
+            getActivity().getActionBar().setSubtitle("Em aula de " + Singleton.getMateria_em_aula().getName());
+        else
+            getActivity().getActionBar().setSubtitle("Horário livre");
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

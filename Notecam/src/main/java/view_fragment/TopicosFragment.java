@@ -105,8 +105,17 @@ public class TopicosFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.topicos, menu);
 
-        getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
-        getActivity().getActionBar().setSubtitle("Sem aulas hoje");
+        try {
+            getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
+            if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
+                getActivity().getActionBar().setSubtitle("Em aula!");
+            else
+                getActivity().getActionBar().setSubtitle("Sem aula agora");
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+
+        }
 
 
 

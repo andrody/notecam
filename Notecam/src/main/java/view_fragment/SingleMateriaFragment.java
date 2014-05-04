@@ -26,6 +26,7 @@ import com.koruja.notecam.R;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
+import model.Aula;
 import model.Subject;
 import model.Topico;
 
@@ -142,6 +143,14 @@ public class SingleMateriaFragment extends Fragment {
         nome_materia.setText(getMateria().getName());
         nome_materia.setTextColor(getMateria().getColor());
 
+        //Horario da materia
+        TextView horario = ((TextView)view.findViewById(R.id.horario));
+        Aula aula = materia.ChecarHorario();
+        if(aula != null)
+            horario.setText(aula.getStartTime().format("%H:%M") + " - " + aula.getEndTime().format("%H:%M"));
+        else
+            horario.setText("Em nenhuma aula");
+
         //Texto do Topico
         TextView nome_topico = ((TextView)view.findViewById(R.id.nome_topico));
         nome_topico.setText(topico.getName());
@@ -247,7 +256,10 @@ public class SingleMateriaFragment extends Fragment {
 
         try {
             getActivity().getActionBar().setTitle(getMateria().getName());
-            getActivity().getActionBar().setSubtitle("Sem aulas hoje");
+            if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
+                getActivity().getActionBar().setSubtitle("Em aula!");
+            else
+                getActivity().getActionBar().setSubtitle("Sem aula agora");
         }
         catch (NullPointerException e){
             e.printStackTrace();

@@ -32,6 +32,7 @@ public class Singleton {
     public static TopicosFragment topicosFragment = null;
 
     private static Subject materia_selecionada = null;
+    private static Subject materia_em_aula = null;
 
     private static PictureTaker pictureTaker;
 
@@ -51,6 +52,14 @@ public class Singleton {
 
     public static void setPictureTaker(PictureTaker pictureTaker) {
         Singleton.pictureTaker = pictureTaker;
+    }
+
+    public static Subject getMateria_em_aula() {
+        return materia_em_aula;
+    }
+
+    public static void setMateria_em_aula(Subject materia_em_aula) {
+        Singleton.materia_em_aula = materia_em_aula;
     }
 
     /**

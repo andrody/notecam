@@ -207,9 +207,9 @@ public class AddSubjectFragment extends Fragment {
                     db.updateSubjectAndClasses(materia, aulas);
                 }
 
-
                 ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
                 ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+                ((MateriasActivity)getActivity()).checarHorario();
 
 
             }

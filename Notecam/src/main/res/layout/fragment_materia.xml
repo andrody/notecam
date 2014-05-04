@@ -49,7 +49,8 @@
             android:text="10:00 - 12:30"
             android:layout_marginTop="0dp"
             android:layout_gravity="center"
-            android:textColor="@color/text_color" />
+            android:textColor="@color/text_color"
+            android:id="@+id/horario" />
 
         <!-- Aula -->
         <LinearLayout

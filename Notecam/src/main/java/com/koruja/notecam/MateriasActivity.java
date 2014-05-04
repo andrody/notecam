@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -26,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,30 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     PagerAdapter pagerAdapter;
     private String mTitle = "Notecam";
     private boolean emptyFragments = false;
+    private boolean primeira_vez = true;
+
+    //Handler para atualizar a cada 30 segundos
+    Handler handler = new Handler();
+
+    //Refresh a cada 30 segundos
+    Runnable timedTask = new Runnable(){
+
+        @Override
+        public void run() {
+            if(Singleton.getMateria_em_aula() != null){
+                Aula aula = Singleton.getMateria_em_aula().ChecarHorario();
+                if (aula == null){
+                    Singleton.setMateria_em_aula(null);
+                    Singleton.singleMateriaFragment.reload(Singleton.getMateria_selecionada());
+                    Singleton.topicosFragment.reload(Singleton.getMateria_selecionada());
+                    MateriasActivity.this.checarHorario();
+                }
+            }
+            else MateriasActivity.this.checarHorario();
+               Log.e("LOG", "checando horario");
+            handler.postDelayed(timedTask, 10000);
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -93,6 +120,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //Seleciona a primeira matéria selecionada
         if(!db.getAllSubjects().isEmpty())
@@ -140,10 +168,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         //Set custom font to comicneue
         fontType = Typeface.createFromAsset(getAssets(), "fonts/ComicNeue-Bold.ttf");
 
-        if(Singleton.materiasFragment != null) {
-            this.setMateriasFragment(Singleton.materiasFragment);
-            this.setSingleMateriasFragment(Singleton.singleMateriaFragment);
-        }
+        checarHorario();
+
+        timedTask.run();
 
         //setMateriasFragment(new MateriasFragment());
         //getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
@@ -411,18 +438,28 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
      (Ele para na primeira aula encontrada que bate)
      */
     public void checarHorario(){
-        Aula aula;
+        Aula aula = null;
         List<Subject> materias = db.getAllSubjects();
         for(Subject m: materias){
             aula = m.ChecarHorario();
             if(aula != null){
                 Singleton.setMateria_selecionada(m);
+                Singleton.setMateria_em_aula(m);
+                if(primeira_vez){
+                    moveFragmentPager(1);
+                }
+                else
+                    Toast.makeText(this, "Em aula de " + m.getName(), Toast.LENGTH_SHORT);
+                break;
             }
         }
+        if(aula == null)
+            Singleton.setMateria_em_aula(null);
+        primeira_vez = false;
     }
 
     public void moveFragmentPager(int position){
-
+        this.getViewPager().setCurrentItem(position, true);
     }
 
     public void toggleMenu(View v) {
