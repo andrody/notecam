@@ -154,7 +154,7 @@ public class SingleMateriaFragment extends Fragment {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     background.setColor(0);
                     image_camera.setColorFilter(filter);
-                    Singleton.getPictureTaker().TakePicture("teste");
+                    Singleton.getPictureTaker().TakePicture("teste", "1");
                 }
                 else if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     background.setColor(getMateria().getColor());
@@ -168,7 +168,7 @@ public class SingleMateriaFragment extends Fragment {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Singleton.getPictureTaker().TakePicture("teste");
+                Singleton.getPictureTaker().TakePicture("teste", "2");
             }
         });
 
@@ -264,8 +264,8 @@ public class SingleMateriaFragment extends Fragment {
     }
 
 
-    public void reload(int materia_id) {
-        setMateria(db.getSubject((long)materia_id));
+    public void reload(Subject materia) {
+        setMateria(materia);
         criarUI(view_do_onViewCreated);
     }
 

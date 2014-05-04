@@ -28,9 +28,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
+import model.Aula;
+import model.Subject;
 import photo.PictureTaker;
 import view_fragment.AddSubjectFragment;
 import view_fragment.MateriasFragment;
@@ -340,7 +343,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     int materia_id = content.getAsInteger(Singleton.MATERIA_ID);
                     //singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
 
-                    Singleton.singleMateriaFragment.reload(materia_id);
+                    Singleton.singleMateriaFragment.reload(db.getSubject(materia_id));
                     getViewPager().getAdapter().notifyDataSetChanged();
                     getViewPager().setCurrentItem(1, true);
                     //TrocaFragments
@@ -399,8 +402,23 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     public void reload(){
         getViewPager().setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
         changeFragments(getMateriasFragment(), null);
-        getSingleMateriasFragment().reload(Singleton.getMateria_selecionada().getId());
+        getSingleMateriasFragment().reload(Singleton.getMateria_selecionada());
 
+    }
+
+    /*
+     Procura em cada classe de cada subject se  o horario atual bate com o horario de alguma aula
+     (Ele para na primeira aula encontrada que bate)
+     */
+    public void checarHorario(){
+        Aula aula;
+        List<Subject> materias = db.getAllSubjects();
+        for(Subject m: materias){
+            aula = m.ChecarHorario();
+            if(aula != null){
+                Singleton.setMateria_selecionada(m);
+            }
+        }
     }
 
     public void moveFragmentPager(int position){
