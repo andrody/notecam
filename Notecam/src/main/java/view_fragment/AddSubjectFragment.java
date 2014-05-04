@@ -203,8 +203,14 @@ public class AddSubjectFragment extends Fragment {
                 else
                     db.updateSubjectAndClasses(materia, aulas);
 
+                //Coloca a matéria criada como a selecionada
+                List<Subject> materias = db.getAllSubjects();
+                Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
+
                 ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
                 ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+
+
             }
 
             //if (flagEditFromHome)

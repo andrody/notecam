@@ -92,7 +92,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         setContentView(R.layout.activity_main);
 
         //Seleciona a primeira matéria selecionada
-        Singleton.setMateria_selecionada(db.getAllSubjects().get(0));
+        if(!db.getAllSubjects().isEmpty())
+            Singleton.setMateria_selecionada(db.getAllSubjects().get(0));
 
         //Cria um nova instância da biblioteca de tirar fotos
         Singleton.setPictureTaker(new PictureTaker(this));
