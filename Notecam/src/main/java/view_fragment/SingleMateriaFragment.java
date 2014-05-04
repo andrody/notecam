@@ -150,6 +150,7 @@ public class SingleMateriaFragment extends Fragment {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     background.setColor(0);
                     image_camera.setColorFilter(filter);
+                    Singleton.getPictureTaker().TakePicture("teste");
                 }
                 else if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     background.setColor(getMateria().getColor());
@@ -159,6 +160,15 @@ public class SingleMateriaFragment extends Fragment {
                 return true;
             }
         });
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Singleton.getPictureTaker().TakePicture("teste");
+            }
+        });
+
+
         View view_f = view;
 
         //Botao de topicos

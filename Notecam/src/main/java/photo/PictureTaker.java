@@ -30,7 +30,7 @@ public class PictureTaker {
 
     //Referência para a activity
     private Activity activity;
-    //Nomo da pasta onde a img será salva
+    //Nome da pasta onde a img será salva
     private String folderName;
 
     //Construtor

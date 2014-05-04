@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 
 import model.Subject;
+import photo.PictureTaker;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 
@@ -30,12 +31,22 @@ public class Singleton {
 
     private static Subject materia_selecionada = null;
 
+    private static PictureTaker pictureTaker;
+
     public static Subject getMateria_selecionada() {
         return materia_selecionada;
     }
 
     public static void setMateria_selecionada(Subject materia) {
         materia_selecionada = materia;
+    }
+
+    public static PictureTaker getPictureTaker() {
+        return pictureTaker;
+    }
+
+    public static void setPictureTaker(PictureTaker pictureTaker) {
+        Singleton.pictureTaker = pictureTaker;
     }
 
     /**

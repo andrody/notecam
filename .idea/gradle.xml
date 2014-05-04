@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/Notecam" />
+            <option value="C:\Projects\Notecam" />
+            <option value="C:\Projects\Notecam\Notecam" />
           </set>
         </option>
       </GradleProjectSettings>

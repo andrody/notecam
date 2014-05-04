@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
+import photo.PictureTaker;
 import view_fragment.AddSubjectFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
@@ -46,6 +47,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     private String mTitle = "Notecam";
     private boolean emptyFragments = false;
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Singleton.getPictureTaker().OnActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -85,8 +91,13 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Seleciona a primeira matéria selecionada
         Singleton.setMateria_selecionada(db.getAllSubjects().get(0));
 
+        //Cria um nova instância da biblioteca de tirar fotos
+        Singleton.setPictureTaker(new PictureTaker(this));
+
+        //Verifica se há alguma matéria criada e armazena a booleana correspondente
         this.setEmptyFragments(db.getAllSubjects().isEmpty());
 
 
