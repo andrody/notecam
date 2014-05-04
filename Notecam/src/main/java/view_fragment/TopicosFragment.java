@@ -24,8 +24,9 @@ public class TopicosFragment extends Fragment {
 
     private DatabaseHelper db;
 
-
+    ExpandableListView lista;
     private Subject materia;
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -46,6 +47,7 @@ public class TopicosFragment extends Fragment {
         // inflate the layout that contains the ExpandableListView
         View view =  inflater.inflate(R.layout.fragment_topicos, container, false);
         final ExpandableListView list = (ExpandableListView)view.findViewById(R.id.expandableListView_aulas);
+        lista = list;
         list.setAdapter(new TopicosAdapter(getActivity(), materia));
 
         list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -99,6 +101,9 @@ public class TopicosFragment extends Fragment {
 
         getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
         getActivity().getActionBar().setSubtitle("Sem aulas hoje");
+
+        reload(Singleton.getMateria_selecionada());
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -110,12 +115,20 @@ public class TopicosFragment extends Fragment {
         setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
-            db = ((MateriasActivity)getActivity()).getDb();
-            if(!db.getAllSubjects().isEmpty())
-                materia = db.getSubject((long) materia_id);
+            //int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
+            //db = ((MateriasActivity)getActivity()).getDb();
+            //if(!db.getAllSubjects().isEmpty())
+            //    materia = db.getSubject((long) materia_id);
+            this.materia = Singleton.getMateria_selecionada();
         }
 
+
+    }
+
+    public void reload(Subject nova_materia){
+        this.materia = nova_materia;
+
+        lista.setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
 
     }
 

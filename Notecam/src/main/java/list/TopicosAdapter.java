@@ -24,50 +24,12 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
     ArrayList<Topico> topicos;
     Subject materia;
 
-    String[] listaPai = { "Categoria 1", "Categoria 2", "Categoria 3" };
-    String[][] listafilho = { { "Subcategoria 1", "Subcategoria 1.2" },
-            { "Subcategoria 2" }, { "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-            "Subcategoria 3",
-    }
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
-            ,{ "Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3","Subcategoria 3", "Subcategoria 3"}
 
-    };
     Context context;
     public TopicosAdapter(Context context, Subject materia) {
         this.context = context;
         this.materia = materia;
-        topicos = new ArrayList<Topico>();
-        topicos.add(new Topico("Matrizes"));
-        topicos.add(new Topico("Logaritmos"));
-        topicos.add(new Topico("Vetores Bidimensionais"));
-        topicos.add(new Topico("Funções exponenciais"));
-        topicos.add(new Topico("Funções exponenciais"));
-        topicos.add(new Topico("Funções exponenciais"));
-        topicos.add(new Topico("Funções exponenciais"));
-        topicos.add(new Topico("Funções exponenciais"));
-        topicos.add(new Topico("Funções exponenciais"));
-        topicos.add(new Topico("Funções exponenciais"));
+        topicos = (ArrayList<Topico>) materia.getTopicos();
 
     }
 

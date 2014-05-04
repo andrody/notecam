@@ -32,7 +32,7 @@ public class ClassesFragment extends Fragment implements View.OnClickListener {
         //Se foi passado algum parametro, adiciona no subject
         if (getArguments() != null) {
             subject = db.getSubject(getArguments().getInt(Subject.ID));
-            subject.popularClasses(db);
+            subject.popularClasses();
         }
     }
 

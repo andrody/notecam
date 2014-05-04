@@ -3,6 +3,7 @@ package model;
 import android.content.Context;
 import android.text.format.Time;
 
+import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.List;
@@ -36,7 +37,9 @@ public class Subject {
         this.name = name;
         this.context = context;
     }
-    public Subject(Context context){ this.context = context; }
+    public Subject(Context context){
+        this.context = context;
+    }
 
     public String getName() {
         return name;
@@ -48,10 +51,13 @@ public class Subject {
 
     public int getId() {
         return id;
+
     }
 
     public void setId(int id) {
         this.id = id;
+        popularTopicos();
+        popularClasses();
     }
 
     public boolean isCheckboxSelecionada() {
@@ -137,8 +143,14 @@ public class Subject {
         this.color = color;
     }
 
-    public void popularClasses(DatabaseHelper db){
+    public void popularClasses(){
+        DatabaseHelper db = ((MateriasActivity)context).getDb();
         setAulas(db.getAllClassesBySubject(this.getId()));
+    }
+
+    public void popularTopicos(){
+        DatabaseHelper db = ((MateriasActivity)context).getDb();
+        setTopicos(db.getAllTopicosBySubject(this.getId()));
     }
 
     /*

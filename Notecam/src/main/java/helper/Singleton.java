@@ -3,6 +3,7 @@ package helper;
 import android.content.ContentValues;
 import android.net.Uri;
 
+import model.Subject;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 
@@ -26,6 +27,16 @@ public class Singleton {
 
     public static MateriasFragment materiasFragment = null;
     public static SingleMateriaFragment singleMateriaFragment = null;
+
+    private static Subject materia_selecionada = null;
+
+    public static Subject getMateria_selecionada() {
+        return materia_selecionada;
+    }
+
+    public static void setMateria_selecionada(Subject materia) {
+        materia_selecionada = materia;
+    }
 
     /**
      * This interface must be implemented by activities that contain this

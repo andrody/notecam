@@ -421,7 +421,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public List<Subject> getAllSubjects(){
         List<Subject> subjects = db.getAllSubjects();
         for (Subject subject : subjects)
-            subject.popularClasses(db);
+            subject.popularClasses();
         return subjects;
     }
 

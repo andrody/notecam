@@ -31,7 +31,6 @@ import java.util.ArrayList;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
-import model.Subject;
 import view_fragment.AddSubjectFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
@@ -46,6 +45,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     PagerAdapter pagerAdapter;
     private String mTitle = "Notecam";
     private boolean emptyFragments = false;
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -84,6 +84,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Singleton.setMateria_selecionada(db.getAllSubjects().get(0));
 
         this.setEmptyFragments(db.getAllSubjects().isEmpty());
 
@@ -383,13 +385,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
     public void reload(){
-        //Fragment fragment = MateriasFragment.newInstance();
-        //setMateriasFragment((MateriasFragment) fragment);
-        //changeFragments(fragment, null);
-        //getViewPager().setAdapter(null);
-        //getViewPager().getAdapter().notifyDataSetChanged();
         getViewPager().setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
         changeFragments(getMateriasFragment(), null);
+        getSingleMateriasFragment().reload(Singleton.getMateria_selecionada().getId());
 
     }
 
@@ -466,6 +464,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     public void setAddSubjectsFragment(AddSubjectFragment addSubjectsFragment) {
         this.addSubjectsFragment = addSubjectsFragment;
     }
+
 }
 
 class PagerAdapter extends FragmentPagerAdapter {
@@ -504,19 +503,15 @@ class PagerAdapter extends FragmentPagerAdapter {
             ((MateriasActivity)context).setMateriasFragment((MateriasFragment) fragment);
         }
         else if(position == 1){
-            Subject subject;
             if (mFragmentAtPos1 == null) {
-                subject = (Subject) ((MateriasActivity)context).getDb().getAllSubjects().get(0);
-                mFragmentAtPos1 = SingleMateriaFragment.newInstance(subject.getId());
+                mFragmentAtPos1 = SingleMateriaFragment.newInstance(Singleton.getMateria_selecionada().getId());
             }
             ((MateriasActivity)context).setSingleMateriasFragment((SingleMateriaFragment) mFragmentAtPos1);
             return mFragmentAtPos1;
         }
         else if(position == 2){
-            Subject subject;
             if (mFragmentAtPos2 == null) {
-                subject = (Subject) ((MateriasActivity)context).getDb().getAllSubjects().get(0);
-                mFragmentAtPos2 = TopicosFragment.newInstance(subject.getId());
+                mFragmentAtPos2 = TopicosFragment.newInstance(Singleton.getMateria_selecionada().getId());
             }
             ((MateriasActivity)context).setTopicosFragment((TopicosFragment) mFragmentAtPos2);
             return mFragmentAtPos2;

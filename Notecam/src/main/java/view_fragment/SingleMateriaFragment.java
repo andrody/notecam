@@ -115,9 +115,6 @@ public class SingleMateriaFragment extends Fragment {
         //Se não houver topicos criados na materia, cria um
         if (getMateria().getTopicos().isEmpty()) {
             getMateria().addTopico("Geral");
-            getMateria().addTopico("topico 1");
-            getMateria().addTopico("topico 2");
-            getMateria().addTopico("topico 3");
         }
         this.topico = getMateria().getTopicos().get(0);
 

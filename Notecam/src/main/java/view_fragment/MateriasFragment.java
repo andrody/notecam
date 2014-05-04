@@ -91,6 +91,8 @@ public class MateriasFragment extends Fragment {
 
                         //Pega a materia selecionada
                         Subject subject = (Subject)materiasAdapter.getItem(position);
+                        Singleton.setMateria_selecionada(subject);
+                        ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
                         ContentValues values = new ContentValues();
                         values.put(Singleton.REPLACE_FRAGMENT, Singleton.MATERIA);
