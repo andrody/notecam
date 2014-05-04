@@ -32,6 +32,8 @@ public class PictureTaker {
     private Activity activity;
     //Nome da pasta onde a img será salva
     private String folderName;
+    //Nome do arquivo da foto
+    private String photoName;
 
     //Construtor
     public PictureTaker(Activity activity) {
@@ -39,8 +41,10 @@ public class PictureTaker {
     }
 
     //Use esse método para tirar uma foto e salvá-la na pasta FolderName
-    public void TakePicture(String folderName)
+    public void TakePicture(String folderName, String photoName)
     {
+        //Guarda o nome do arquivo
+        this.photoName = photoName;
         //Guarda o nome da pasta
         this.folderName = folderName;
         //salva o intent
@@ -58,7 +62,7 @@ public class PictureTaker {
             final String appName = activity.getString(R.string.app_name);
             final String galleryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             final String albumPath = galleryPath + "/" + appName + "/" + folderName;
-            final String photoPath = albumPath + "/" + currentTimeMillis + ".png";
+            final String photoPath = albumPath + "/" + photoName + ".png";
             final ContentValues values = new ContentValues();
             values.put(MediaStore.MediaColumns.DATA, photoPath);
             values.put(MediaStore.Images.Media.MIME_TYPE, PHOTO_MIME_TYPE);
@@ -78,12 +82,14 @@ public class PictureTaker {
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
             //Salva a foto no arquivo
             try {
-                album.createNewFile();
-                FileOutputStream fo = new FileOutputStream(album);
+                File photo = new File(photoPath);
+                photo.createNewFile();
+                FileOutputStream fo = new FileOutputStream(photo);
                 fo.write(bytes.toByteArray());
                 fo.close();
             } catch (IOException e) {
                 Log.e(TAG, "Failed to save image in " + albumPath);
+                Log.e(TAG, e.getMessage());
             }
 
             // Salva na MediaStore
