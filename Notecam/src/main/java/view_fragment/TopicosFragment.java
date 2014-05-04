@@ -107,19 +107,25 @@ public class TopicosFragment extends Fragment {
 
         try {
             getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
-            if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
-                getActivity().getActionBar().setSubtitle("Em aula!");
-            else
-                getActivity().getActionBar().setSubtitle("Sem aula agora");
+            updateSubTitle();
         }
         catch (NullPointerException e){
             e.printStackTrace();
 
         }
-
-
-
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
+    public void updateSubTitle(){
+        if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 2){
+            if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
+                getActivity().getActionBar().setSubtitle("Em aula!");
+            else
+                getActivity().getActionBar().setSubtitle("Sem aula agora");
+        }
+
     }
 
     @Override
@@ -142,6 +148,8 @@ public class TopicosFragment extends Fragment {
         this.materia = nova_materia;
 
         lista.setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
+        updateSubTitle();
+
 
     }
 

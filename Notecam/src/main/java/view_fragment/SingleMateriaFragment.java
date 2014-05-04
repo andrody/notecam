@@ -163,7 +163,7 @@ public class SingleMateriaFragment extends Fragment {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     background.setColor(0);
                     image_camera.setColorFilter(filter);
-                    Singleton.getPictureTaker().TakePicture("teste2", "1hhh");
+                    Singleton.getPictureTaker().TakePicture("teste4", "1hhh");
                 }
                 else if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     background.setColor(getMateria().getColor());
@@ -251,16 +251,23 @@ public class SingleMateriaFragment extends Fragment {
 
         try {
             getActivity().getActionBar().setTitle(getMateria().getName());
-            if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
-                getActivity().getActionBar().setSubtitle("Em aula!");
-            else
-                getActivity().getActionBar().setSubtitle("Sem aula agora");
+            updateSubTitle();
         }
         catch (NullPointerException e){
             e.printStackTrace();
 
         }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public void updateSubTitle(){
+        if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 1){
+            if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
+                getActivity().getActionBar().setSubtitle("Em aula!");
+            else
+                getActivity().getActionBar().setSubtitle("Sem aula agora");
+        }
+
     }
 
 
@@ -274,6 +281,7 @@ public class SingleMateriaFragment extends Fragment {
     public void reload(Subject materia) {
         setMateria(materia);
         criarUI(view_do_onViewCreated);
+        updateSubTitle();
     }
 
     public Subject getMateria() {

@@ -42,8 +42,9 @@ public class Singleton {
 
     public static void setMateria_selecionada(Subject materia) {
         materia_selecionada = materia;
-        if(singleMateriaFragment != null)
+        if(singleMateriaFragment != null) {
             singleMateriaFragment.reload(materia);
+        }
     }
 
     public static PictureTaker getPictureTaker() {

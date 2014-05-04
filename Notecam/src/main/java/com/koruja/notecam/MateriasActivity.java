@@ -68,6 +68,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     Singleton.setMateria_em_aula(null);
                     Singleton.singleMateriaFragment.reload(Singleton.getMateria_selecionada());
                     Singleton.topicosFragment.reload(Singleton.getMateria_selecionada());
+                    Singleton.materiasFragment.updateSubTitle();
                     MateriasActivity.this.checarHorario();
                 }
             }
@@ -443,13 +444,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         for(Subject m: materias){
             aula = m.ChecarHorario();
             if(aula != null){
-                Singleton.setMateria_selecionada(m);
                 Singleton.setMateria_em_aula(m);
+                Singleton.setMateria_selecionada(m);
                 if(primeira_vez){
                     moveFragmentPager(1);
                 }
-                else
-                    Toast.makeText(this, "Em aula de " + m.getName(), Toast.LENGTH_SHORT).show();
+                else Toast.makeText(this, "Em aula de " + m.getName(), Toast.LENGTH_SHORT).show();
+
+                if(Singleton.materiasFragment != null) Singleton.materiasFragment.updateSubTitle();
                 break;
             }
         }

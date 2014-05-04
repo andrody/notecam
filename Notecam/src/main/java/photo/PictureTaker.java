@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,6 +97,6 @@ public class PictureTaker {
 
     public void OnActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Toast.makeText(activity, "Result code = " + resultCode + ". Você tirou foto", Toast.LENGTH_LONG).show();
+        //Toast.makeText(activity, "Result code = " + resultCode + ". Você tirou foto", Toast.LENGTH_LONG).show();
     }
 }

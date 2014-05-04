@@ -49,10 +49,7 @@ public class MateriasFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
-        if(Singleton.getMateria_em_aula() != null)
-            getActivity().getActionBar().setSubtitle("Em aula de " + Singleton.getMateria_em_aula().getName());
-        else
-            getActivity().getActionBar().setSubtitle("Horário livre");
+        updateSubTitle();
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -149,12 +146,19 @@ public class MateriasFragment extends Fragment {
         inflater.inflate(R.menu.materias, menu);
 
         getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
-        if(Singleton.getMateria_em_aula() != null)
-            getActivity().getActionBar().setSubtitle("Em aula de " + Singleton.getMateria_em_aula().getName());
-        else
-            getActivity().getActionBar().setSubtitle("Horário livre");
+        updateSubTitle();
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public void updateSubTitle(){
+        if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 0) {
+
+            if (Singleton.getMateria_em_aula() != null)
+                getActivity().getActionBar().setSubtitle("Em aula de " + Singleton.getMateria_em_aula().getName());
+            else
+                getActivity().getActionBar().setSubtitle("Horário livre");
+        }
     }
 
     // TODO: Rename parameter arguments, choose names that match
@@ -239,6 +243,8 @@ public class MateriasFragment extends Fragment {
     private void reload() {
         materiasAdapter = new MateriasAdapter(getActivity());
         gridview.setAdapter(materiasAdapter);
+        updateSubTitle();
+
     }
 
     //Syncroniza com o banco de dados
