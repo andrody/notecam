@@ -3,13 +3,13 @@ package photo;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 
+import helper.Singleton;
 import model.Foto;
 import model.Topico;
 
@@ -68,9 +68,9 @@ public class PictureTaker {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        final String imagesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-        final String appname = "Notecam";
-        final String photoFolder = imagesFolder + "/" + appname + "/" + folderMateriaName + "/" + folderTopicoName;
+        //final String imagesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        //final String appname = "Notecam";
+        final String photoFolder = Singleton.NOTECAM_FOLDER + "/" + folderMateriaName + "/" + folderTopicoName;
         File storageDir = new File(photoFolder);
         if (!storageDir.isDirectory())
         {

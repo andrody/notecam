@@ -177,9 +177,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteSubjectAndClasses(Subject subject){
         deleteAllFotosBySubject(subject.getId());
-        deleteSubject(subject.getId());
-        deleteAllClassesBySubject(subject.getId());
         deleteAllTopicosBySubject(subject.getId());
+        deleteAllClassesBySubject(subject.getId());
+        deleteSubject(subject.getId());
         //closeDB();
     }
 
@@ -458,6 +458,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * Deleting topico
     */
     private void deleteTopico(long topico_id) {
+        Topico topico = getTopico(topico_id);
+        Subject subject = getSubject(topico.getSubject_id());
+        DeleteRecursive(new File(Singleton.NOTECAM_FOLDER + "/" + subject.getName() + "/" + topico.getName()));
+
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;
         db.delete(TABLE_TOPICO, KEY_ID + " = ?",
@@ -527,10 +531,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * delete all topicos of a subject
     */
     private void deleteAllTopicosBySubject(long subject_id) {
+        DeleteRecursive(new File(Singleton.NOTECAM_FOLDER + "/" + getSubject(subject_id).getName()));
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;
         db.delete(TABLE_TOPICO, KEY_TOPICO_SUBJECT + " = ?",
                 new String[] { String.valueOf(subject_id) });
+    }
+
+    void DeleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                DeleteRecursive(child);
+
+        fileOrDirectory.delete();
     }
 
     /*

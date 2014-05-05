@@ -145,7 +145,9 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolderChild) row.getTag();
         }
 
-        holder.gridview.setAdapter(new FotoAdapter(context, topicos.get(groupPosition)));
+        Topico topico = topicos.get(groupPosition);
+
+        holder.gridview.setAdapter(new FotoAdapter(context, topico));
 
         // initialize the following variables (i've done it based on your layout
         // note: rowHeightDp is based on my grid_cell.xml, that is the height i've
@@ -161,7 +163,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
 
         // calculate the column and row counts based on your display
         final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
-        final int rowCount = (int)Math.ceil((6 + 0d) / colCount);
+        final int rowCount = (int)Math.ceil((topico.getFotos().size() + 0d) / colCount);
 
         // calculate the height for the current grid
         final int GRID_HEIGHT = Math.round(rowCount * (ROW_HEIGHT + SPACING));
