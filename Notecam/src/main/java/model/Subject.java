@@ -77,8 +77,9 @@ public class Subject {
     }
 
     public void addTopico(String nome) {
-        Topico novo_topico = new Topico(nome, this.getId());
+        Topico novo_topico = new Topico(context, nome, this.getId());
         novo_topico.save(context);
+        novo_topico.popularFotos();
         topicos.add(novo_topico);
     }
 

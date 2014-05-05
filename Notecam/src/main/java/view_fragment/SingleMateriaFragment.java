@@ -163,7 +163,9 @@ public class SingleMateriaFragment extends Fragment {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     background.setColor(0);
                     image_camera.setColorFilter(filter);
-                    Singleton.getPictureTaker().TakePicture("teste4", "1hhh");
+                    Singleton.getPictureTaker().TakePicture(materia.getName(), SingleMateriaFragment.this.topico.getName(),
+                            SingleMateriaFragment.this.topico.getName() + ""  + SingleMateriaFragment.this.topico.getFotos().size() + "",
+                            topico);
                 }
                 else if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     background.setColor(getMateria().getColor());
@@ -267,7 +269,6 @@ public class SingleMateriaFragment extends Fragment {
             else
                 getActivity().getActionBar().setSubtitle("Sem aula agora");
         }
-
     }
 
 

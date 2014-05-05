@@ -6,6 +6,8 @@ import com.koruja.notecam.MateriasActivity;
 
 import java.util.List;
 
+import helper.DatabaseHelper;
+
 /**
  * Created by Andrew on 10/24/13.
  */
@@ -14,25 +16,36 @@ public class Topico {
     public static String NAME = "name";
 
     private boolean checkboxSelecionada = false;
-    private List<Aula> aulas;
+    private List<Foto> fotos;
     private int id = -1;
     private int number = 0;
     private int subject_id;
     private String name = "";
     private int createdAt;
+    private Context context;
 
-    public Topico(String name, int subject_id){
+    public Topico(Context context, String name, int subject_id){
         this.name = name;
         this.subject_id = subject_id;
+        this.context = context;
     }
 
-    public Topico(){}
-    public Topico(String nome){
+    public Topico(Context context){ this.context = context;}
+
+    public Topico(Context context, String nome){
         this.name = nome;
+        this.context = context;
+
     }
 
     public void save(Context context){
         this.id = (int) ((MateriasActivity) context).getDb().createTopico(this);
+    }
+
+    public void popularFotos(){
+        DatabaseHelper db = ((MateriasActivity)context).getDb();
+        setFotos(db.getAllFotosByTopico(this.getId()));
+
     }
 
     public String getName() {
@@ -91,4 +104,13 @@ public class Topico {
         return 0;
     }
 
+    public List<Foto> getFotos() {
+        if(fotos ==null)
+            popularFotos();
+        return fotos;
+    }
+
+    public void setFotos(List<Foto> fotos) {
+        this.fotos = fotos;
+    }
 }

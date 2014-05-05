@@ -1,7 +1,11 @@
 package helper;
 
 import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+
+import java.io.File;
 
 import model.Subject;
 import photo.PictureTaker;
@@ -19,6 +23,7 @@ public class Singleton {
     public static String MATERIA_ID = "materia_id";
     public static String TOPICO_ID = "topico_id";
     public static String REDIRECT = "redirect";
+    public static int THUMBNAIL_SIZE = 1000;
 
     public static String FRAGMENT_TYPE = "fragment_type";
     public static String FRAGMENT_TYPE_MATERIAS = "fragment_materias";
@@ -76,5 +81,23 @@ public class Singleton {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri, ContentValues content);
+    }
+
+
+    public static Bitmap getPreview(String uri) {
+        File image = new File(uri);
+
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(image.getPath(), bounds);
+        if ((bounds.outWidth == -1) || (bounds.outHeight == -1))
+            return null;
+
+        int originalSize = (bounds.outHeight > bounds.outWidth) ? bounds.outHeight
+                : bounds.outWidth;
+
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = originalSize / THUMBNAIL_SIZE;
+        return BitmapFactory.decodeFile(image.getPath(), opts);
     }
 }

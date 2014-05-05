@@ -21,16 +21,16 @@
             android:layout_height="match_parent"
             android:id="@+id/materia_back_color">
             <ImageView
-                android:src="@drawable/ma"
-                android:paddingTop="30dp"
-                android:paddingLeft="15dp"
-                android:background="@drawable/exemplo_foto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/foto_imagem"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/ic_action_picture"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

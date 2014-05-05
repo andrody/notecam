@@ -10,6 +10,9 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
+import model.Foto;
+import model.Topico;
+
 /**
  * Created by lapada on 03/05/14.
  */
@@ -23,9 +26,16 @@ public class PictureTaker {
     //Referência para a activity
     private Activity activity;
     //Nome da pasta onde a img será salva
-    private String folderName;
+    private String folderMateriaName;
+
+    //Nome da pasta de topico onde a img será salva
+    private String folderTopicoName;
+
     //Nome do arquivo da foto
     private String photoName;
+
+    //Topico da foto
+    private Topico topico;
 
     //Construtor
     public PictureTaker(Activity activity) {
@@ -33,7 +43,7 @@ public class PictureTaker {
     }
 
     //Use esse método para tirar uma foto e salvá-la na pasta FolderName
-    public void TakePicture(String folderName, String photoName)
+    public void TakePicture(String folderName,String folderTopicoName, String photoName, Topico topico)
     {
         //guarda o nome do arquivo
         //(garante que tenha 3 caracteres)
@@ -44,7 +54,9 @@ public class PictureTaker {
         else
             this.photoName = photoName;
         //Guarda o nome da pasta
-        this.folderName = folderName;
+        this.folderMateriaName = folderName;
+        this.folderTopicoName = folderTopicoName;
+        this.topico = topico;
 
         dispatchTakePictureIntent();
     }
@@ -55,7 +67,7 @@ public class PictureTaker {
         // Create an image file name
         final String imagesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
         final String appname = "Notecam";
-        final String photoFolder = imagesFolder + "/" + appname + "/" + folderName;
+        final String photoFolder = imagesFolder + "/" + appname + "/" + folderMateriaName + "/" + folderTopicoName;
         File storageDir = new File(photoFolder);
         if (!storageDir.isDirectory())
         {
@@ -82,6 +94,8 @@ public class PictureTaker {
             File photoFile = null;
             try {
                 photoFile = createImageFile();
+                Foto new_foto = new Foto(photoName, photoFile.getAbsolutePath(), topico);
+                new_foto.save(activity);
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 Log.e(TAG, "Erro ao criar arquivo...");
@@ -97,6 +111,6 @@ public class PictureTaker {
 
     public void OnActivityResult(int requestCode, int resultCode, Intent data)
     {
-        //Toast.makeText(activity, "Result code = " + resultCode + ". Você tirou foto", Toast.LENGTH_LONG).show();
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_OK) topico.popularFotos();
     }
 }

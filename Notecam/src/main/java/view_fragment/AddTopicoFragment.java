@@ -71,7 +71,7 @@ public class AddTopicoFragment extends Fragment {
                     this.topico = t;
             this.flagEdit = true;
         }
-        else topico = new Topico("", materia.getId());
+        else topico = new Topico(getActivity(), "", materia.getId());
 
 
         return view;

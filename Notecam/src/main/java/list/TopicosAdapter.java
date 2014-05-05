@@ -145,7 +145,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolderChild) row.getTag();
         }
 
-        holder.gridview.setAdapter(new FotoAdapter(context));
+        holder.gridview.setAdapter(new FotoAdapter(context, topicos.get(groupPosition)));
 
         // initialize the following variables (i've done it based on your layout
         // note: rowHeightDp is based on my grid_cell.xml, that is the height i've

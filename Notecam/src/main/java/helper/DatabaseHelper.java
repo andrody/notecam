@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Locale;
 
 import model.Aula;
-import model.Topico;
+import model.Foto;
 import model.Subject;
+import model.Topico;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -27,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     // Database Name
     private static final String DATABASE_NAME = "subjectsManager";
@@ -36,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_SUBJECT = "subjects";
     private static final String TABLE_CLASS = "classes";
     private static final String TABLE_TOPICO = "topicos";
+    private static final String TABLE_FOTO = "fotos";
     private static final String TABLE_DAY = "days";
 
     // Common column names
@@ -67,6 +69,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TOPICO_SUBJECT = "topico_subjectID";
     private static final String KEY_TOPICO_NAME = "topico_name";
     private static final String KEY_TOPICO_NUMBER = "topico_number";
+
+    // FOTOS Table - column names
+    private static final String KEY_FOTO_TOPICO = "foto_topicoID";
+    private static final String KEY_FOTO_NAME = "foto_name";
+    private static final String KEY_FOTO_NUMBER = "foto_number";
+    private static final String KEY_FOTO_PATH = "foto_path";
 
 
     // Table Create Statements
@@ -109,6 +117,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_CREATED_AT + " INTEGER"
             + ")";
 
+    // Foto table create statement
+    private static final String CREATE_TABLE_FOTO = "CREATE TABLE "
+            + TABLE_FOTO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_FOTO_NAME + " TEXT,"
+            + KEY_FOTO_PATH + " TEXT,"
+            + KEY_FOTO_TOPICO + " INTEGER,"
+            + KEY_FOTO_NUMBER + " INTEGER,"
+            + KEY_CREATED_AT + " INTEGER"
+            + ")";
+
 
     Context context;
 
@@ -125,6 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SUBJECT);
         db.execSQL(CREATE_TABLE_CLASS);
         db.execSQL(CREATE_TABLE_TOPICO);
+        db.execSQL(CREATE_TABLE_FOTO);
 
     }
 
@@ -134,6 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBJECT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOPICO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FOTO);
 
         // create new tables
         onCreate(db);
@@ -458,7 +478,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        Topico topico = new Topico();
+        Topico topico = new Topico(context);
         topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
         topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
@@ -485,7 +505,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Topico topico = new Topico();
+                Topico topico = new Topico(context);
                 topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
                 topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
@@ -529,7 +549,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Topico topico = new Topico();
+                Topico topico = new Topico(context);
                 topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
                 topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
@@ -543,6 +563,165 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return topicos;
+    }
+
+    // ----------------------------------------------------------//
+    // -------------------- Fotos table  methods ----------------//
+    // ----------------------------------------------------------//
+
+
+    /*
+    * Creating Foto
+    */
+    public long createFoto(Foto foto) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_FOTO_NAME, foto.getName());
+        values.put(KEY_FOTO_TOPICO, foto.getTopico().getId());
+        values.put(KEY_FOTO_PATH, foto.getPath());
+
+        Time time = new Time();
+        time.setToNow();
+        values.put(KEY_CREATED_AT, time.toMillis(true));
+
+        // insert row
+        long foto_id = db.insert(TABLE_FOTO, null, values);
+
+        return foto_id;
+    }
+
+    /*
+    * Updating Foto
+    */
+    public int updateFoto(Foto foto) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_FOTO_NAME, foto.getName());
+        values.put(KEY_FOTO_TOPICO, foto.getTopico().getId());
+        values.put(KEY_FOTO_PATH, foto.getPath());
+
+
+        // updating foto
+        assert db != null;
+        return db.update(TABLE_FOTO, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(foto.getId()) });
+    }
+
+    /*
+    * Deleting foto
+    */
+    private void deleteFoto(long foto_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        assert db != null;
+        db.delete(TABLE_FOTO, KEY_ID + " = ?",
+                new String[] { String.valueOf(foto_id) });
+    }
+
+    /*
+    * get single foto
+    */
+    public Foto getFoto(long foto_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FOTO + " WHERE "
+                + KEY_ID + " = " + foto_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        Foto foto = new Foto();
+        foto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        foto.setName((c.getString(c.getColumnIndex(KEY_FOTO_NAME))));
+        foto.setPath((c.getString(c.getColumnIndex(KEY_FOTO_PATH))));
+        //foto.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
+        foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
+        foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+
+
+        return foto;
+    }
+
+    /*
+    * getting all fotos
+    *
+     */
+    public List<Foto> getAllFotos() {
+        List<Foto> fotos = new ArrayList<Foto>();
+        String selectQuery = "SELECT  * FROM " + TABLE_FOTO;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto foto = new Foto();
+                foto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                foto.setName((c.getString(c.getColumnIndex(KEY_FOTO_NAME))));
+                foto.setPath((c.getString(c.getColumnIndex(KEY_FOTO_PATH))));
+                //foto.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
+                foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
+                foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+
+                // adding to subject list
+                fotos.add(foto);
+            } while (c.moveToNext());
+        }
+        closeDB();
+
+        return fotos;
+    }
+
+    /*
+    * delete all fotos of a topico
+    */
+    private void deleteAllFotosByTopico(long topico_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        assert db != null;
+        db.delete(TABLE_FOTO, KEY_FOTO_TOPICO + " = ?",
+                new String[] { String.valueOf(topico_id) });
+    }
+
+    /*
+   * getting all fotos under single topico
+   */
+    public List<Foto> getAllFotosByTopico(long topico_id) {
+        List<Foto> fotos = new ArrayList<Foto>();
+
+        String selectQuery = "SELECT  * FROM "
+                + TABLE_FOTO + " WHERE "
+                + KEY_FOTO_TOPICO + " = " + topico_id + " ORDER BY " + KEY_CREATED_AT + " ASC";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto foto = new Foto();
+                foto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                foto.setName((c.getString(c.getColumnIndex(KEY_FOTO_NAME))));
+                foto.setPath((c.getString(c.getColumnIndex(KEY_FOTO_PATH))));
+                //foto.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
+                foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
+                foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+
+                // adding to subject list
+                fotos.add(foto);
+            } while (c.moveToNext());
+        }
+
+        return fotos;
     }
 
 

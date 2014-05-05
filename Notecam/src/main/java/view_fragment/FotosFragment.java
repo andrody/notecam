@@ -64,13 +64,13 @@ public class FotosFragment extends Fragment {
         resources = getActivity().getResources();
 
         //Cria o adapter
-        fotosAdapter = new FotoAdapter(getActivity());
+        //fotosAdapter = new FotoAdapter(getActivity(), );
 
         //Syncroniza lista com o banco
         //syncDB();
 
         gridview = (GridView) v.findViewById(R.id.fotos_grid_view);
-        gridview.setAdapter(fotosAdapter);
+        //gridview.setAdapter(fotosAdapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

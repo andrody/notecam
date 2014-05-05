@@ -5,6 +5,7 @@ package list;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,13 @@ import android.widget.TextView;
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import helper.Singleton;
 import model.Foto;
+import model.Topico;
 
 /**
  * O BaseAdapter é responsável por construir as views do gridview
@@ -31,17 +35,9 @@ public class FotoAdapter extends BaseAdapter {
 
     Context context;
 
-    public FotoAdapter(Context context) {
+    public FotoAdapter(Context context, Topico topico) {
         this.context = context;
-
-        fotos = new ArrayList<Foto>();
-
-        fotos.add(new Foto("1", 0, null, 0));
-        fotos.add(new Foto("2", 0, null, 1));
-        fotos.add(new Foto("3", 0, null, 2));
-        fotos.add(new Foto("4", 0, null, 3));
-        fotos.add(new Foto("5", 0, null, 4));
-        fotos.add(new Foto("6", 0, null, 5));
+        fotos = (ArrayList<Foto>) topico.getFotos();
     }
 
     @Override
@@ -87,7 +83,13 @@ public class FotoAdapter extends BaseAdapter {
 
         final Foto item = (Foto) getItem(position);
 
-        //holder.foto_imagem.setImageResource(materias.get(position).image_id);
+        Bitmap bitmap = Singleton.getPreview(item.getPath());
+
+        //Seta imagem da foto
+        holder.foto_imagem.setImageBitmap(bitmap);
+
+
+
         holder.foto_numero.setText(position + 1 + "");
 
         views.put(item.getId(), row);
@@ -117,7 +119,6 @@ public class FotoAdapter extends BaseAdapter {
     public View getView(int id){
         return views.get(id);
     }
-
 
 
 

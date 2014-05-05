@@ -1,5 +1,9 @@
 package model;
 
+import android.content.Context;
+
+import com.koruja.notecam.MateriasActivity;
+
 /**
  * Created by Andrew on 30/04/14.
  */
@@ -10,20 +14,24 @@ public class Foto {
     private boolean checkboxSelecionada = false;
     private Topico topico;
     private int id = -1;
-    private int subject_id;
+    private int topico_id;
     private String name = "";
+    private String path;
     private int createdAt;
 
     public Foto(String name){
         this.name = name;
     }
-    public Foto(String name, int subject_id, Topico topico, int id){
-        this.setSubject_id(subject_id);
+    public Foto(String name, String path, Topico topico){
         this.name = name;
-        this.topico = topico;
-        this.id = id;
+        this.path = path;
+        this.setTopico(topico);
     }
     public Foto(){}
+
+    public void save(Context context){
+        this.id = (int) ((MateriasActivity) context).getDb().createFoto(this);
+    }
 
     public String getName() {
         return name;
@@ -49,14 +57,6 @@ public class Foto {
         this.checkboxSelecionada = checkboxSelecionada;
     }
 
-    public int getSubject_id() {
-        return subject_id;
-    }
-
-    public void setSubject_id(int subject_id) {
-        this.subject_id = subject_id;
-    }
-
     public int getCreatedAt() {
         return createdAt;
     }
@@ -66,4 +66,27 @@ public class Foto {
     }
 
 
+    public Topico getTopico() {
+        return topico;
+    }
+
+    public void setTopico(Topico topico) {
+        this.topico = topico;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getTopico_id() {
+        return topico_id;
+    }
+
+    public void setTopico_id(int topico_id) {
+        this.topico_id = topico_id;
+    }
 }
