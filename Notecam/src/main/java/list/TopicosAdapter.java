@@ -106,7 +106,7 @@ public class TopicosAdapter extends BaseExpandableListAdapter {
         holder.letra_sphere.setText(groupPosition + 1 + "");
         holder.sphere.setColor(materia.getColor());
         holder.nome_topico.setText(item.getName());
-        holder.numero_fotos.setText(item.getNumber() + " fotos");
+        holder.numero_fotos.setText(item.getFotos().size() + " fotos");
 
         if(isExpanded) {
             holder.ic_expandivel.setImageResource(R.drawable.ic_action_collapse);

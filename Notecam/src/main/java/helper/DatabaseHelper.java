@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.koruja.notecam.MateriasActivity;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 16;
 
     // Database Name
     private static final String DATABASE_NAME = "subjectsManager";
@@ -175,6 +176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void deleteSubjectAndClasses(Subject subject){
+        deleteAllFotosBySubject(subject.getId());
         deleteSubject(subject.getId());
         deleteAllClassesBySubject(subject.getId());
         deleteAllTopicosBySubject(subject.getId());
@@ -482,7 +484,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
         topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
-        topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
+        topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_TOPICO_SUBJECT))));
         topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
 
@@ -613,6 +615,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * Deleting foto
     */
     private void deleteFoto(long foto_id) {
+        File file = new File(getFoto(foto_id).getPath());
+        file.delete();
+
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;
         db.delete(TABLE_FOTO, KEY_ID + " = ?",
@@ -684,10 +689,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * delete all fotos of a topico
     */
     private void deleteAllFotosByTopico(long topico_id) {
+        for(Foto foto : getTopico(topico_id).getFotos()) {
+            deleteFoto(foto.getId());
+        }
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;
         db.delete(TABLE_FOTO, KEY_FOTO_TOPICO + " = ?",
                 new String[] { String.valueOf(topico_id) });
+    }
+
+    /*
+    * delete all fotos of a subject
+    */
+    private void deleteAllFotosBySubject(long subject_id) {
+        Subject subject = getSubject(subject_id);
+        for(Topico topico : subject.getTopicos()) {
+            deleteAllFotosByTopico(topico.getId());
+        }
     }
 
     /*

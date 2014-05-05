@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 
 import java.io.File;
 
@@ -24,6 +25,8 @@ public class Singleton {
     public static String TOPICO_ID = "topico_id";
     public static String REDIRECT = "redirect";
     public static int THUMBNAIL_SIZE = 1000;
+    public static String APPNAME = "Notecam";
+    public static final String NOTECAM_FOLDER = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + APPNAME;
 
     public static String FRAGMENT_TYPE = "fragment_type";
     public static String FRAGMENT_TYPE_MATERIAS = "fragment_materias";

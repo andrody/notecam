@@ -171,7 +171,11 @@ public class Subject {
     }
 
     public int getNumero_fotos() {
-        return numero_fotos;
+        int i = 0;
+        for(Topico t: getTopicos()){
+            i += t.getFotos().size();
+        }
+        return i;
     }
 
     public void setNumero_fotos(int numero_fotos) {
