@@ -37,6 +37,9 @@ public class PictureTaker {
     //Topico da foto
     private Topico topico;
 
+    //REferência para o arquivo da foto
+    File savedPhoto;
+
     //Construtor
     public PictureTaker(Activity activity) {
         this.activity = activity;
@@ -103,6 +106,7 @@ public class PictureTaker {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
+                savedPhoto = photoFile;
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
@@ -111,6 +115,11 @@ public class PictureTaker {
 
     public void OnActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_OK) topico.popularFotos();
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_OK)
+            topico.popularFotos();
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_CANCELED)
+        {
+            savedPhoto.delete();
+        }
     }
 }
