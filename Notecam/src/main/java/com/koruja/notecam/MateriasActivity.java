@@ -70,7 +70,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 }
             }
             else MateriasActivity.this.checarHorario();
-               Log.e("LOG", "checando horario");
+            Log.e("LOG", "checando horario");
             handler.postDelayed(timedTask, 10000);
         }
     };
@@ -288,6 +288,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         if(item.getTitle().equals("Add Materia")){
 
