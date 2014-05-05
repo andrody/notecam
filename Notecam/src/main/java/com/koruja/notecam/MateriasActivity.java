@@ -1,13 +1,11 @@
 package com.koruja.notecam;
 
-import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -20,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -181,12 +178,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     public void setUpClickListenersMenu(){
         final LinearLayout materias = (LinearLayout)findViewById(R.id.menu_option_materias);
         final LinearLayout exportar_tudo = (LinearLayout)findViewById(R.id.menu_option_exportar);
+        final LinearLayout contato = (LinearLayout)findViewById(R.id.menu_option_contato);
         final LinearLayout sobre = (LinearLayout)findViewById(R.id.menu_option_sobre);
         final LinearLayout ajuda = (LinearLayout)findViewById(R.id.menu_option_ajuda);
         final LinearLayout premium = (LinearLayout)findViewById(R.id.menu_option_premium);
 
         lista_options_menu.add(materias);
         lista_options_menu.add(exportar_tudo);
+        lista_options_menu.add(contato);
         lista_options_menu.add(sobre);
         lista_options_menu.add(ajuda);
         lista_options_menu.add(premium);
@@ -205,10 +204,22 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                         changeFragments(Singleton.materiasFragment, null);
                     }
 
+
                     //Se clicou na opção Sobre nós, vai para o site da koruja
-                    if(view.equals(sobre) || view.equals(premium)|| view.equals(ajuda) ) {
+                    if(view.equals(sobre)||view.equals(premium)|| view.equals(ajuda) ) {
                         startActivity(new Intent(Intent.ACTION_VIEW,
                                 Uri.parse("http://koruja.herokuapp.com/")));
+                    }
+
+                    //Se clicou na opção Contato, abre leitor de email
+                    if(view.equals(contato)) {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto","andrewcsz@gmail.com", null));
+                        //intent.setType("text/plain");
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "[Notecam]");
+                        //intent.putExtra(Intent.EXTRA_TEXT, "I'm email body.");
+
+                        startActivity(Intent.createChooser(intent, "Send Email"));
                     }
 
 
@@ -233,11 +244,12 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         });
     }*/
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setUpDrawerToggle(){
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+
+        if (android.os.Build.VERSION.SDK_INT >=14)
+            actionBar.setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -274,39 +286,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        /*menu.add("Adicionar Materia")
-                .setIcon(R.drawable.ic_add)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        /*menu.add("Share")
-                .setIcon(R.drawable.ic_action_new)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);*/
-
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //hiding default app icon
-        //ActionBar actionBar = getActionBar();
-        //actionBar.setDisplayShowHomeEnabled(false);
-        //displaying custom ActionBar
-        //View mActionBarView = getLayoutInflater().inflate(R.layout.custom_actionbar, null);
-        //actionBar.setCustomView(mActionBarView);
-        //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
-        //getMenuInflater().inflate(R.menu.materias, menu);
-        return true;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
 
         if(item.getTitle().equals("Add Materia")){
 
@@ -317,7 +298,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
     DrawerListener myDrawerListener = new DrawerListener(){
@@ -354,7 +334,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     state = "unknown!";
             }
 
-            //textPrompt2.setText(state);
         }};
 
     @Override
@@ -396,6 +375,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     public void changeFragments(Fragment fragment, Fragment fragment_origin){
         seleciona_option_certo_no_menu(fragment);
+
         //Inicia a transação
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -408,9 +388,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             }
             getViewPager().setCurrentItem(0);
         }
-        else if(fragment instanceof SingleMateriaFragment){
+        else if(fragment instanceof SingleMateriaFragment){  }
 
-        }
         else {
             getViewPager().setVisibility(View.GONE);
 
@@ -420,7 +399,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
             transaction.addToBackStack(null);
         }
-
 
         //Efetuar a transação do novo fragment
         transaction.commit();
@@ -472,10 +450,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         return mTitle;
     }
 
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
-    }
-
     public DatabaseHelper getDb() {
         return db;
     }
@@ -492,24 +466,10 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         return Singleton.materiasFragment;
     }
 
-    public void setMateriasFragment(MateriasFragment materiasFragment) {
-        Singleton.materiasFragment = materiasFragment;
-    }
+
 
     public SingleMateriaFragment getSingleMateriasFragment() {
         return Singleton.singleMateriaFragment;
-    }
-
-    public void setSingleMateriasFragment(SingleMateriaFragment singleMateriasFragment) {
-        Singleton.singleMateriaFragment = singleMateriasFragment;
-    }
-
-    public TopicosFragment getTopicosFragment() {
-        return Singleton.topicosFragment;
-    }
-
-    public void setTopicosFragment(TopicosFragment topicosFragment) {
-        Singleton.topicosFragment = topicosFragment;
     }
 
     public ViewPager getViewPager() {
@@ -535,25 +495,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 }
 
 class PagerAdapter extends FragmentPagerAdapter {
-    /*private final class MateriaPageListener implements
-            MateriaPageFragmentListener {
-        public void onSwitchToNextFragment(int materia_id) {
-            mFragmentManager.beginTransaction().remove(mFragmentAtPos1)
-                    .commit();
-            mFragmentAtPos1 = NextFragment.newInstance(listener);
-
-            notifyDataSetChanged();
-        }
-    }*/
 
     Context context;
     private Fragment mFragmentAtPos1 = null;
     private Fragment mFragmentAtPos2 = null;
     final private FragmentManager mFragmentManager;
-
-    //ListaDeFragmentos
-    //private ArrayList<Task> fragments = new ArrayList<Task>();
-
 
     public PagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -564,7 +510,6 @@ class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
-        Bundle args = new Bundle();
         if(position == 0){
             fragment = MateriasFragment.newInstance();
             Singleton.materiasFragment = (MateriasFragment) fragment;
@@ -589,17 +534,6 @@ class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         if(((MateriasActivity)context).isEmptyFragments()){
-            /*if(mFragmentAtPos1 != null)
-                ((MateriasActivity)context).getSupportFragmentManager().beginTransaction().remove(mFragmentAtPos1).commit();
-
-            SingleMateriaFragment fragment = ((MateriasActivity)context).getSingleMateriasFragment();
-            if(fragment != null)
-                ((MateriasActivity)context).getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-
-            if(mFragmentAtPos2 != null)
-                ((MateriasActivity)context).getSupportFragmentManager().beginTransaction().remove(mFragmentAtPos2).commit();*/
-
-
             return 1;
         }
         else

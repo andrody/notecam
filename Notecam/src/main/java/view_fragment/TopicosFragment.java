@@ -96,12 +96,8 @@ public class TopicosFragment extends Fragment {
     /**
      * Cria as opções do header
      **/
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.main, menu);
-        //super.onCreateOptionsMenu(menu, inflater);
-
         menu.clear();
         inflater.inflate(R.menu.topicos, menu);
 
@@ -136,10 +132,6 @@ public class TopicosFragment extends Fragment {
         setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            //int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
-            //db = ((MateriasActivity)getActivity()).getDb();
-            //if(!db.getAllSubjects().isEmpty())
-            //    materia = db.getSubject((long) materia_id);
             this.materia = Singleton.getMateria_selecionada();
         }
     }

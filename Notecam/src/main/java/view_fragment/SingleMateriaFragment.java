@@ -1,6 +1,5 @@
 package view_fragment;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -8,7 +7,6 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -39,9 +37,6 @@ public class SingleMateriaFragment extends Fragment {
     private View view_do_onViewCreated;
 
     private Singleton.OnFragmentInteractionListener mListener;
-
-
-
 
     public static SingleMateriaFragment newInstance(int materia_id) {
         SingleMateriaFragment fragment = new SingleMateriaFragment();
@@ -120,10 +115,6 @@ public class SingleMateriaFragment extends Fragment {
         this.topico = getMateria().getTopicos().get(0);
 
         if(!Singleton.getMateria_selecionada().equals(getMateria())) Singleton.setMateria_selecionada(getMateria());
-
-
-
-
 
         //Setando cor da materia aos graficos
         final Drawable camera = getResources().getDrawable( R.drawable.compact_camera );
@@ -242,11 +233,8 @@ public class SingleMateriaFragment extends Fragment {
     /**
      * Cria as opções do header
      **/
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.main, menu);
-        //super.onCreateOptionsMenu(menu, inflater);
 
         menu.clear();
         inflater.inflate(R.menu.single_materia, menu);

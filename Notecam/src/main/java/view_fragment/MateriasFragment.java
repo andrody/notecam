@@ -136,7 +136,6 @@ public class MateriasFragment extends Fragment {
     /**
      * Cria as opções do header
      **/
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflater.inflate(R.menu.main, menu);
@@ -161,19 +160,10 @@ public class MateriasFragment extends Fragment {
         }
     }
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private Singleton.OnFragmentInteractionListener mListener;
 
 
-    // TODO: Rename and change types and number of parameters
     public static MateriasFragment newInstance() {
         MateriasFragment fragment = new MateriasFragment();
         Bundle args = new Bundle();
@@ -188,10 +178,6 @@ public class MateriasFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         //Tem de habilitar para mudar o ActionBar
         setHasOptionsMenu(true);
@@ -382,14 +368,6 @@ class MateriasAdapter extends BaseAdapter {
         this.context = context;
 
         materias = new ArrayList<Subject>();
-        //Resources res = context.getResources();
-
-        // TODO: Remover essas materias testes
-        //materias.add(new Materia("Matematica", R.drawable.ma, 2, R.color.red));
-        //materias.add(new Materia("Física", R.drawable.ma, 47, R.color.blue));
-        //materias.add(new Materia("Geografia", R.drawable.ma, 0, R.color.blue));
-        //materias.add(new Materia("História", R.drawable.ma, 38, R.color.red));
-        //materias.add(new Materia("Português", R.drawable.ma, 12, R.color.red));
     }
 
     @Override
@@ -456,24 +434,11 @@ class MateriasAdapter extends BaseAdapter {
         else
             holder.checkbox.setVisibility(CheckBox.GONE);
 
-        /*final ViewHolder holder_final = holder;
-
-        row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(checkBoxFlag)
-                    holder_final.checkbox.setChecked(true);
-            }
-        });*/
-
         return row;
     }
 
     public View getView(int id){
         return views.get(id);
     }
-
-
-
 
 }
