@@ -18,6 +18,7 @@ public class Foto {
     private String name = "";
     private String path;
     private int createdAt;
+    private Context context;
 
     public Foto(String name){
         this.name = name;
@@ -88,5 +89,9 @@ public class Foto {
 
     public void setTopico_id(int topico_id) {
         this.topico_id = topico_id;
+    }
+
+    public void delete(Context context) {
+        ((MateriasActivity) context).getDb().deleteFoto(this.getId());
     }
 }

@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +41,7 @@ import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
 
-public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener {
+public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient {
 
     private ViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
@@ -78,7 +79,12 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Singleton.getPictureTaker().OnActivityResult(requestCode, resultCode, data);
+        //Singleton.getPictureTaker().OnActivityResult(requestCode, resultCode, data);
+        Uri currImageURI = data.getData();
+        String s = currImageURI.toString().substring(0, currImageURI.toString().length()-6);
+        s+= "/" + 784;
+        Intent intent = new Intent(Intent.ACTION_VIEW, currImageURI);
+        startActivity(intent);
     }
 
     @Override
@@ -169,6 +175,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         checarHorario();
 
         timedTask.run();
+
+        Singleton.setMateriasActivity(this);
 
         //setMateriasFragment(new MateriasFragment());
         //getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
@@ -495,6 +503,57 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         this.addSubjectsFragment = addSubjectsFragment;
     }
 
+    private String SCAN_PATH ;
+    private static final String FILE_TYPE = "image/*";
+    private MediaScannerConnection conn;
+
+    public void startScan(String path)
+    {
+        SCAN_PATH = path;
+        Log.d("Connected", "success" + conn);
+        if(conn!=null)
+        {
+            conn.disconnect();
+        }
+        conn = new MediaScannerConnection(this,this);
+        //conn.connect();
+        //Intent intent = new Intent(Intent.ACTION_VIEW,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        //intent.setType("image/jpeg");
+        //startActivity(intent);
+
+        // To open up a gallery browser
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, 0);
+
+        /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivity(intent);*/
+    }
+
+    @Override
+    public void onMediaScannerConnected() {
+        Log.d("onMediaScannerConnected","success"+conn);
+        conn.scanFile(SCAN_PATH, FILE_TYPE);
+    }
+
+    @Override
+    public void onScanCompleted(String path, Uri uri) {
+        try {
+            Log.d("onScanCompleted",uri + "success"+conn);
+            if (uri != null)
+            {
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.setData(uri);
+                startActivity(intent);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("content://media/external/images/media/16")));
+            }
+        } finally
+        {
+            conn.disconnect();
+            conn = null;
+        }
+    }
 }
 
 class PagerAdapter extends FragmentPagerAdapter {

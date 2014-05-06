@@ -226,7 +226,7 @@ public class MateriasFragment extends Fragment {
         this.checkboxFlag = checkboxFlag;
     }
 
-    private void reload() {
+    public void reload() {
         materiasAdapter = new MateriasAdapter(getActivity());
         gridview.setAdapter(materiasAdapter);
         updateSubTitle();

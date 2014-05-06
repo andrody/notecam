@@ -2,6 +2,7 @@ package photo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -40,6 +41,9 @@ public class PictureTaker {
     //REferência para o arquivo da foto
     File savedPhoto;
 
+    //Referencia ao objeto que representa a foto
+    Foto new_foto;
+
     //Construtor
     public PictureTaker(Activity activity) {
         this.activity = activity;
@@ -70,7 +74,7 @@ public class PictureTaker {
         // Create an image file name
         //final String imagesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
         //final String appname = "Notecam";
-        final String photoFolder = Singleton.NOTECAM_FOLDER + "/" + folderMateriaName + "/" + folderTopicoName;
+        final String photoFolder = Singleton.NOTECAM_FOLDER + "/" + folderMateriaName + "/" + folderMateriaName + "-" + folderTopicoName;
         File storageDir = new File(photoFolder);
         if (!storageDir.isDirectory())
         {
@@ -97,7 +101,7 @@ public class PictureTaker {
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                Foto new_foto = new Foto(photoName, photoFile.getAbsolutePath(), topico);
+                new_foto = new Foto(photoName, photoFile.getAbsolutePath(), topico);
                 new_foto.save(activity);
             } catch (IOException ex) {
                 // Error occurred while creating the File
@@ -115,11 +119,23 @@ public class PictureTaker {
 
     public void OnActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_OK)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_OK){
             topico.popularFotos();
+
+            //Faz a foto aparecer na galeria de fotos do android
+            MediaScannerConnection.scanFile(activity,
+                    new String[]{new_foto.getPath()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.d("LOG", "scanned : " + path);
+                        }
+                    }
+            );
+        }
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_CANCELED)
         {
             savedPhoto.delete();
+            new_foto.delete(activity);
         }
     }
 }

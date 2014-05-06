@@ -1,10 +1,14 @@
 package helper;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
+
+import com.koruja.notecam.MateriasActivity;
 
 import java.io.File;
 
@@ -39,6 +43,8 @@ public class Singleton {
     public static SingleMateriaFragment singleMateriaFragment = null;
     public static TopicosFragment topicosFragment = null;
 
+    private static MateriasActivity materiasActivity;
+
     private static Subject materia_selecionada = null;
     private static Subject materia_em_aula = null;
 
@@ -69,6 +75,14 @@ public class Singleton {
 
     public static void setMateria_em_aula(Subject materia_em_aula) {
         Singleton.materia_em_aula = materia_em_aula;
+    }
+
+    public static MateriasActivity getMateriasActivity() {
+        return materiasActivity;
+    }
+
+    public static void setMateriasActivity(MateriasActivity activity) {
+        materiasActivity = activity;
     }
 
     /**
@@ -102,5 +116,10 @@ public class Singleton {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inSampleSize = originalSize / THUMBNAIL_SIZE;
         return BitmapFactory.decodeFile(image.getPath(), opts);
+    }
+
+    public static void deleteFile(String path) {
+        ContentResolver resolver = getMateriasActivity().getContentResolver();
+        resolver.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media.DATA + "=?", new String[]{path});
     }
 }

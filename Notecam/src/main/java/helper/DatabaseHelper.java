@@ -627,9 +627,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * Deleting foto
     */
-    private void deleteFoto(long foto_id) {
-        File file = new File(getFoto(foto_id).getPath());
+    public void deleteFoto(long foto_id) {
+        String path = getFoto(foto_id).getPath();
+        File file = new File(path);
         file.delete();
+        Singleton.deleteFile(path);
 
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;

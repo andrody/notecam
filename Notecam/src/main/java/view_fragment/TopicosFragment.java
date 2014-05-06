@@ -1,7 +1,5 @@
 package view_fragment;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
+import java.util.List;
+
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
+import model.Foto;
 import model.Subject;
 
 public class TopicosFragment extends Fragment {
@@ -26,6 +28,7 @@ public class TopicosFragment extends Fragment {
 
     ExpandableListView lista;
     private Subject materia;
+
 
 
     @Override
@@ -57,9 +60,17 @@ public class TopicosFragment extends Fragment {
         list.setAdapter(new TopicosAdapter(getActivity(), materia));
 
         list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                List<Foto> fotos = materia.getTopicos().get(groupPosition).getFotos();
+                /*if(!fotos.isEmpty()){
+                    ((MateriasActivity)getActivity()).startScan(fotos.get(1).getPath());
+                }
+                else {
+                    Toast.makeText(getActivity(), "Não há fotos nesse tópico", Toast.LENGTH_SHORT).show();
+                }*/
+                if(fotos.isEmpty())
+                    Toast.makeText(getActivity(), "Não há fotos nesse tópico", Toast.LENGTH_SHORT).show();
                 if (list.isGroupExpanded(groupPosition)) {
                     list.collapseGroup(groupPosition);
                 } else {
@@ -154,3 +165,4 @@ public class TopicosFragment extends Fragment {
 
 
 }
+
