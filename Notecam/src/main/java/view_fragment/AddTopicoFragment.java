@@ -158,11 +158,12 @@ public class AddTopicoFragment extends Fragment {
             // else
             //Volta pra tela anterior
             ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
-            Singleton.singleMateriaFragment.reload(materia);
-            Singleton.topicosFragment.reload(materia);
+
             getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null);
             //getActivity().getSupportFragmentManager().beginTransaction().replace(AddTopicoFragment.this);
             getActivity().getSupportFragmentManager().popBackStackImmediate();
+            Singleton.singleMateriaFragment.reload(materia);
+            Singleton.topicosFragment.reload(materia);
 
         }
     };

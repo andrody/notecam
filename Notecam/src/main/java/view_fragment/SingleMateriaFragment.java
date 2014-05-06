@@ -247,6 +247,7 @@ public class SingleMateriaFragment extends Fragment {
             e.printStackTrace();
 
         }
+        reload(Singleton.getMateria_selecionada());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
