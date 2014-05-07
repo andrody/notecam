@@ -240,6 +240,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sb.setTopicos(getAllTopicosBySubject(subject_id));
 
+        c.close();
 
         return sb;
     }
@@ -268,6 +269,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 subjects.add(sb);
             } while (c.moveToNext());
         }
+        c.close();
         closeDB();
 
         return subjects;
@@ -384,6 +386,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 aulas.add(cl);
             } while (c.moveToNext());
         }
+        c.close();
+
 
         return aulas;
     }
@@ -491,6 +495,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_TOPICO_SUBJECT))));
         topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
+        c.close();
 
         return topico;
     }
@@ -522,6 +527,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 topicos.add(topico);
             } while (c.moveToNext());
         }
+        c.close();
+
         closeDB();
 
         return topicos;
@@ -576,6 +583,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 topicos.add(topico);
             } while (c.moveToNext());
         }
+        c.close();
 
         return topicos;
     }
@@ -663,6 +671,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
         foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
 
+        c.close();
 
         return foto;
     }
@@ -695,6 +704,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 fotos.add(foto);
             } while (c.moveToNext());
         }
+        c.close();
+
         closeDB();
 
         return fotos;
@@ -753,6 +764,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 fotos.add(foto);
             } while (c.moveToNext());
         }
+        c.close();
 
         return fotos;
     }
