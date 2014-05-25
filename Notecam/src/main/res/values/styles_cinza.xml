@@ -34,7 +34,7 @@
     </style>
 
     <style name="ActionBar.Solid.Cinza" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="background">@drawable/ab_solid_cinza</item>
+        <!--item name="background">@drawable/ab_solid_cinza</item-->
         <item name="backgroundStacked">@drawable/ab_stacked_solid_cinza</item>
         <item name="backgroundSplit">@drawable/ab_bottom_solid_cinza</item>
         <item name="progressBarStyle">@style/ProgressBar.Cinza</item>

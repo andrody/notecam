@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 

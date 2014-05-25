@@ -419,7 +419,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     public void reload(){
         getViewPager().setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
         changeFragments(getMateriasFragment(), null);
-        getSingleMateriasFragment().reload(Singleton.getMateria_selecionada());
+
+        if(Singleton.getMateria_selecionada() != null)
+            getSingleMateriasFragment().reload(Singleton.getMateria_selecionada());
 
     }
 
