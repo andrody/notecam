@@ -37,7 +37,6 @@ import java.util.List;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
-import model.Subject;
 
 
 public class MateriasFragment extends Fragment {
@@ -95,13 +94,13 @@ public class MateriasFragment extends Fragment {
                     if (mListener != null) {
 
                         //Pega a materia selecionada
-                        Subject subject = (Subject)materiasAdapter.getItem(position);
-                        Singleton.setMateria_selecionada(subject);
+                        model.Materia materia = (model.Materia)materiasAdapter.getItem(position);
+                        Singleton.setMateria_selecionada(materia);
                         ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
                         ContentValues values = new ContentValues();
                         values.put(Singleton.REPLACE_FRAGMENT, Singleton.MATERIA);
-                        values.put(Singleton.MATERIA_ID, subject.getId());
+                        values.put(Singleton.MATERIA_ID, materia.getId());
 
                         mListener.onFragmentInteraction(null, values);
                     }
@@ -247,19 +246,19 @@ public class MateriasFragment extends Fragment {
             DatabaseHelper db = ((MateriasActivity) getActivity()).getDb();
 
             //Pede todos os subjects do banco
-            ArrayList<Subject> subjects = (ArrayList<Subject>) db.getAllSubjects();
+            ArrayList<model.Materia> materias = (ArrayList<model.Materia>) db.getAllSubjects();
 
             //Pede toda as classes desse subject e armazena nele
-            for (Subject subject : subjects) {
-                subject.setAulas(db.getAllClassesBySubject(subject.getId()));
+            for (model.Materia materia : materias) {
+                materia.setAulas(db.getAllClassesBySubject(materia.getId()));
             }
 
             //Limpa o adapter
             //materiasAdapter.clear();
 
             //Se existir pelo menos um subject, adiciona no adapter
-            if (!subjects.isEmpty())
-                materiasAdapter.materias = subjects;
+            if (!materias.isEmpty())
+                materiasAdapter.materias = materias;
             //materiasAdapter.setData(subjects);
 
             //Atualiza tela
@@ -304,16 +303,16 @@ public class MateriasFragment extends Fragment {
             if(item.getTitle().equals("Deletar")){
 
                 //Pede todos os subjects do adapter e põe numa lista
-                List<Subject> subjects = materiasAdapter.materias;
+                List<model.Materia> materias = materiasAdapter.materias;
 
                 //Pega a referencia do banco da activity
                 DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
                 //Para cada subject da lista
-                for(Subject subject : subjects){
+                for(model.Materia materia : materias){
 
                     //Descobre em qual a view corresponde a este subject
-                    View view = materiasAdapter.getView(subject.getId());
+                    View view = materiasAdapter.getView(materia.getId());
 
                     //Pega uma referência para o checkbox dele
                     CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox_subject);
@@ -322,7 +321,7 @@ public class MateriasFragment extends Fragment {
                     if(checkBox.isChecked()){
 
                         //Deleta esse subject e todas as suas classes
-                        db.deleteSubjectAndClasses(subject);
+                        db.deleteSubjectAndClasses(materia);
                     }
                 }
                 syncDB();
@@ -366,7 +365,7 @@ class Materia {
  */
 class MateriasAdapter extends BaseAdapter {
 
-    ArrayList<Subject> materias;
+    ArrayList<model.Materia> materias;
     private HashMap<Integer, View> views = new HashMap<Integer, View>();
 
     Context context;
@@ -374,7 +373,7 @@ class MateriasAdapter extends BaseAdapter {
     MateriasAdapter(Context context) {
         this.context = context;
 
-        materias = new ArrayList<Subject>();
+        materias = new ArrayList<model.Materia>();
     }
 
     @Override
@@ -425,7 +424,7 @@ class MateriasAdapter extends BaseAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        final Subject item = (Subject) getItem(position);
+        final model.Materia item = (model.Materia) getItem(position);
 
         //holder.myInitialLetter.setImageResource(materias.get(position).image_id);
         //holder.myInitialLetter.setText(materias.get(position).getName().substring(0,1));//materias.get(position).getColor());

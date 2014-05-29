@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import model.Aula;
 import model.Foto;
-import model.Subject;
+import model.Materia;
 import model.Topico;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -161,25 +161,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     // ------------------------ Utils table methods ----------------//
 
-    public int createSubjectAndClasses(Subject subject, List<Aula> aulas){
-        long subject_id = createSubject(subject);
+    public int createSubjectAndClasses(Materia materia, List<Aula> aulas){
+        long subject_id = createSubject(materia);
         if(aulas != null)
             createClasses(aulas, subject_id);
         return (int)subject_id;
     }
 
-    public void updateSubjectAndClasses(Subject subject, List<Aula> aulas){
-        updateSubject(subject);
-        deleteAllClassesBySubject(subject.getId());
-        createClasses(aulas, subject.getId());
+    public void updateSubjectAndClasses(Materia materia, List<Aula> aulas){
+        updateSubject(materia);
+        deleteAllClassesBySubject(materia.getId());
+        createClasses(aulas, materia.getId());
         //closeDB();
     }
 
-    public void deleteSubjectAndClasses(Subject subject){
-        deleteAllFotosBySubject(subject.getId());
-        deleteAllTopicosBySubject(subject.getId());
-        deleteAllClassesBySubject(subject.getId());
-        deleteSubject(subject.getId());
+    public void deleteSubjectAndClasses(Materia materia){
+        deleteAllFotosBySubject(materia.getId());
+        deleteAllTopicosBySubject(materia.getId());
+        deleteAllClassesBySubject(materia.getId());
+        deleteSubject(materia.getId());
         //closeDB();
     }
 
@@ -195,12 +195,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
      * Creating a Subject
      */
-    private long createSubject(Subject subject) {
+    private long createSubject(Materia materia) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_SUBJECT, subject.getName());
-        values.put(KEY_COLOR, subject.getColorNumber());
+        values.put(KEY_SUBJECT, materia.getName());
+        values.put(KEY_COLOR, materia.getColorNumber());
         values.put(KEY_CREATED_AT, getDateTime());
 
 
@@ -220,7 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * get single subject
     */
-    public Subject getSubject(long subject_id) {
+    public Materia getSubject(long subject_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_SUBJECT + " WHERE "
@@ -233,7 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        Subject sb = new Subject(context);
+        Materia sb = new Materia(context);
         sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
         sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
@@ -248,8 +248,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * getting all subjects
     * */
-    public List<Subject> getAllSubjects() {
-        List<Subject> subjects = new ArrayList<Subject>();
+    public List<Materia> getAllSubjects() {
+        List<Materia> materias = new ArrayList<Materia>();
         String selectQuery = "SELECT  * FROM " + TABLE_SUBJECT;
 
         Log.e(LOG, selectQuery);
@@ -260,35 +260,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Subject sb = new Subject(context);
+                Materia sb = new Materia(context);
                 sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
                 sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
 
                 // adding to subject list
-                subjects.add(sb);
+                materias.add(sb);
             } while (c.moveToNext());
         }
         c.close();
         closeDB();
 
-        return subjects;
+        return materias;
     }
 
     /*
     * Updating subject
     */
-    private int updateSubject(Subject subject) {
+    private int updateSubject(Materia materia) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_SUBJECT, subject.getName());
-        values.put(KEY_COLOR, subject.getColorNumber());
+        values.put(KEY_SUBJECT, materia.getName());
+        values.put(KEY_COLOR, materia.getColorNumber());
 
 
         // updating row
         return db.update(TABLE_SUBJECT, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(subject.getId()) });
+                new String[] { String.valueOf(materia.getId()) });
     }
 
     /*
@@ -463,8 +463,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     */
     private void deleteTopico(long topico_id) {
         Topico topico = getTopico(topico_id);
-        Subject subject = getSubject(topico.getSubject_id());
-        DeleteRecursive(new File(Singleton.NOTECAM_FOLDER + "/" + subject.getName() + "/" + topico.getName()));
+        Materia materia = getSubject(topico.getSubject_id());
+        DeleteRecursive(new File(Singleton.NOTECAM_FOLDER + "/" + materia.getName() + "/" + topico.getName()));
 
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;
@@ -728,8 +728,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * delete all fotos of a subject
     */
     private void deleteAllFotosBySubject(long subject_id) {
-        Subject subject = getSubject(subject_id);
-        for(Topico topico : subject.getTopicos()) {
+        Materia materia = getSubject(subject_id);
+        for(Topico topico : materia.getTopicos()) {
             deleteAllFotosByTopico(topico.getId());
         }
     }

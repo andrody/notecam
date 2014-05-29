@@ -62,7 +62,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
            // id = R.id.mainLinearLayout_land;
          //  id = 0;
 
-        OnOkDialogListener fragment = ((AddSubjectFragment) getActivity().getSupportFragmentManager().findFragmentById(id)).getAddClassesFragment();
+        OnOkDialogListener fragment = ((AddMateriaFragment) getActivity().getSupportFragmentManager().findFragmentById(id)).getAddAulasFragment();
         fragment.onOkDialog(hourOfDay,minute,position,startime);
 
 

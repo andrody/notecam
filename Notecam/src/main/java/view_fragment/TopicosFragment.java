@@ -19,15 +19,15 @@ import java.util.List;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
-import model.Foto;
-import model.Subject;
+import model.*;
+import model.Materia;
 
 public class TopicosFragment extends Fragment {
 
     private DatabaseHelper db;
 
     ExpandableListView lista;
-    private Subject materia;
+    private Materia materia;
 
 
 
@@ -149,7 +149,7 @@ public class TopicosFragment extends Fragment {
         }
     }
 
-    public void reload(Subject nova_materia){
+    public void reload(model.Materia nova_materia){
         this.materia = nova_materia;
 
         lista.setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));

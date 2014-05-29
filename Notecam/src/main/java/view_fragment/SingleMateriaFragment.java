@@ -24,14 +24,13 @@ import com.koruja.notecam.R;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
-import model.Aula;
-import model.Subject;
-import model.Topico;
+import model.*;
+import model.Materia;
 
 public class SingleMateriaFragment extends Fragment {
 
 
-    private Subject materia;
+    private Materia materia;
     private Topico topico;
     private DatabaseHelper db;
     private View view_do_onViewCreated;
@@ -61,9 +60,9 @@ public class SingleMateriaFragment extends Fragment {
         //Se o botão selecionado pelo usuario for o de editar materia
         if(item.getTitle().equals(getResources().getString(R.string.action_editar_materia))){
             //Cria uma nova instância do Fragment addSubjectsFragment
-            AddSubjectFragment addSubjectFragment = AddSubjectFragment.newInstance(materia.getId());
+            AddMateriaFragment addMateriaFragment = AddMateriaFragment.newInstance(materia.getId());
 
-            ((MateriasActivity)getActivity()).setAddSubjectsFragment(addSubjectFragment);
+            ((MateriasActivity)getActivity()).setAddSubjectsFragment(addMateriaFragment);
 
             ((MateriasActivity)getActivity()).changeFragments(((MateriasActivity) getActivity()).getAddSubjectsFragment(), null);
         }
@@ -268,17 +267,17 @@ public class SingleMateriaFragment extends Fragment {
     }
 
 
-    public void reload(Subject materia) {
+    public void reload(Materia materia) {
         setMateria(materia);
         criarUI(view_do_onViewCreated);
         updateSubTitle();
     }
 
-    public Subject getMateria() {
+    public Materia getMateria() {
         return materia;
     }
 
-    public void setMateria(Subject materia) {
+    public void setMateria(model.Materia materia) {
         this.materia = materia;
     }
 }

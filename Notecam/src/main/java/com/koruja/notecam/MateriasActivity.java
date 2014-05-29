@@ -34,9 +34,9 @@ import java.util.List;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Aula;
-import model.Subject;
+import model.Materia;
 import photo.PictureTaker;
-import view_fragment.AddSubjectFragment;
+import view_fragment.AddMateriaFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
@@ -106,7 +106,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     private DatabaseHelper db = new DatabaseHelper(this);
 
     //Armazena uma referência para o Fragmento de Adicionar Materias
-    private AddSubjectFragment addSubjectsFragment;
+    private AddMateriaFragment addSubjectsFragment;
 
     //Armazena uma referência para o Fragmento de Materias
     //private MateriasFragment materiasFragment;
@@ -307,7 +307,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         if(item.getTitle().equals("Add Materia")){
 
             //Cria uma nova instância do Fragment addSubjectsFragment
-            setAddSubjectsFragment(new AddSubjectFragment());
+            setAddSubjectsFragment(new AddMateriaFragment());
 
             changeFragments(getAddSubjectsFragment(), null);
         }
@@ -435,8 +435,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
      */
     public void checarHorario(){
         Aula aula = null;
-        List<Subject> materias = db.getAllSubjects();
-        for(Subject m: materias){
+        List<Materia> materias = db.getAllSubjects();
+        for(Materia m: materias){
             aula = m.ChecarHorario();
             if(aula != null){
                 Singleton.setMateria_em_aula(m);
@@ -475,7 +475,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         this.db = db;
     }
 
-    public AddSubjectFragment getAddSubjectsFragment() {
+    public AddMateriaFragment getAddSubjectsFragment() {
         return addSubjectsFragment;
     }
 
@@ -505,7 +505,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         this.emptyFragments = emptyFragments;
     }
 
-    public void setAddSubjectsFragment(AddSubjectFragment addSubjectsFragment) {
+    public void setAddSubjectsFragment(AddMateriaFragment addSubjectsFragment) {
         this.addSubjectsFragment = addSubjectsFragment;
     }
 

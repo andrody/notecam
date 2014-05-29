@@ -18,15 +18,15 @@ import java.util.List;
 
 import helper.DatabaseHelper;
 import list.ClassAdapter;
-import model.Aula;
-import model.Subject;
+import model.*;
+import model.Materia;
 
 // A ListFragment is used to display a list of items
 
-public class AddClassesFragment extends ListFragment implements View.OnClickListener, TimePickerFragment.OnOkDialogListener {
+public class AddAulasFragment extends ListFragment implements View.OnClickListener, TimePickerFragment.OnOkDialogListener {
 
     //Armazena o model do Subject em questão
-    private Subject subject;
+    private Materia materia;
 
     //Referencia para a lista com os models das classes
     List<Aula> aulas;
@@ -55,12 +55,12 @@ public class AddClassesFragment extends ListFragment implements View.OnClickList
         setListAdapter(getAdapter());
 
         //Se estamos no modo de edição, i.e. não estamos criando um novo subject
-        if(getSubject() != null && getSubject().getId() >=0) {
+        if(getMateria() != null && getMateria().getId() >=0) {
             //Pega referência do Banco de Dados
             DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
             //Recupera do Banco as classes relativas ao Subject
-            List<Aula> aulas = db.getAllClassesBySubject(getSubject().getId());
+            List<Aula> aulas = db.getAllClassesBySubject(getMateria().getId());
 
             //Adiciona classes no adapter
             addElementList(aulas);
@@ -190,11 +190,11 @@ public class AddClassesFragment extends ListFragment implements View.OnClickList
         this.adapter = adapter;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public Materia getMateria() {
+        return materia;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setMateria(model.Materia materia) {
+        this.materia = materia;
     }
 }

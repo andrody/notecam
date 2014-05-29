@@ -18,7 +18,19 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome da Matéria"
+                    android:id="@+id/textView"
+                    android:layout_marginTop="30dp"
+                    android:singleLine="true"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -26,13 +38,14 @@
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:id="@+id/editText_subject"
-                    android:hint="Subject Name"
                     android:singleLine="true"
                     android:layout_gravity="left"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:focusable="true" />
+                    android:layout_marginTop="10dp"
+                    android:focusable="true"
+                    android:background="@drawable/rect_text_edit"
+                    android:textColor="@color/darker_text_color"
+                    android:textCursorDrawable="@null"
+                    android:padding="15dp" />
 
 
                 <!--HorizontalScrollView
@@ -63,32 +76,15 @@
                 </HorizontalScrollView-->
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Schedule "
-                    android:id="@+id/textView"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:focusable="true" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="3dp" />
-
                 <Button
-                    android:layout_width="200dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="Add Class"
+                    android:text="nova aula"
                     android:id="@+id/button_addClass"
-                    android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="15dp"
-                    style="@style/btnStyleBeige"
+                    android:layout_gravity="center_horizontal|left"
+                    android:layout_marginTop="35dp"
+                    style="@style/btn_flat_blue"
                     android:textSize="18dp"
-                    android:textColor="#a09d9d"
                     android:focusable="true" />
 
 

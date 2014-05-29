@@ -12,7 +12,7 @@ import com.koruja.notecam.MateriasActivity;
 
 import java.io.File;
 
-import model.Subject;
+import model.Materia;
 import photo.PictureTaker;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
@@ -45,16 +45,16 @@ public class Singleton {
 
     private static MateriasActivity materiasActivity;
 
-    private static Subject materia_selecionada = null;
-    private static Subject materia_em_aula = null;
+    private static Materia materia_selecionada = null;
+    private static Materia materia_em_aula = null;
 
     private static PictureTaker pictureTaker;
 
-    public static Subject getMateria_selecionada() {
+    public static Materia getMateria_selecionada() {
         return materia_selecionada;
     }
 
-    public static void setMateria_selecionada(Subject materia) {
+    public static void setMateria_selecionada(Materia materia) {
         materia_selecionada = materia;
         if(singleMateriaFragment != null) {
             singleMateriaFragment.reload(materia);
@@ -69,11 +69,11 @@ public class Singleton {
         Singleton.pictureTaker = pictureTaker;
     }
 
-    public static Subject getMateria_em_aula() {
+    public static Materia getMateria_em_aula() {
         return materia_em_aula;
     }
 
-    public static void setMateria_em_aula(Subject materia_em_aula) {
+    public static void setMateria_em_aula(Materia materia_em_aula) {
         Singleton.materia_em_aula = materia_em_aula;
     }
 

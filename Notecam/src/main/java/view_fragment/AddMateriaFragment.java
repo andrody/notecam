@@ -22,11 +22,11 @@ import java.util.List;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
-import model.Aula;
-import model.Subject;
+import model.*;
+import model.Materia;
 
 
-public class AddSubjectFragment extends Fragment {
+public class AddMateriaFragment extends Fragment {
     @Override
     public void onDetach() {
         try {
@@ -47,10 +47,10 @@ public class AddSubjectFragment extends Fragment {
     }
 
     //Armazena o model do Subject em questão
-    private Subject materia;
+    private Materia materia;
 
     //Guarda uma referência ao fragment das classes
-    private AddClassesFragment addClassesFragment;
+    private AddAulasFragment addAulasFragment;
 
     //Flag para saber se o usuario clicou em OK (Salva dados no Banco) ou Cancel (Descarta mudanças e volta pra tela anterior)
     private boolean flagActionModeCancel = false;
@@ -58,8 +58,8 @@ public class AddSubjectFragment extends Fragment {
     //Flag para saber se ele está editando da home
     private boolean flagEditFromHome = false;
 
-    public static AddSubjectFragment newInstance(int materia_id) {
-        AddSubjectFragment fragment = new AddSubjectFragment();
+    public static AddMateriaFragment newInstance(int materia_id) {
+        AddMateriaFragment fragment = new AddMateriaFragment();
         Bundle args = new Bundle();
         args.putInt(Singleton.MATERIA_ID, materia_id);
         fragment.setArguments(args);
@@ -68,13 +68,13 @@ public class AddSubjectFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.add_subject, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_materia, container, false);
 
         //Referencia para o banco de dados
         DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
 
         //Cria novo materia
-        materia = new Subject(getActivity());
+        materia = new Materia(getActivity());
 
         //Se foi passado algum parametro, adiciona no materia
         if (getArguments() != null) {
@@ -84,7 +84,7 @@ public class AddSubjectFragment extends Fragment {
                 flagEditFromHome = true;
                 int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
 
-                materia.setId(getArguments().getInt(Subject.ID));
+                materia.setId(getArguments().getInt(Materia.ID));
                 materia = db.getSubject(materia_id);
 
                 assert view != null;
@@ -101,7 +101,7 @@ public class AddSubjectFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        //Listener do botão "Adicionar Classe"
+        //Listener do botão "Adicionar Aulas"
         Button button= (Button) getView().findViewById(R.id.button_addClass);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,17 +114,17 @@ public class AddSubjectFragment extends Fragment {
             }
         });
 
-        //Cria novo Fragmento de Classes
-        setAddClassesFragment(new AddClassesFragment());
-        getAddClassesFragment().setSubject(materia);
+        //Cria novo Fragmento de Aulas
+        setAddAulasFragment(new AddAulasFragment());
+        getAddAulasFragment().setMateria(materia);
 
         //Faz as transactions do fragmento das classes
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, getAddClassesFragment());
+        transaction.replace(R.id.fragment_container, getAddAulasFragment());
         transaction.commit();
 
         //Inicia o modo ActionMode (Header fica branco e com opções especializadas)
-        getActivity().startActionMode(mActionModeCallback);
+        //getActivity().startActionMode(mActionModeCallback);
 
         //Fazer teclado desaparecer ao EditText perder foco (Por algum motivo ele não perde sozinho)
         ((EditText)getView().findViewById(R.id.editText_subject)).setOnFocusChangeListener(new View.OnFocusChangeListener(){
@@ -190,7 +190,7 @@ public class AddSubjectFragment extends Fragment {
                 materia.setRandomColor();
 
                 //Pega as classes que foram adicionadas/alteradas
-                List<Aula> aulas = addClassesFragment.getAdapter().getItems();
+                List<Aula> aulas = addAulasFragment.getAdapter().getItems();
 
                 //Pega a referência do banco de dados
                 DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
@@ -198,7 +198,7 @@ public class AddSubjectFragment extends Fragment {
                 //Se Não existe no DB ainda, então não possui ID
                 if(materia.getId() <= 0){
                     db.createSubjectAndClasses(materia, aulas);
-                    List<Subject> materias = db.getAllSubjects();
+                    List<model.Materia> materias = db.getAllSubjects();
                     Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
                 }
 
@@ -226,14 +226,14 @@ public class AddSubjectFragment extends Fragment {
 
     //Cria uma nova classe
     public void addClass(View v){
-        getAddClassesFragment().addElement();
+        getAddAulasFragment().addElement();
     }
 
-    public AddClassesFragment getAddClassesFragment() {
-        return addClassesFragment;
+    public AddAulasFragment getAddAulasFragment() {
+        return addAulasFragment;
     }
 
-    public void setAddClassesFragment(AddClassesFragment addClassesFragment) {
-        this.addClassesFragment = addClassesFragment;
+    public void setAddAulasFragment(AddAulasFragment addAulasFragment) {
+        this.addAulasFragment = addAulasFragment;
     }
 }

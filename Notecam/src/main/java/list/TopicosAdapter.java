@@ -16,17 +16,17 @@ import com.koruja.notecam.R;
 
 import java.util.ArrayList;
 
-import model.Subject;
+import model.Materia;
 import model.Topico;
 
 public class TopicosAdapter extends BaseExpandableListAdapter {
 
     ArrayList<Topico> topicos;
-    Subject materia;
+    Materia materia;
 
 
     Context context;
-    public TopicosAdapter(Context context, Subject materia) {
+    public TopicosAdapter(Context context, Materia materia) {
         this.context = context;
         this.materia = materia;
         topicos = (ArrayList<Topico>) materia.getTopicos();

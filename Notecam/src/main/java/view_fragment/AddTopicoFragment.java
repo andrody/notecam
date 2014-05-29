@@ -17,8 +17,7 @@ import com.koruja.notecam.R;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
-import model.Subject;
-import model.Topico;
+import model.*;
 
 
 public class AddTopicoFragment extends Fragment {
@@ -30,7 +29,7 @@ public class AddTopicoFragment extends Fragment {
     }
 
     //Armazena o model da Materia em questão
-    private Subject materia;
+    private model.Materia materia;
 
     //Armazena o model do Subject em questão
     private Topico topico;

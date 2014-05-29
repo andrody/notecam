@@ -14,7 +14,7 @@ import helper.DatabaseHelper;
 /**
  * Created by Andrew on 10/24/13.
  */
-public class Subject {
+public class Materia {
     public static String ID = "id";
     public static String NAME = "name";
 
@@ -33,11 +33,11 @@ public class Subject {
     private String name = "";
     Context context;
 
-    public Subject(String name, Context context){
+    public Materia(String name, Context context){
         this.name = name;
         this.context = context;
     }
-    public Subject(Context context){
+    public Materia(Context context){
         this.context = context;
     }
 

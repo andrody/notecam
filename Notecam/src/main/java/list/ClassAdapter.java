@@ -71,10 +71,10 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
             viewHolder.startTime.setText(item.getStartTime().format("%H:%M"));
             viewHolder.endTime.setText(item.getEndTime().format("%H:%M"));
 
-            viewHolder.letra.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
-            viewHolder.weekday.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
-            viewHolder.startTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
-            viewHolder.endTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddClassesFragment());
+            viewHolder.letra.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
+            viewHolder.weekday.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
+            viewHolder.startTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
+            viewHolder.endTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
 
         }
 
