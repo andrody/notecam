@@ -4,19 +4,34 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:actionBarStyle">@style/RedActionBar</item>
+
     </style>
 
+    <style name="RedActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:background">@drawable/header_style</item>
+        <item name="android:textColor">@color/actionbar_title_color</item>
+        <!--item name="android:displayOptions">showHome|useLogo</item>
+        <item name="displayOptions">showHome|useLogo</item>
+        <item name="android:background">@drawable/header_style</item>
+        <item name="android:text">"asdasd"</item>
+        <item name="android:textSize">@dimen/actionbar_text_size</item>
+        <item name="android:height">46dp</item-->
+
+        <!--item name="android:titleTextStyle">@style/MyTextAppearance</item-->
+    </style>
 
 
     <style name="textShadow">

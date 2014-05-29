@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFF</color>
-    <color name="actionbar_title_color">#2b8464</color>
+    <color name="actionbar_title_color">#fff</color>
     <color name="black">#000000</color>
     <color name="action_bar_line_color">#008a9d</color>
     <color name="red">#e45866</color>
@@ -18,12 +18,12 @@
     <color name="verde">#1abc9c</color>
     <color name="text_color">#818181</color>
     <color name="darker_text_color">#303030</color>
-    <color name="background_light">#eeeeee</color>
+    <color name="background_light">#fff</color>
     <color name="menu_text">#ffffff</color>
     <color name="background_menu">#303030</color>
     <color name="background_menu_selected">#E8E8E8</color>
-    <color name="background_header">#dddddd</color>
-    <color name="background_aula_box">#FFF</color>
+    <color name="background_header">#e84f56</color>
+    <color name="background_aula_box">#f1f1f1</color>
     <color name="background_newaula_box">#83d4a9</color>
     <color name="separador_menu_1">#2c2c2c</color>
     <color name="separador_menu_2">#292929</color>
@@ -33,5 +33,7 @@
     <color name="menu_text_b">#636363</color>
     <color name="separador_menu_1_b">#fff</color>
     <color name="separador_menu_2_b">#fff</color>
+
+    <color name="separador_actionbar">#d4474e</color>
 
 </resources>

@@ -151,13 +151,15 @@ public class MateriasFragment extends Fragment {
     }
 
     public void updateSubTitle(){
-        if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 0) {
+        /*if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 0) {
 
             if (Singleton.getMateria_em_aula() != null)
                 getActivity().getActionBar().setSubtitle("Em aula de " + Singleton.getMateria_em_aula().getName());
             else
                 getActivity().getActionBar().setSubtitle("Horário livre");
-        }
+
+            getActivity().getActionBar().setSubtitle("");
+        }*/
     }
 
 

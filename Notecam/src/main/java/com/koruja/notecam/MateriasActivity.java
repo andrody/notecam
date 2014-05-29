@@ -125,6 +125,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if(SDK_INT >= 14)
+            getActionBar().setIcon(R.drawable.ic_launcher_stroke);
 
         //Seleciona a primeira matéria selecionada
         if(!db.getAllSubjects().isEmpty())
