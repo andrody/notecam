@@ -17,12 +17,13 @@
     <color name="azul">#50bfea</color>
     <color name="verde">#1abc9c</color>
     <color name="text_color">#818181</color>
+    <color name="text_color_light">#fff</color>
     <color name="darker_text_color">#303030</color>
     <color name="background_light">#fff</color>
     <color name="menu_text">#ffffff</color>
     <color name="background_menu">#303030</color>
     <color name="background_menu_selected">#E8E8E8</color>
-    <color name="background_header">#e84f56</color>
+    <color name="background_header">#FF5867</color>
     <color name="background_aula_box">#f1f1f1</color>
     <color name="background_newaula_box">#83d4a9</color>
     <color name="separador_menu_1">#2c2c2c</color>
@@ -34,6 +35,6 @@
     <color name="separador_menu_1_b">#fff</color>
     <color name="separador_menu_2_b">#fff</color>
 
-    <color name="separador_actionbar">#d4474e</color>
+    <color name="separador_actionbar">#FF2834</color>
 
 </resources>

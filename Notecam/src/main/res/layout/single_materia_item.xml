@@ -1,85 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:paddingTop="15dp">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
-        <FrameLayout
-            android:layout_width="145dp"
-            android:layout_height="155dp"
-            android:background="@drawable/album"
-            android:layout_centerInParent="true"
-            android:id="@+id/frameLayout"
-            android:padding="20dp">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/materia_back_color"
-            android:background="@color/red">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:textSize="90dp"
-                android:id="@+id/letra_inicial_image"
-                android:textColor="@color/white"
-                android:layout_gravity="center" />
-
-            </FrameLayout>
-            <!--ImageView
-                android:src="@drawable/ma"
-                android:layout_marginLeft="11dp"
-                android:layout_marginTop="18dp"
-                android:paddingTop="30dp"
-                android:paddingLeft="15dp"
-                android:background="@drawable/color_background"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/letra_inicial_image"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" /-->
-        </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkBox_subject"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:visibility="gone"
-                 />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_marginTop="5dp"
-                android:text="M"
-                android:textColor="@color/text_color"
-                android:id="@+id/materia_nome_text"
-                android:layout_below="@+id/frameLayout"
-                android:layout_centerHorizontal="true"
-                android:textSize="22sp"
-                android:textStyle="bold|italic"
-                android:layout_gravity="center" />
-        </LinearLayout>
-
-        </FrameLayout>
 
 
         <TextView
@@ -95,12 +23,108 @@
             android:background="@drawable/oval_background"
             android:textColor="@color/white"
             android:id="@+id/materia_numero_fotos_text"
-            android:layout_below="@+id/frameLayout"
+            android:layout_below="@+id/single_materia_back"
             android:layout_centerHorizontal="true"
             android:textSize="14sp"
             android:textStyle="bold|italic"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
         </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:background="@drawable/materia"
+        android:layout_centerInParent="true"
+        android:id="@+id/single_materia_back">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <FrameLayout
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:id="@+id/imagem_materia"
+                android:background="@drawable/lab"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="2"></FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="4"
+                android:layout_gravity="center">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkBox_subject"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone"
+                     />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_color_light"
+                    android:id="@+id/materia_nome_text"
+                    android:layout_below="@+id/single_materia_back"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="22sp"
+                    android:textStyle="bold|italic"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:layout_marginTop="-5dp"
+                    style="@style/MagicTextLayer"
+                    android:singleLine="true"
+                    android:text="Calculo" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:visibility="gone">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/materia_back_color"
+            android:background="@color/red"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:textSize="90dp"
+                android:id="@+id/letra_inicial_image"
+                android:textColor="@color/white"
+                android:layout_gravity="center" />
+
+            </FrameLayout>
+
+        <!--ImageView
+            android:src="@drawable/ma"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="18dp"
+            android:paddingTop="30dp"
+            android:paddingLeft="15dp"
+            android:background="@drawable/color_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/letra_inicial_image"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" /-->
+    </FrameLayout>
 
 </RelativeLayout>

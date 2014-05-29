@@ -5,10 +5,15 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -393,12 +398,15 @@ class MateriasAdapter extends BaseAdapter {
         View back_color;
         TextView numero_fotos;
         CheckBox checkbox;
+        Drawable drawable;
+
         ViewHolder(View v) {
             myInitialLetter = (TextView) v.findViewById(R.id.letra_inicial_image);
             nome_materia = (TextView) v.findViewById(R.id.materia_nome_text);
             numero_fotos = (TextView) v.findViewById(R.id.materia_numero_fotos_text);
             checkbox = (CheckBox) v.findViewById(R.id.checkBox_subject);
-            back_color = v.findViewById(R.id.materia_back_color);
+            back_color = v.findViewById(R.id.single_materia_back);
+            drawable  = context.getResources().getDrawable(R.drawable.materia);
         }
     }
 
@@ -420,10 +428,38 @@ class MateriasAdapter extends BaseAdapter {
         final Subject item = (Subject) getItem(position);
 
         //holder.myInitialLetter.setImageResource(materias.get(position).image_id);
-        holder.myInitialLetter.setText(materias.get(position).getName().substring(0,1));//materias.get(position).getColor());
-        holder.nome_materia.setText(materias.get(position).getName());
-        holder.numero_fotos.setText(materias.get(position).getNumero_fotos() + " fotos");
-        holder.back_color.setBackgroundColor(materias.get(position).getColor());
+        //holder.myInitialLetter.setText(materias.get(position).getName().substring(0,1));//materias.get(position).getColor());
+
+        String nome_materia = "#" + materias.get(position).getName().toLowerCase();
+
+        Paint paint = new Paint();
+
+        //Calcula o tamanho ideal do texto
+        //float measureText = paint.measureText(nome_materia);
+        //DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        //float screenWidth = ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics();
+        //float screenWidth = metrics.widthPixels;
+        //float perfectSize = (nome_materia.length() / measureText) * screenWidth;
+
+        //Seta o nome e tamanho
+        holder.nome_materia.setText("#" + materias.get(position).getName().toLowerCase());
+        //holder.nome_materia.setTextSize(perfectSize);
+        correctWidth(holder.nome_materia, 200);
+
+        //holder.numero_fotos.setText(materias.get(position).getNumero_fotos() + " fotos");
+
+
+        holder.drawable.setColorFilter(materias.get(position).getColor(), PorterDuff.Mode.SRC_ATOP);
+
+        //Troca cor de fundo das matérias
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            holder.back_color.setBackgroundDrawable(holder.drawable);
+        } else {
+            holder.back_color.setBackground(holder.drawable);
+        }
+
+
 
         views.put(item.getId(), row);
 
@@ -437,6 +473,27 @@ class MateriasAdapter extends BaseAdapter {
             holder.checkbox.setVisibility(CheckBox.GONE);
 
         return row;
+    }
+
+    public void correctWidth(TextView textView, int desiredWidth)
+    {
+        Paint paint = new Paint();
+        Rect bounds = new Rect();
+
+        paint.setTypeface(textView.getTypeface());
+        float textSize = textView.getTextSize();
+        paint.setTextSize(textSize);
+        String text = textView.getText().toString();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        while (bounds.width() > desiredWidth)
+        {
+            textSize--;
+            paint.setTextSize(textSize);
+            paint.getTextBounds(text, 0, text.length(), bounds);
+        }
+
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
     }
 
     public View getView(int id){
