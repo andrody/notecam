@@ -125,6 +125,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Singleton.setMateriasActivity(this);
+
+        Singleton.setActionBarTitle("Notecam2");
 
 
         //Muda o ícone no Actionbar do app
@@ -182,9 +185,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         timedTask.run();
 
-        Singleton.setMateriasActivity(this);
-
-        Singleton.setActionBarTitle("Materias");
 
 
         //setMateriasFragment(new MateriasFragment());
