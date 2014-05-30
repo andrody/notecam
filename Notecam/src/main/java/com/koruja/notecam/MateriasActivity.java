@@ -125,6 +125,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         //Muda o ícone no Actionbar do app
         /*int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if(SDK_INT >= 14)
@@ -181,6 +183,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         timedTask.run();
 
         Singleton.setMateriasActivity(this);
+
+        Singleton.setActionBarTitle("Materias");
+
 
         //setMateriasFragment(new MateriasFragment());
         //getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();

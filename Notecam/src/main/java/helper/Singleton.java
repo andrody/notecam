@@ -4,9 +4,13 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 
 import com.koruja.notecam.MateriasActivity;
 
@@ -126,5 +130,15 @@ public class Singleton {
     public static int get_dp_in_px(int padding_in_dp){
         final float scale = getMateriasActivity().getResources().getDisplayMetrics().density;
         return (int) (padding_in_dp * scale + 0.5f);
+    }
+
+    public static void setActionBarTitle(String title) {
+        Spannable actionBarTitle = new SpannableString(title);
+        actionBarTitle.setSpan(
+                new ForegroundColorSpan(Color.WHITE),
+                0,
+                actionBarTitle.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getMateriasActivity().getActionBar().setTitle(actionBarTitle);
     }
 }

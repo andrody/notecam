@@ -52,7 +52,10 @@ public class MateriasFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
+        Singleton.setActionBarTitle("Materias");
+
+
+        //getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
         updateSubTitle();
     }
 
@@ -148,7 +151,9 @@ public class MateriasFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.materias, menu);
 
-        getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
+        Singleton.setActionBarTitle("Materias");
+
+        //getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
         updateSubTitle();
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -187,6 +192,8 @@ public class MateriasFragment extends Fragment {
 
         //Tem de habilitar para mudar o ActionBar
         setHasOptionsMenu(true);
+
+
 
     }
 

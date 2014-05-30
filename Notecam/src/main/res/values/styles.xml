@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="@style/Theme.AppCompat">
+    <style name="AppBaseTheme" parent="@style/Theme.Base.AppCompat.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -13,6 +13,7 @@
 
     </style>
 
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
@@ -20,9 +21,10 @@
 
     </style>
 
-    <style name="RedActionBar" parent="@style/Widget.AppCompat.ActionBar">
+    <style name="RedActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@drawable/header_style</item>
-        <item name="android:textColor">@color/actionbar_title_color</item>
+        <item name="titleTextStyle">@style/titleStyle2</item>
+
         <!--item name="android:displayOptions">showHome|useLogo</item>
         <item name="displayOptions">showHome|useLogo</item>
         <item name="android:background">@drawable/header_style</item>
@@ -31,6 +33,10 @@
         <item name="android:height">46dp</item-->
 
         <!--item name="android:titleTextStyle">@style/MyTextAppearance</item-->
+    </style>
+
+    <style name="titleStyle2" parent="@style/TextAppearance.AppCompat.Widget.Base.ActionBar.Title">
+        <item name="android:textColor">#f584f6</item>
     </style>
 
 
