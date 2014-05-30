@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row_content"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_gravity="left|top"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginBottom="20dp"
+    android:layout_marginTop="50dp"
+    >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:orientation="horizontal"
+        android:background="@drawable/soft_corner_light">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent">
+
+            <FrameLayout
+                android:layout_width="55dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="left|top"
+                android:id="@+id/letra"
+                android:text="x"
+                android:textColor="#fff"
+                android:textSize="30dp"
+                android:singleLine="false"
+                android:background="@drawable/custom_btn_flat_red"
+                android:padding="13dp">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_background"
+                    android:adjustViewBounds="false"
+                    android:src="@drawable/ic_action_del_red" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="seg"
+                android:id="@+id/button_weekday"
+                android:textColor="@color/text_color"
+                android:background="@drawable/custom_btn_flat_light"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="das"
+                android:id="@+id/textView"
+                android:textSize="18sp"
+                android:textColor="@color/text_color"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10:00"
+                android:id="@+id/button_start_time"
+                android:textColor="@color/text_color"
+                android:background="@drawable/custom_btn_flat_light"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:layout_marginLeft="7dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="às"
+                android:id="@+id/textView4"
+                android:textSize="18sp"
+                android:textColor="@color/text_color"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:30"
+                android:id="@+id/button_end_time"
+                android:textColor="@color/text_color"
+                android:background="@drawable/custom_btn_flat_light"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:layout_marginLeft="7dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|top"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="10:00"
+                    android:id="@+id/button_start_time2"
+                    android:textSize="22dp"
+                    android:textStyle="bold"
+                    android:textIsSelectable="false"
+                    android:shadowColor="#000000"
+                    style="@style/btnStyleBeige"
+                    android:textColor="#a09d9d" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text=" - "
+                    android:textColor="#a09d9d"
+                    android:id="@+id/textView2"
+                    android:textSize="22dp"
+                    android:textIsSelectable="false"
+                    android:textColorHighlight="#F55555"
+                    android:shadowColor="#000000"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="12:00"
+                    android:textColor="#a09d9d"
+                    android:id="@+id/button_end_time2"
+                    android:textSize="22dp"
+                    android:textStyle="bold"
+                    android:textIsSelectable="false"
+                    style="@style/btnStyleBeige" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout><![CDATA[
+
+
+
+
+
+
+
+
+
+            />
+
+
+
+
+]]>
+</FrameLayout>
+
+
+

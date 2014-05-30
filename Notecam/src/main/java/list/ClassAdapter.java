@@ -5,7 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -23,10 +24,10 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
     // our ViewHolder.
     // caches our TextView
     public static class ViewHolder {
-        Button letra;
-        Button weekday;
-        Button startTime;
-        Button endTime;
+        FrameLayout letra;
+        TextView weekday;
+        TextView startTime;
+        TextView endTime;
     }
 
     public ClassAdapter(Context context, int layout, List<Aula> items) {
@@ -49,12 +50,12 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
         ViewHolder viewHolder;
 
         if (convertView == null){
-            convertView = mInflater.inflate(R.layout.add_class_item, parent, false);
+            convertView = mInflater.inflate(R.layout.add_aula_item, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.weekday = (Button)convertView.findViewById(R.id.button_weekday);
-            viewHolder.letra = (Button)convertView.findViewById(R.id.letra);
-            viewHolder.startTime = (Button)convertView.findViewById(R.id.button_start_time);
-            viewHolder.endTime = (Button)convertView.findViewById(R.id.button_end_time);
+            viewHolder.weekday = (TextView)convertView.findViewById(R.id.button_weekday);
+            viewHolder.letra = (FrameLayout)convertView.findViewById(R.id.letra);
+            viewHolder.startTime = (TextView)convertView.findViewById(R.id.button_start_time);
+            viewHolder.endTime = (TextView)convertView.findViewById(R.id.button_end_time);
 
             convertView.setTag(viewHolder);
         }
@@ -67,7 +68,7 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
         if (item != null){
             String weekday = Aula.getWeekDayString(item.getWeekday());
 
-            viewHolder.weekday.setText(weekday);
+            viewHolder.weekday.setText(weekday.toLowerCase());
             viewHolder.startTime.setText(item.getStartTime().format("%H:%M"));
             viewHolder.endTime.setText(item.getEndTime().format("%H:%M"));
 

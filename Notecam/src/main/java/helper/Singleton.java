@@ -122,4 +122,9 @@ public class Singleton {
         ContentResolver resolver = getMateriasActivity().getContentResolver();
         resolver.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media.DATA + "=?", new String[]{path});
     }
+
+    public static int get_dp_in_px(int padding_in_dp){
+        final float scale = getMateriasActivity().getResources().getDisplayMetrics().density;
+        return (int) (padding_in_dp * scale + 0.5f);
+    }
 }

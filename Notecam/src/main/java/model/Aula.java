@@ -44,19 +44,19 @@ public class Aula {
     public static String getWeekDayString(int weekday){
         switch(weekday){
             case 0:
-                return "SUN";
+                return "dom";
             case 1:
-                return "MON";
+                return "seg";
             case 2:
-                return "TUE";
+                return "ter";
             case 3:
-                return "WED";
+                return "qua";
             case 4:
-                return "THU";
+                return "qui";
             case 5:
-                return "FRI";
+                return "sex";
             case 6:
-                return "SAT";
+                return "sab";
 
         }
         return null;

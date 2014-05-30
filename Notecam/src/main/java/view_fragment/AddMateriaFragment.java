@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,8 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -22,7 +26,7 @@ import java.util.List;
 
 import helper.DatabaseHelper;
 import helper.Singleton;
-import model.*;
+import model.Aula;
 import model.Materia;
 
 
@@ -89,6 +93,16 @@ public class AddMateriaFragment extends Fragment {
 
                 assert view != null;
                 ((EditText)view.findViewById(R.id.editText_subject)).setText(materia.getName());
+
+                TextView text_criar_materia = (TextView) view.findViewById(R.id.text_criar_materia);
+                text_criar_materia.setText("Pronto");
+
+                FrameLayout button_criar_materia = (FrameLayout) view.findViewById(R.id.btn_criar_materia);
+                button_criar_materia.setVisibility(View.VISIBLE);
+
+                final FrameLayout container_das_aulas =  (FrameLayout) view.findViewById(R.id.fragment_container).getParent();
+                container_das_aulas.setPadding(0,0,0,Singleton.get_dp_in_px(75));
+
             }
 
 
@@ -102,17 +116,61 @@ public class AddMateriaFragment extends Fragment {
         super.onStart();
 
         //Listener do botão "Adicionar Aulas"
-        Button button= (Button) getView().findViewById(R.id.button_addClass);
-        button.setOnClickListener(new View.OnClickListener() {
+        LinearLayout btn_nova_aula= (LinearLayout) getView().findViewById(R.id.button_addClass);
+        btn_nova_aula.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addClass(v);
 
                 //Recolher teclado
-                InputMethodManager imm =  (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
+
+        //Listener do botão "Criar Matéria"
+        final FrameLayout button_criar_materia = (FrameLayout) getView().findViewById(R.id.btn_criar_materia);
+        button_criar_materia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                criar_ou_editar_materia();
+            }
+        });
+
+        //Listener do EditText "Nome da materia"
+        EditText nome_da_materia = (EditText) getView().findViewById(R.id.editText_subject);
+
+        final FrameLayout container_das_aulas =  (FrameLayout) getView().findViewById(R.id.fragment_container).getParent();
+
+
+        nome_da_materia.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(count >= 1) {
+                    button_criar_materia.setVisibility(View.VISIBLE);
+                    container_das_aulas.setPadding(0,0,0, Singleton.get_dp_in_px(75));
+                }
+                else {
+                    button_criar_materia.setVisibility(View.INVISIBLE);
+                    container_das_aulas.setPadding(0,0,0,0);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+            }
+        });
+
+
+
+
 
         //Cria novo Fragmento de Aulas
         setAddAulasFragment(new AddAulasFragment());
@@ -127,7 +185,7 @@ public class AddMateriaFragment extends Fragment {
         //getActivity().startActionMode(mActionModeCallback);
 
         //Fazer teclado desaparecer ao EditText perder foco (Por algum motivo ele não perde sozinho)
-        ((EditText)getView().findViewById(R.id.editText_subject)).setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        (getView().findViewById(R.id.editText_subject)).setOnFocusChangeListener(new View.OnFocusChangeListener(){
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -139,6 +197,55 @@ public class AddMateriaFragment extends Fragment {
             }
 
         });
+    }
+
+    public void criar_ou_editar_materia(){
+        //Pega o nome do materia digitado pelo usuario
+        String subjectName = ((EditText)getView().findViewById(R.id.editText_subject)).getText().toString();
+
+        //Se ele clicou no icone de OK e digitou um nome com mais de 1 letra, salva mudanças
+        if(!flagActionModeCancel && subjectName.length() > 0){
+
+            //Primeira letra maiuscula
+            String name = Character.toUpperCase(subjectName.charAt(0)) + subjectName.substring(1).toLowerCase();
+
+            //Atualiza o nome do materia no model do materia
+            materia.setName(name);
+
+            //if(!materia.isColored())
+            materia.setRandomColor();
+
+            //Pega as classes que foram adicionadas/alteradas
+            List<Aula> aulas = addAulasFragment.getAdapter().getItems();
+
+            //Pega a referência do banco de dados
+            DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
+
+            //Se Não existe no DB ainda, então não possui ID
+            if(materia.getId() <= 0){
+                db.createSubjectAndClasses(materia, aulas);
+                List<model.Materia> materias = db.getAllSubjects();
+                Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
+            }
+
+            //Se já existe no Banco, apenas da um update
+            else {
+                db.updateSubjectAndClasses(materia, aulas);
+            }
+
+            ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
+            ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+            ((MateriasActivity)getActivity()).checarHorario();
+
+
+        }
+
+        //if (flagEditFromHome)
+        getActivity().onBackPressed();
+        //else
+        //Volta pra tela anterior
+        //    getActivity().getSupportFragmentManager().popBackStackImmediate();
+
     }
 
     //Callback para criar e manipular o ActionMode

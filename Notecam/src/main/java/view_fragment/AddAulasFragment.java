@@ -7,8 +7,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.text.format.Time;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import helper.DatabaseHelper;
 import list.ClassAdapter;
-import model.*;
+import model.Aula;
 import model.Materia;
 
 // A ListFragment is used to display a list of items
@@ -38,7 +38,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
         super.onActivityCreated(savedInstanceState);
 
         //Se não houver nenhuma class, imprime isto
-        setEmptyText("Add a class!");
+        //setEmptyText("Add a class!");
     }
 
     // Initializes the Fragment
@@ -65,6 +65,10 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
             //Adiciona classes no adapter
             addElementList(aulas);
         }
+        else{
+            Aula a = new Aula();
+            getAdapter().add(a);
+        }
 
     }
 
@@ -87,8 +91,8 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
 
             //Cria um Bundle e passa os argumentos do botão para ele
             Bundle args = new Bundle();
-            args.putInt(Aula.HORA, Integer.parseInt(((Button) v).getText().subSequence(0, 2).toString()));
-            args.putInt(Aula.MINUTO, Integer.parseInt(((Button)v).getText().subSequence(3, 5).toString()));
+            args.putInt(Aula.HORA, Integer.parseInt(((TextView) v).getText().subSequence(0, 2).toString()));
+            args.putInt(Aula.MINUTO, Integer.parseInt(((TextView)v).getText().subSequence(3, 5).toString()));
             args.putInt(Aula.POSITION, getPosition(v));
 
             //Cria um dialog para pegar o tempo e passa os dados do botão para ele
@@ -157,6 +161,8 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
             b.show();
         }
 
+
+
     }
 
 
@@ -179,7 +185,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
 
     //Retorna a posição da view (Um item/linha da lista) na lista
     public int getPosition(View v){
-        return ((ListView)v.getParent().getParent().getParent().getParent().getParent()).getPositionForView(v);
+        return ((ListView)v.getParent().getParent().getParent().getParent()).getPositionForView(v);
     }
 
     public ClassAdapter getAdapter() {
