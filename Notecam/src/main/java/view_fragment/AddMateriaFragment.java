@@ -285,8 +285,8 @@ public class AddMateriaFragment extends Fragment {
             //Atualiza o nome do materia no model do materia
             materia.setName(name);
 
-            //if(!materia.isColored())
-            //materia.setRandomColor();
+            if(!materia.isColored())
+                materia.setRandomColor();
 
             //Pega as classes que foram adicionadas/alteradas
             List<Aula> aulas = addAulasFragment.getAdapter().getItems();
@@ -366,8 +366,8 @@ public class AddMateriaFragment extends Fragment {
                 //Atualiza o nome do materia no model do materia
                 materia.setName(name);
 
-                //if(!materia.isColored())
-                materia.setRandomColor();
+                if(!materia.isColored())
+                    materia.setRandomColor();
 
                 //Pega as classes que foram adicionadas/alteradas
                 List<Aula> aulas = addAulasFragment.getAdapter().getItems();

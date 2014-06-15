@@ -26,7 +26,7 @@ public class Materia {
     private boolean checkboxSelecionada = false;
     private List<Aula> aulas;
     private List<Topico> topicos;
-    private int color;
+    private int color = -1;
     private int id = -1;
     private int image_id = 0;
     private int numero_fotos = 0;
@@ -36,7 +36,6 @@ public class Materia {
     public Materia(String name, Context context){
         this.name = name;
         this.context = context;
-        setColor(context.getResources().getColor(R.color.red));
     }
     public Materia(Context context){
         this.context = context;
@@ -128,7 +127,7 @@ public class Materia {
     }
 
     public boolean isColored(){
-        if(this.color >= 0)
+        if(this.color != -1)
             return true;
         return false;
     }
