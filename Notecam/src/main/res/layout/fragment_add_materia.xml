@@ -140,10 +140,10 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="65dp"
         android:id="@+id/btn_criar_materia"
         android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/custom_btn_flat_blue"
+        android:background="@drawable/custom_btn_flat_green"
         android:visibility="invisible">
 
         <TextView

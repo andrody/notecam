@@ -54,6 +54,10 @@ public class Singleton {
 
     private static PictureTaker pictureTaker;
 
+    public static void resetarSingleton(){
+        singleMateriaFragment = null;
+    }
+
     public static Materia getMateria_selecionada() {
         return materia_selecionada;
     }

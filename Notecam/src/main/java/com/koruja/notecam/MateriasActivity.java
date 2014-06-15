@@ -133,6 +133,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Singleton.resetarSingleton();
 
         Singleton.setMateriasActivity(this);
 
@@ -417,7 +418,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
             //TrocaFragments
             //transaction.replace(R.id.mainLinearLayout, fragment);
-            transaction.add(R.id.drawer_layout, fragment);
+            transaction.add(R.id.mainLinearLayout, fragment);
             mDrawerToggle.setDrawerIndicatorEnabled(false);
 
             //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
