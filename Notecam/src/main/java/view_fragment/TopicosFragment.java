@@ -128,12 +128,12 @@ public class TopicosFragment extends Fragment {
 
 
     public void updateSubTitle(){
-        if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 2){
+        /*if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 2){
             if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
                 getActivity().getActionBar().setSubtitle("Em aula!");
             else
                 getActivity().getActionBar().setSubtitle("Sem aula agora");
-        }
+        }*/
 
     }
 

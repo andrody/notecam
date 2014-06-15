@@ -36,6 +36,7 @@ public class Materia {
     public Materia(String name, Context context){
         this.name = name;
         this.context = context;
+        setColor(context.getResources().getColor(R.color.red));
     }
     public Materia(Context context){
         this.context = context;

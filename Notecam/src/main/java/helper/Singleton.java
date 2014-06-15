@@ -32,6 +32,7 @@ public class Singleton {
     public static String MATERIA_ID = "materia_id";
     public static String TOPICO_ID = "topico_id";
     public static String REDIRECT = "redirect";
+    public static String COLOR = "color";
     public static int THUMBNAIL_SIZE = 100;
     public static String APPNAME = "Notecam";
     public static final String NOTECAM_FOLDER = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" +APPNAME;

@@ -2,6 +2,7 @@ package view_fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -83,6 +86,25 @@ public class AddMateriaFragment extends Fragment {
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    /**
+     * Cria as opções do header
+     **/
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        menu.clear();
+        inflater.inflate(R.menu.add_materia, menu);
+
+        try {
+            Singleton.setActionBarTitle("Criar ou editar matéria");
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Get item selected and deal with it
@@ -91,7 +113,9 @@ public class AddMateriaFragment extends Fragment {
                 //called when the up affordance/carat in actionbar is pressed
                 getActivity().onBackPressed();
                 return true;
-
+            case R.id.colorselect:
+                openColorDialog();
+                return true;
         }
         return true;
     }
@@ -225,6 +249,29 @@ public class AddMateriaFragment extends Fragment {
         });
     }
 
+    public void openColorDialog(){
+        //Toast.makeText(getActivity(), "teste", Toast.LENGTH_SHORT).show();
+
+        Bundle args = null;
+
+        //Se está em modo de edição
+        /*if(!(materia.getId() <= 0)){
+
+            //Cria um Bundle e passa a cor da materia
+            args = new Bundle();
+            args.putInt(Singleton.COLOR, materia.getColor());
+        }*/
+
+        //Cria um dialog passa os argumentos
+        ColorPickerFragment colorDialog = new ColorPickerFragment();
+        //colorDialog.setArguments(args);
+        colorDialog.setMateria(materia);
+        colorDialog.show(getFragmentManager(), "Selecione uma cor");
+
+
+
+    }
+
     public void criar_ou_editar_materia(){
         //Pega o nome do materia digitado pelo usuario
         String subjectName = ((EditText)getView().findViewById(R.id.editText_subject)).getText().toString();
@@ -239,7 +286,7 @@ public class AddMateriaFragment extends Fragment {
             materia.setName(name);
 
             //if(!materia.isColored())
-            materia.setRandomColor();
+            //materia.setRandomColor();
 
             //Pega as classes que foram adicionadas/alteradas
             List<Aula> aulas = addAulasFragment.getAdapter().getItems();
