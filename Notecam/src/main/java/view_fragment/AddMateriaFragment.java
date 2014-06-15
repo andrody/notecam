@@ -70,6 +70,32 @@ public class AddMateriaFragment extends Fragment {
         return fragment;
     }
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // needed to indicate that the fragment would
+        // like to add items to the Options Menu
+        setHasOptionsMenu(true);
+
+        // update the actionbar to show the up carat/affordance
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Get item selected and deal with it
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //called when the up affordance/carat in actionbar is pressed
+                getActivity().onBackPressed();
+                return true;
+
+        }
+        return true;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_materia, container, false);

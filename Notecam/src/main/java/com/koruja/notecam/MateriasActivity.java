@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -99,6 +100,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onResume();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // turn on the Navigation Drawer image;
+        // this is called in the LowerLevelFragments
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+    }
+
     //Referencia para colocar uma custom font
     private Typeface fontType;
 
@@ -164,7 +173,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 drawerLayout.closeDrawers();
             }});
 
-        drawerLayout.setDrawerListener(myDrawerListener);
+        //drawerLayout.setDrawerListener(myDrawerListener);
 
         drawerView.setOnTouchListener(new OnTouchListener() {
 
@@ -249,18 +258,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
 
-
-    /*@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public void menu_on_hover(final View view){
-        view.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                view.setBackgroundColor(getResources().getColor(R.color.blue));
-                return false;
-            }
-        });
-    }*/
-
     private void setUpDrawerToggle(){
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -302,6 +299,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         drawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -414,7 +416,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             getViewPager().setVisibility(View.GONE);
 
             //TrocaFragments
-            transaction.replace(R.id.mainLinearLayout, fragment);
+            //transaction.replace(R.id.mainLinearLayout, fragment);
+            transaction.add(R.id.drawer_layout, fragment);
+            mDrawerToggle.setDrawerIndicatorEnabled(false);
 
             //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
             transaction.addToBackStack(null);
