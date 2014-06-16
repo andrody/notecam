@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.koruja.notecam.MateriasActivity;
@@ -19,6 +20,7 @@ import java.util.List;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
+import list.TopicosAdapter_old;
 import model.*;
 import model.Materia;
 
@@ -26,7 +28,7 @@ public class TopicosFragment extends Fragment {
 
     private DatabaseHelper db;
 
-    ExpandableListView lista;
+    ListView lista;
     private Materia materia;
 
 
@@ -53,13 +55,12 @@ public class TopicosFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // inflate the layout that contains the ExpandableListView
         View view =  inflater.inflate(R.layout.fragment_topicos, container, false);
-        final ExpandableListView list = (ExpandableListView)view.findViewById(R.id.expandableListView_aulas);
+        final ListView list = (ListView)view.findViewById(R.id.topicos_list);
         lista = list;
         list.setAdapter(new TopicosAdapter(getActivity(), materia));
 
-        list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        /*list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 List<Foto> fotos = materia.getTopicos().get(groupPosition).getFotos();
@@ -69,7 +70,7 @@ public class TopicosFragment extends Fragment {
                 else {
                     Toast.makeText(getActivity(), "Não há fotos nesse tópico", Toast.LENGTH_SHORT).show();
                 }*/
-                if(fotos.isEmpty())
+                /*if(fotos.isEmpty())
                     Toast.makeText(getActivity(), "Não há fotos nesse tópico", Toast.LENGTH_SHORT).show();
                 if (list.isGroupExpanded(groupPosition)) {
                     list.collapseGroup(groupPosition);
@@ -81,7 +82,7 @@ public class TopicosFragment extends Fragment {
 
                 return true;
             }
-        });
+        });*/
 
         return view;
     }
@@ -113,8 +114,9 @@ public class TopicosFragment extends Fragment {
         inflater.inflate(R.menu.topicos, menu);
 
         try {
-            getActivity().getActionBar().setTitle(materia.getName() + " / Tópicos");
-            updateSubTitle();
+            Singleton.setActionBarTitle(materia.getName());
+
+            //updateSubTitle();
         }
         catch (NullPointerException e){
             e.printStackTrace();
@@ -147,13 +149,15 @@ public class TopicosFragment extends Fragment {
         if (getArguments() != null) {
             this.materia = Singleton.getMateria_selecionada();
         }
+
     }
 
     public void reload(model.Materia nova_materia){
         this.materia = nova_materia;
 
         lista.setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
-        updateSubTitle();
+        Singleton.setActionBarColor(materia.getColor());
+        //updateSubTitle();
 
 
     }

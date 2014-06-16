@@ -1,11 +1,14 @@
 package list;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
@@ -20,6 +23,7 @@ import model.Aula;
 public class ClassAdapter extends ArrayAdapter<Aula> {
     private LayoutInflater mInflater;
     private List<Aula> items = new ArrayList<Aula>();
+    Context context;
 
     // our ViewHolder.
     // caches our TextView
@@ -28,11 +32,14 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
         TextView weekday;
         TextView startTime;
         TextView endTime;
+        ImageView del_x;
+
     }
 
     public ClassAdapter(Context context, int layout, List<Aula> items) {
         super(context, layout, items);
         this.items = items;
+        this.context = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -50,12 +57,14 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
         ViewHolder viewHolder;
 
         if (convertView == null){
-            convertView = mInflater.inflate(R.layout.add_aula_item, parent, false);
+            convertView = mInflater.inflate(R.layout.item_aula, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.weekday = (TextView)convertView.findViewById(R.id.button_weekday);
             viewHolder.letra = (FrameLayout)convertView.findViewById(R.id.letra);
             viewHolder.startTime = (TextView)convertView.findViewById(R.id.button_start_time);
             viewHolder.endTime = (TextView)convertView.findViewById(R.id.button_end_time);
+            viewHolder.del_x = (ImageView) convertView.findViewById(R.id.del_x);
+
 
             convertView.setTag(viewHolder);
         }
@@ -76,6 +85,10 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
             viewHolder.weekday.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
             viewHolder.startTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
             viewHolder.endTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
+
+            //Muda cor do fundo para cor vermelha
+            Drawable drawable = viewHolder.del_x.getDrawable();
+            drawable.setColorFilter(context.getResources().getColor(R.color.background_header), PorterDuff.Mode.SRC_ATOP);
 
         }
 

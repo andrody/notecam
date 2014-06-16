@@ -53,7 +53,7 @@ public class MateriasFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Singleton.setActionBarTitle("Materias");
-
+        Singleton.setActionBarColor(getActivity().getResources().getColor(R.color.background_header));
 
         //getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
         updateSubTitle();
@@ -435,22 +435,12 @@ class MateriasAdapter extends BaseAdapter {
 
         final model.Materia item = (model.Materia) getItem(position);
 
-        //holder.myInitialLetter.setImageResource(materias.get(position).image_id);
-        //holder.myInitialLetter.setText(materias.get(position).getName().substring(0,1));//materias.get(position).getColor());
-
         String nome_materia = "#" + materias.get(position).getName().toLowerCase();
 
         Paint paint = new Paint();
 
         //Seleciona o ícone da materia
         holder.icon.setBackgroundResource(materias.get(position).getIcon_id());
-
-        //Calcula o tamanho ideal do texto
-        //float measureText = paint.measureText(nome_materia);
-        //DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        //float screenWidth = ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics();
-        //float screenWidth = metrics.widthPixels;
-        //float perfectSize = (nome_materia.length() / measureText) * screenWidth;
 
         //Seta o nome e tamanho
         holder.nome_materia.setText("#" + materias.get(position).getName().toLowerCase());

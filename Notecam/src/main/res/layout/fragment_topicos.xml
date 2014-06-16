@@ -1,17 +1,64 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_container2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.koruja.notecam.MateriasFragment">
+    android:background="@color/background_light">
 
-    <ExpandableListView
-        android:id="@+id/expandableListView_aulas"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:footerDividersEnabled="false"
-        android:groupIndicator="@null"
-        android:paddingTop="5dp"
-        android:divider="@null">
-    </ExpandableListView>
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="nova aula"
+            android:id="@+id/button_addTopico"
+            android:layout_gravity="center_horizontal|left"
+            android:layout_marginTop="35dp"
+            android:textSize="18dp"
+            android:focusable="true"
+            android:background="@drawable/custom_btn_flat_blue"
+            android:clickable="false"
+            android:orientation="horizontal"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/imageView"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:adjustViewBounds="false"
+                android:src="@drawable/ic_action_new_azul" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="novo tópico"
+                android:id="@+id/textView2"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/topicos_list"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

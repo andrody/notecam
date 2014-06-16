@@ -1,181 +1,109 @@
 package list;
 
-
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.GridView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import model.Aula;
 import model.Materia;
 import model.Topico;
 
-public class TopicosAdapter extends BaseExpandableListAdapter {
 
-    ArrayList<Topico> topicos;
-    Materia materia;
-
-
+public class TopicosAdapter extends BaseAdapter {
     Context context;
+    Materia materia;
+    private LayoutInflater mInflater;
+    private List<Topico> items = new ArrayList<Topico>();
+
     public TopicosAdapter(Context context, Materia materia) {
         this.context = context;
         this.materia = materia;
-        topicos = (ArrayList<Topico>) materia.getTopicos();
-
+        this.items = materia.getTopicos();
     }
 
     @Override
-    public int getGroupCount() {
-        return topicos.size();
+    public int getCount() {
+        return items.size();
     }
 
     @Override
-    public int getChildrenCount(int groupPosition) {
-        return 1;
+    public Object getItem(int i) {
+        return items.get(i);
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
-        return topicos.get(groupPosition);
+    public long getItemId(int i) {
+        return i;
     }
 
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        return null;
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    class ViewHolderGroup {
-        CheckBox checkbox;
-        GradientDrawable sphere;
-        TextView letra_sphere;
+    class ViewHolder {
+        FrameLayout del_back;
+        ImageView del_x;
+        ImageView seta_direita;
+        TextView numero_fotos_topico;
         TextView nome_topico;
-        TextView numero_fotos;
-        ImageView ic_expandivel;
-        ViewHolderGroup(View v) {
-            letra_sphere = (TextView) v.findViewById(R.id.topico_letra);
+
+        ViewHolder(View v) {
+            del_back = (FrameLayout) v.findViewById(R.id.del_back);
+            del_x = (ImageView) v.findViewById(R.id.del_x);
+            seta_direita = (ImageView) v.findViewById(R.id.seta_direita);
+            numero_fotos_topico = (TextView) v.findViewById(R.id.numero_fotos_topico);
             nome_topico = (TextView) v.findViewById(R.id.nome_topico);
-            numero_fotos = (TextView) v.findViewById(R.id.numero_fotos);
-            checkbox = (CheckBox) v.findViewById(R.id.checkBox_topico);
-            ic_expandivel = (ImageView) v.findViewById(R.id.expandivel_icon);
-            sphere = (GradientDrawable) v.findViewById(R.id.sphere).getBackground();
         }
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ViewHolderGroup holder = null;
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        View row = view;
+        ViewHolder holder = null;
 
         //Se estamos chamando o getView pela primeira vez (Operações custosas)
         if(row == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.topico_item, parent, false);
-            holder = new ViewHolderGroup(row);
+            row = inflater.inflate(R.layout.item_topico, viewGroup, false);
+            holder = new ViewHolder(row);
             row.setTag(holder);
         }
         else {
-            holder = (ViewHolderGroup) row.getTag();
+            holder = (ViewHolder) row.getTag();
         }
 
-        Topico item = (Topico) getGroup(groupPosition);
+        //Seta nome do tópico
+        holder.nome_topico.setText(items.get(i).getName());
 
-        holder.letra_sphere.setText(groupPosition + 1 + "");
-        holder.sphere.setColor(materia.getColor());
-        holder.nome_topico.setText(item.getName());
-        holder.numero_fotos.setText(item.getFotos().size() + " fotos");
+        //Seta numero de fotos do tópico
+        holder.numero_fotos_topico.setText("10");//items.get(i).getFotos().size());
 
-        if(isExpanded) {
-            holder.ic_expandivel.setImageResource(R.drawable.ic_action_collapse);
-            holder.numero_fotos.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.ic_expandivel.setImageResource(R.drawable.ic_action_expand);
-            holder.numero_fotos.setVisibility(View.GONE);
-        }
+        //Muda cor do fundo para cor da matéria
+        Drawable drawable = holder.del_back.getBackground();
+        drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
+
+        //Muda cor do fundo para cor da matéria do X
+        drawable = holder.del_x.getDrawable();
+        drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
+
+        //Muda cor do fundo para cor da matéria da seta
+        drawable = holder.seta_direita.getDrawable();
+        drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
 
         return row;
     }
 
-    class ViewHolderChild {
-        GridView gridview;
 
-        ViewHolderChild(View v) {
-            gridview = (GridView) v.findViewById(R.id.fotos_grid_view);
-        }
-    }
-
-
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ViewHolderChild holder = null;
-
-        //Se estamos chamando o getView pela primeira vez (Operações custosas)
-        if(row == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.fragment_fotos, parent, false);
-            holder = new ViewHolderChild(row);
-            row.setTag(holder);
-        }
-        else {
-            holder = (ViewHolderChild) row.getTag();
-        }
-
-        Topico topico = topicos.get(groupPosition);
-
-        holder.gridview.setAdapter(new FotoAdapter(context, topico));
-
-        // initialize the following variables (i've done it based on your layout
-        // note: rowHeightDp is based on my grid_cell.xml, that is the height i've
-        //    assigned to the items in the grid.
-        final int spacingDp = 10;
-        final int colWidthDp = 100;
-        final int rowHeightDp = 160;
-
-        // convert the dp values to pixels
-        final float COL_WIDTH = context.getResources().getDisplayMetrics().density * colWidthDp;
-        final float ROW_HEIGHT = context.getResources().getDisplayMetrics().density * rowHeightDp;
-        final float SPACING = context.getResources().getDisplayMetrics().density * spacingDp;
-
-        // calculate the column and row counts based on your display
-        final int colCount = (int)Math.floor((parent.getWidth() - (2 * SPACING)) / (COL_WIDTH + SPACING));
-        final int rowCount = (int)Math.ceil((topico.getFotos().size() + 0d) / colCount);
-
-        // calculate the height for the current grid
-        final int GRID_HEIGHT = Math.round(rowCount * (ROW_HEIGHT + SPACING));
-
-        // set the height of the current grid
-        holder.gridview.getLayoutParams().height = GRID_HEIGHT;
-
-        return row;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
-    }
 }
+

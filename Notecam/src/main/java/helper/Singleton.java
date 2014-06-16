@@ -1,10 +1,12 @@
 package helper;
 
+import android.app.ActionBar;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -145,5 +147,13 @@ public class Singleton {
                 actionBarTitle.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getMateriasActivity().getActionBar().setTitle(actionBarTitle);
+    }
+
+    public static void setActionBarColor(int color) {
+        ActionBar actionBar = getMateriasActivity().getActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(color));
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
+
     }
 }
