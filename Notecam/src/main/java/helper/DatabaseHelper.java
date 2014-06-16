@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
 
     // Database Name
     private static final String DATABASE_NAME = "subjectsManager";
@@ -49,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_SUBJECT = "subject";
     private static final String KEY_STATUS = "status";
     private static final String KEY_COLOR = "color";
+    private static final String KEY_ICON = "icon";
 
 
     // CLASSES Table - column names
@@ -84,6 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_SUBJECT + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_SUBJECT + " TEXT,"
             + KEY_COLOR + " INTEGER,"
+            + KEY_ICON + " INTEGER,"
             + KEY_CREATED_AT + " DATETIME"
             + ")";
 
@@ -201,6 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT, materia.getName());
         values.put(KEY_COLOR, materia.getColorNumber());
+        values.put(KEY_ICON, materia.getIcon_id());
         values.put(KEY_CREATED_AT, getDateTime());
 
 
@@ -237,6 +240,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
         sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
+        sb.setIcon_id((c.getInt(c.getColumnIndex(KEY_ICON))));
 
         sb.setTopicos(getAllTopicosBySubject(subject_id));
 
@@ -264,6 +268,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
                 sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
+                sb.setIcon_id((c.getInt(c.getColumnIndex(KEY_ICON))));
 
                 // adding to subject list
                 materias.add(sb);
@@ -284,6 +289,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT, materia.getName());
         values.put(KEY_COLOR, materia.getColorNumber());
+        values.put(KEY_ICON, materia.getIcon_id());
 
 
         // updating row

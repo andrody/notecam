@@ -9,4 +9,10 @@
         android:icon="@drawable/ic_paint"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/iconselect"
+        android:title="Icone"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_mask"
+        app:showAsAction="ifRoom" />
+
 </menu>

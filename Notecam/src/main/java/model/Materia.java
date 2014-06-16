@@ -28,7 +28,7 @@ public class Materia {
     private List<Topico> topicos;
     private int color = -1;
     private int id = -1;
-    private int image_id = 0;
+    private int icon_id = 0;
     private int numero_fotos = 0;
     private String name = "";
     Context context;
@@ -182,12 +182,12 @@ public class Materia {
         this.numero_fotos = numero_fotos;
     }
 
-    public int getImage_id() {
-        return image_id;
+    public int getIcon_id() {
+        return icon_id;
     }
 
-    public void setImage_id(int image_id) {
-        this.image_id = image_id;
+    public void setIcon_id(int icon_id) {
+        this.icon_id = icon_id;
     }
 
     public List<Topico> getTopicos() {

@@ -405,11 +405,13 @@ class MateriasAdapter extends BaseAdapter {
         TextView numero_fotos;
         CheckBox checkbox;
         Drawable drawable;
+        View icon;
 
         ViewHolder(View v) {
             myInitialLetter = (TextView) v.findViewById(R.id.letra_inicial_image);
             nome_materia = (TextView) v.findViewById(R.id.materia_nome_text);
             numero_fotos = (TextView) v.findViewById(R.id.materia_numero_fotos_text);
+            icon = v.findViewById(R.id.imagem_materia);
             checkbox = (CheckBox) v.findViewById(R.id.checkBox_subject);
             back_color = v.findViewById(R.id.single_materia_back);
             drawable  = context.getResources().getDrawable(R.drawable.materia);
@@ -439,6 +441,9 @@ class MateriasAdapter extends BaseAdapter {
         String nome_materia = "#" + materias.get(position).getName().toLowerCase();
 
         Paint paint = new Paint();
+
+        //Seleciona o ícone da materia
+        holder.icon.setBackgroundResource(materias.get(position).getIcon_id());
 
         //Calcula o tamanho ideal do texto
         //float measureText = paint.measureText(nome_materia);

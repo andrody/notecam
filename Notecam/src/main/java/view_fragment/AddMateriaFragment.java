@@ -116,6 +116,9 @@ public class AddMateriaFragment extends Fragment {
             case R.id.colorselect:
                 openColorDialog();
                 return true;
+            case R.id.iconselect:
+                openIconDialog();
+                return true;
         }
         return true;
     }
@@ -267,6 +270,18 @@ public class AddMateriaFragment extends Fragment {
         //colorDialog.setArguments(args);
         colorDialog.setMateria(materia);
         colorDialog.show(getFragmentManager(), "Selecione uma cor");
+
+
+
+    }
+
+    public void openIconDialog(){
+
+        //Cria um dialog passa os argumentos
+        IconPickerFragment iconDialog = new IconPickerFragment();
+        //colorDialog.setArguments(args);
+        iconDialog.setMateria(materia);
+        iconDialog.show(getFragmentManager(), "Selecione um icone");
 
 
 
