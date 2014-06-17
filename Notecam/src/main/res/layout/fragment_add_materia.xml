@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Criar Nova Matéria"
-                    android:id="@+id/textView3"
+                    android:id="@+id/header_text"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:textSize="20dp" />

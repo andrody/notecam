@@ -164,21 +164,26 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         //Se matéria ainda não possui cor
         if(!materia.isColored()) {
             materia.setRandomColor();
-
-            //Faz o header mudar para a cor selecionada
-            View fake_action_bar = view.findViewById(R.id.fake_action_bar);
-            fake_action_bar.setBackgroundColor(materia.getColor());
         }
+        else {
+            //Se não possuir cor, o que significa que é modo de edição, muda o Header para "Editar Matéria"
+            TextView header_text = (TextView) view.findViewById(R.id.header_text);
+            header_text.setText("Editar Matéria");
+        }
+
+        //Faz o header mudar para a cor selecionada
+        View fake_action_bar = view.findViewById(R.id.fake_action_bar);
+        fake_action_bar.setBackgroundColor(materia.getColor());
 
         //Se matéria ainda não possui cor
         if(!materia.isIconed()) {
             materia.setRandomIcon();
 
-            //Faz o icone do header mudar pro icone selecionado
-            ImageView icone_materia = (ImageView) view.findViewById(R.id.icone_materia);
-            icone_materia.setImageResource(materia.getIcon_id());
         }
 
+        //Faz o icone do header mudar pro icone selecionado
+        ImageView icone_materia = (ImageView) view.findViewById(R.id.icone_materia);
+        icone_materia.setImageResource(materia.getIcon_id());
 
 
         //Setando listener do botão de Voltar

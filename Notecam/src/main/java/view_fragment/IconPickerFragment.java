@@ -61,8 +61,8 @@ public class IconPickerFragment extends DialogFragment {
                 getMateria().setIcon_id(adapter.icons.get(position));
 
                 //Faz o icone do header mudar pro icone selecionado
-                View icone_materia = Singleton.getAddMateriaFragment().getView().findViewById(R.id.icone_materia);
-                icone_materia.setBackgroundResource(getMateria().getIcon_id());
+                ImageView icone_materia = (ImageView) Singleton.getAddMateriaFragment().getView().findViewById(R.id.icone_materia);
+                icone_materia.setImageResource(getMateria().getIcon_id());
 
                 //Seleciona o icone nesse Dialog
                 adapter.notifyDataSetChanged();

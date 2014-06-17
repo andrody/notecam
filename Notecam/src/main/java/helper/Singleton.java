@@ -195,7 +195,6 @@ public class Singleton {
         cores.add(getMateriasActivity().getResources().getColor(R.color.orange));
         cores.add(getMateriasActivity().getResources().getColor(R.color.purple));
         cores.add(getMateriasActivity().getResources().getColor(R.color.gray));
-        cores.add(getMateriasActivity().getResources().getColor(R.color.orange));
 
         return cores;
     }

@@ -2,6 +2,7 @@ package view_fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.koruja.notecam.MateriasActivity;
@@ -24,7 +26,7 @@ import list.TopicosAdapter_old;
 import model.*;
 import model.Materia;
 
-public class TopicosFragment extends Fragment {
+public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     private DatabaseHelper db;
 
@@ -60,29 +62,13 @@ public class TopicosFragment extends Fragment {
         lista = list;
         list.setAdapter(new TopicosAdapter(getActivity(), materia));
 
-        /*list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                List<Foto> fotos = materia.getTopicos().get(groupPosition).getFotos();
-                /*if(!fotos.isEmpty()){
-                    ((MateriasActivity)getActivity()).startScan(fotos.get(1).getPath());
-                }
-                else {
-                    Toast.makeText(getActivity(), "Não há fotos nesse tópico", Toast.LENGTH_SHORT).show();
-                }*/
-                /*if(fotos.isEmpty())
-                    Toast.makeText(getActivity(), "Não há fotos nesse tópico", Toast.LENGTH_SHORT).show();
-                if (list.isGroupExpanded(groupPosition)) {
-                    list.collapseGroup(groupPosition);
-                } else {
-                    list.expandGroup(groupPosition);
-                    list.smoothScrollToPositionFromTop(groupPosition,0);
+        //Setando listener do botão de Menu
+        view.findViewById(R.id.back).setOnClickListener(this);
 
-                }
+        //Setando listener do botão de Editar Matéria
+        view.findViewById(R.id.editar_materia).setOnClickListener(this);
 
-                return true;
-            }
-        });*/
+
 
         return view;
     }
@@ -156,9 +142,10 @@ public class TopicosFragment extends Fragment {
         this.materia = nova_materia;
 
         lista.setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
-        Singleton.setActionBarColor(materia.getColor());
-        //updateSubTitle();
+        Singleton.mudarCorHeader(this, materia.getColor());
 
+        TextView nome_materia = (TextView) getView().findViewById(R.id.nome_materia);
+        nome_materia.setText(materia.getName());
 
     }
 
@@ -169,6 +156,28 @@ public class TopicosFragment extends Fragment {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            //Abre Drawer Menu
+            case R.id.back:
+                ((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
+                break;
+
+            //Abre tela de edição de matéria
+            case R.id.editar_materia:
+
+                //Cria uma nova instância do Fragment AddMateriaFragment e passa o id da materia como parametro para edição
+                AddMateriaFragment addMateriaFragment = AddMateriaFragment.newInstance(materia.getId());
+                Singleton.setAddMateriaFragment(addMateriaFragment);
+
+                //Muda o fragment
+                Singleton.changeFragments(Singleton.getAddMateriaFragment());
+                break;
+
+        }
+    }
 
 }
 
