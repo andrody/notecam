@@ -51,16 +51,24 @@
             android:layout_height="fill_parent"
             android:layout_marginLeft="10dp">
 
+
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="175dp"
                 android:layout_height="wrap_content"
                 android:text="Logaritmos"
                 android:id="@+id/nome_topico"
                 android:textSize="19sp"
                 android:textColor="@color/text_color"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="7dp"
-                android:layout_weight="100" />
+                android:layout_marginLeft="0dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:maxWidth="175dp"/>
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="100"></FrameLayout>
 
             <LinearLayout
                 android:orientation="horizontal"

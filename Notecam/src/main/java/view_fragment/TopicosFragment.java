@@ -1,5 +1,6 @@
 package view_fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -9,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -176,7 +178,19 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                 Singleton.changeFragments(Singleton.getAddMateriaFragment());
                 break;
 
+            //Cria um novo tópico
+            case R.id.button_addTopico:
+                addTopico();
+
+                //Recolher teclado
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
         }
+    }
+
+    public void addTopico(){
+
     }
 
 }
