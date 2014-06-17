@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +41,7 @@ import helper.DatabaseHelper;
 import helper.Singleton;
 
 
-public class MateriasFragment extends Fragment {
+public class MateriasFragment extends Fragment implements View.OnClickListener {
 
     GridView gridview;
     MateriasAdapter materiasAdapter  = null;
@@ -195,6 +197,7 @@ public class MateriasFragment extends Fragment {
 
 
 
+
     }
 
     @Override
@@ -202,7 +205,16 @@ public class MateriasFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_materias, container, false);
+        View view = inflater.inflate(R.layout.fragment_materias, container, false);
+
+        View menu = view.findViewById(R.id.menu);
+        menu.setOnClickListener(this);
+
+        View add_materia = view.findViewById(R.id.add_materia);
+        add_materia.setOnClickListener(this);
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -353,6 +365,22 @@ public class MateriasFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            //Abre Drawer Menu
+            case R.id.menu:
+                ((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
+                break;
+
+            //Abre Drawer Menu
+            case R.id.add_materia:
+                Singleton.setAddMateriaFragment(new AddMateriaFragment());
+                Singleton.changeFragments(Singleton.getAddMateriaFragment());
+                break;
+        }
+    }
 }
 
 class Materia {

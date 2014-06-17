@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +35,7 @@ import model.Aula;
 import model.Materia;
 
 
-public class AddMateriaFragment extends Fragment {
+public class AddMateriaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDetach() {
         try {
@@ -89,7 +91,7 @@ public class AddMateriaFragment extends Fragment {
     /**
      * Cria as opções do header
      **/
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         menu.clear();
@@ -121,7 +123,7 @@ public class AddMateriaFragment extends Fragment {
                 return true;
         }
         return true;
-    }
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -157,9 +159,36 @@ public class AddMateriaFragment extends Fragment {
                 container_das_aulas.setPadding(0,0,0,Singleton.get_dp_in_px(75));
 
             }
-
-
         }
+
+        //Se matéria ainda não possui cor
+        if(!materia.isColored()) {
+            materia.setRandomColor();
+
+            //Faz o header mudar para a cor selecionada
+            View fake_action_bar = view.findViewById(R.id.fake_action_bar);
+            fake_action_bar.setBackgroundColor(materia.getColor());
+        }
+
+        //Se matéria ainda não possui cor
+        if(!materia.isIconed()) {
+            materia.setRandomIcon();
+
+            //Faz o icone do header mudar pro icone selecionado
+            ImageView icone_materia = (ImageView) view.findViewById(R.id.icone_materia);
+            icone_materia.setImageResource(materia.getIcon_id());
+        }
+
+
+
+        //Setando listener do botão de Voltar
+        view.findViewById(R.id.back).setOnClickListener(this);
+
+        //Setando listener do botão de Selecionar Cor
+        view.findViewById(R.id.colorselect).setOnClickListener(this);
+
+        //Setando listener do botão de Selecionar Cor
+        view.findViewById(R.id.iconselect).setOnClickListener(this);
 
         return view;
     }
@@ -220,9 +249,6 @@ public class AddMateriaFragment extends Fragment {
 
             }
         });
-
-
-
 
 
         //Cria novo Fragmento de Aulas
@@ -430,5 +456,26 @@ public class AddMateriaFragment extends Fragment {
 
     public void setAddAulasFragment(AddAulasFragment addAulasFragment) {
         this.addAulasFragment = addAulasFragment;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            //Abre Drawer Menu
+            case R.id.back:
+                getActivity().onBackPressed();
+                break;
+
+            //Abre Color Select Dialog
+            case R.id.colorselect:
+                openColorDialog();
+                break;
+
+            //Abre Color Select Dialog
+            case R.id.iconselect:
+                openIconDialog();
+                break;
+        }
     }
 }

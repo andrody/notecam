@@ -1,6 +1,7 @@
 package helper;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
@@ -13,13 +14,17 @@ import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 
 import com.koruja.notecam.MateriasActivity;
+import com.koruja.notecam.R;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import model.Materia;
 import photo.PictureTaker;
+import view_fragment.AddMateriaFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
@@ -49,6 +54,7 @@ public class Singleton {
     public static MateriasFragment materiasFragment = null;
     public static SingleMateriaFragment singleMateriaFragment = null;
     public static TopicosFragment topicosFragment = null;
+    private static AddMateriaFragment addMateriaFragment = null;
 
     private static MateriasActivity materiasActivity;
 
@@ -94,6 +100,14 @@ public class Singleton {
 
     public static void setMateriasActivity(MateriasActivity activity) {
         materiasActivity = activity;
+    }
+
+    public static AddMateriaFragment getAddMateriaFragment() {
+        return addMateriaFragment;
+    }
+
+    public static void setAddMateriaFragment(AddMateriaFragment addMateriaFragment) {
+        Singleton.addMateriaFragment = addMateriaFragment;
     }
 
     /**
@@ -154,6 +168,45 @@ public class Singleton {
         actionBar.setBackgroundDrawable(new ColorDrawable(color));
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowTitleEnabled(true);
+
+    }
+
+    public static void changeFragments(android.support.v4.app.Fragment fragment){
+        getMateriasActivity().changeFragments(fragment, null);
+    }
+
+    public static void mudarCorHeader(android.support.v4.app.Fragment fragment, int color){
+        View fake_action_bar = fragment.getView().findViewById(R.id.fake_action_bar);
+        fake_action_bar.setBackgroundColor(color);
+    }
+
+    public static ArrayList<Integer> getListaCores(){
+        ArrayList<Integer> cores = new ArrayList<Integer>();
+
+        cores.add(getMateriasActivity().getResources().getColor(R.color.pink));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.amarelo));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.azul));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.verde));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.red));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.roxo));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.blue));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.green));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.yellow));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.orange));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.purple));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.gray));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.orange));
+
+        return cores;
+    }
+
+    public static ArrayList<Integer> getListaIcones(){
+
+        ArrayList<Integer> icones = new ArrayList<Integer>();
+        icones.add(R.drawable.lab);
+        icones.add(R.drawable.ic_sobre);
+        icones.add(R.drawable.ic_salvar);
+        return icones;
 
     }
 }

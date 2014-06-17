@@ -6,6 +6,94 @@
     android:layout_height="match_parent"
     android:background="@color/background_light">
 
+    <!-- Conteudo -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/topLinearLayout"
+        >
+
+    <!-- StatusBar -->
+    <RelativeLayout
+        android:id="@+id/padding"
+        android:layout_width="fill_parent"
+        android:layout_height="25dip"
+        android:layout_alignParentTop="true"
+        android:background="@color/black" />
+
+    <!-- FakeActionBar -->
+    <RelativeLayout
+        android:id="@+id/fake_action_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="48.0dip"
+        android:layout_below="@id/padding"
+        android:background="@color/pink">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/back"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="99">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/imageView2"
+                    android:src="@drawable/abc_ic_ab_back_holo_light"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="0dp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/icone_materia"
+                    android:src="@drawable/lab"
+                    android:layout_gravity="center_vertical"
+                    android:focusableInTouchMode="false"
+                    android:layout_marginRight="3dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Criar Nova Matéria"
+                    android:id="@+id/textView3"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorselect"
+                android:src="@drawable/ic_paint"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="3"
+                android:padding="8dp" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/iconselect"
+                android:src="@drawable/ic_mask"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingRight="0dp"
+                android:padding="8dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
@@ -136,6 +224,7 @@
 
         </FrameLayout>
 
+    </LinearLayout>
     </LinearLayout>
 
     <FrameLayout

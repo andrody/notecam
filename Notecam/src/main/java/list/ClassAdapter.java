@@ -11,24 +11,26 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import helper.Singleton;
 import model.Aula;
+import model.Materia;
 
 
 public class ClassAdapter extends ArrayAdapter<Aula> {
     private LayoutInflater mInflater;
     private List<Aula> items = new ArrayList<Aula>();
+    Materia materia;
     Context context;
 
     // our ViewHolder.
     // caches our TextView
     public static class ViewHolder {
-        FrameLayout letra;
+        FrameLayout del_back;
         TextView weekday;
         TextView startTime;
         TextView endTime;
@@ -36,11 +38,13 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
 
     }
 
-    public ClassAdapter(Context context, int layout, List<Aula> items) {
+    public ClassAdapter(Context context, int layout, List<Aula> items, Materia materia) {
         super(context, layout, items);
         this.items = items;
         this.context = context;
+        this.materia = materia;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
     }
 
     public void setData(ArrayList<Aula> data) {
@@ -60,7 +64,7 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
             convertView = mInflater.inflate(R.layout.item_aula, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.weekday = (TextView)convertView.findViewById(R.id.button_weekday);
-            viewHolder.letra = (FrameLayout)convertView.findViewById(R.id.letra);
+            viewHolder.del_back = (FrameLayout)convertView.findViewById(R.id.del_back);
             viewHolder.startTime = (TextView)convertView.findViewById(R.id.button_start_time);
             viewHolder.endTime = (TextView)convertView.findViewById(R.id.button_end_time);
             viewHolder.del_x = (ImageView) convertView.findViewById(R.id.del_x);
@@ -81,14 +85,18 @@ public class ClassAdapter extends ArrayAdapter<Aula> {
             viewHolder.startTime.setText(item.getStartTime().format("%H:%M"));
             viewHolder.endTime.setText(item.getEndTime().format("%H:%M"));
 
-            viewHolder.letra.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
-            viewHolder.weekday.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
-            viewHolder.startTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
-            viewHolder.endTime.setOnClickListener(((MateriasActivity)getContext()).getAddSubjectsFragment().getAddAulasFragment());
+            viewHolder.del_back.setOnClickListener(Singleton.getAddMateriaFragment().getAddAulasFragment());
+            viewHolder.weekday.setOnClickListener(Singleton.getAddMateriaFragment().getAddAulasFragment());
+            viewHolder.startTime.setOnClickListener(Singleton.getAddMateriaFragment().getAddAulasFragment());
+            viewHolder.endTime.setOnClickListener(Singleton.getAddMateriaFragment().getAddAulasFragment());
 
-            //Muda cor do fundo para cor vermelha
+            //Muda cor do fundo para cor da materia
             Drawable drawable = viewHolder.del_x.getDrawable();
-            drawable.setColorFilter(context.getResources().getColor(R.color.background_header), PorterDuff.Mode.SRC_ATOP);
+            //drawable.setColorFilter(context.getResources().getColor(R.color.background_header), PorterDuff.Mode.SRC_ATOP);
+            drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
+
+            drawable = viewHolder.del_back.getBackground();
+            drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
 
         }
 

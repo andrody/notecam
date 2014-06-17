@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.koruja.notecam.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import helper.Singleton;
 import model.Materia;
 
 
@@ -56,8 +58,20 @@ public class ColorPickerFragment extends DialogFragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Seta a cor da matéria
                 getMateria().setColor(adapter.cores.get(position));
+
+                //Faz o header mudar para a cor selecionada
+                Singleton.mudarCorHeader(Singleton.getAddMateriaFragment(), getMateria().getColor());
+
+                //Faz a cor dos icones de deletar das aulas mudarem de cor também
+                Singleton.getAddMateriaFragment().getAddAulasFragment().getAdapter().notifyDataSetChanged();
+
+                //Seleciona a cor nesse Dialog
                 adapter.notifyDataSetChanged();
+
+                //Fecha a tela assim que clicar em uma cor
                 dismiss();
             }
         });
@@ -65,16 +79,6 @@ public class ColorPickerFragment extends DialogFragment {
         return view;
     }
 
-    public ArrayList<Integer> getListaCores(){
-        ArrayList<Integer> cores = new ArrayList<Integer>();
-
-        cores.add(getActivity().getResources().getColor(R.color.amarelo));
-        cores.add(getActivity().getResources().getColor(R.color.azul));
-        cores.add(getActivity().getResources().getColor(R.color.verde));
-        cores.add(getActivity().getResources().getColor(R.color.red));
-
-        return cores;
-    }
 
 
 }
@@ -92,7 +96,7 @@ class ColorAdapter extends BaseAdapter {
 
     ColorAdapter(Context context, ColorPickerFragment fragment) {
         this.context = context;
-        cores = fragment.getListaCores();
+        cores = Singleton.getListaCores();
         materia = fragment.getMateria();
     }
 

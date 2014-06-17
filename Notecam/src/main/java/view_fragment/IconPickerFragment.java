@@ -18,6 +18,7 @@ import com.koruja.notecam.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import helper.Singleton;
 import model.Materia;
 
 
@@ -55,8 +56,18 @@ public class IconPickerFragment extends DialogFragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Seta o icone da matéria
                 getMateria().setIcon_id(adapter.icons.get(position));
+
+                //Faz o icone do header mudar pro icone selecionado
+                View icone_materia = Singleton.getAddMateriaFragment().getView().findViewById(R.id.icone_materia);
+                icone_materia.setBackgroundResource(getMateria().getIcon_id());
+
+                //Seleciona o icone nesse Dialog
                 adapter.notifyDataSetChanged();
+
+                //Fecha a tela assim que clicar em uma cor
                 dismiss();
             }
         });
@@ -64,15 +75,7 @@ public class IconPickerFragment extends DialogFragment {
         return view;
     }
 
-    public ArrayList<Integer> getListaIcones(){
 
-        ArrayList<Integer> icones = new ArrayList<Integer>();
-        icones.add(R.drawable.lab);
-        icones.add(R.drawable.ic_sobre);
-        icones.add(R.drawable.ic_salvar);
-        return icones;
-
-    }
 }
 
 
@@ -89,7 +92,7 @@ class IconAdapter extends BaseAdapter {
 
     IconAdapter(Context context, IconPickerFragment fragment) {
         this.context = context;
-        icons = fragment.getListaIcones();
+        icons = Singleton.getListaIcones();
         materia = fragment.getMateria();
     }
 

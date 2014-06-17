@@ -1,6 +1,5 @@
 package com.koruja.notecam;
 
-import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -42,16 +42,17 @@ import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
 
-public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient {
+public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener {
 
     private ViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
-    DrawerLayout drawerLayout;
+    private DrawerLayout drawerLayout;
     View drawerView;
     PagerAdapter pagerAdapter;
     private String mTitle = "Notecam";
     private boolean emptyFragments = false;
     private boolean primeira_vez = true;
+    private int mPosition;
 
     //Handler para atualizar a cada 30 segundos
     Handler handler = new Handler();
@@ -86,6 +87,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         s+= "/" + 784;
         Intent intent = new Intent(Intent.ACTION_VIEW, currImageURI);
         startActivity(intent);*/
+
     }
 
     @Override
@@ -114,9 +116,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     //Cria uma nova conexão com o Banco de Dados
     private DatabaseHelper db = new DatabaseHelper(this);
 
-    //Armazena uma referência para o Fragmento de Adicionar Materias
-    private AddMateriaFragment addSubjectsFragment;
-
     //Armazena uma referência para o Fragmento de Materias
     //private MateriasFragment materiasFragment;
 
@@ -137,7 +136,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         Singleton.setMateriasActivity(this);
 
-        Singleton.setActionBarTitle("Notecam2");
+        //Singleton.setActionBarTitle("Notecam2");
 
 
         //Muda o ícone no Actionbar do app
@@ -156,13 +155,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         this.setEmptyFragments(db.getAllSubjects().isEmpty());
 
 
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        setDrawerLayout((DrawerLayout)findViewById(R.id.drawer_layout));
         drawerView = findViewById(R.id.drawer);
         setViewPager((ViewPager) findViewById(R.id.pager));
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), this);
 
         getViewPager().setAdapter(pagerAdapter);
+        getViewPager().setOnPageChangeListener(this);
 
         setUpClickListenersMenu();
 
@@ -171,7 +171,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
             @Override
             public void onClick(View arg0) {
-                drawerLayout.closeDrawers();
+                getDrawerLayout().closeDrawers();
             }});
 
         //drawerLayout.setDrawerListener(myDrawerListener);
@@ -195,7 +195,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         timedTask.run();
 
-
+        //Fazer o StatusBar como Overlay
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.flags |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
         //setMateriasFragment(new MateriasFragment());
         //getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
@@ -224,7 +226,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     for(LinearLayout v : lista_options_menu)
                         v.setBackgroundColor(0);
                     view.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
-                    drawerLayout.closeDrawers();
+                    getDrawerLayout().closeDrawers();
 
                     //Se clicou na opção Matérias, troca de fragmentos para Materias
                     if(view.equals(materias)) {
@@ -260,29 +262,29 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
 
     private void setUpDrawerToggle(){
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        //ActionBar actionBar = getActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
 
-        if (android.os.Build.VERSION.SDK_INT >=14)
-            actionBar.setHomeButtonEnabled(true);
+        //if (android.os.Build.VERSION.SDK_INT >=14)
+        //    actionBar.setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                             /* host Activity */
-                drawerLayout,                    /* DrawerLayout object */
+                getDrawerLayout(),                    /* DrawerLayout object */
                 R.drawable.ic_navigation_drawer,  /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle(getmTitle());
+                //getActionBar().setTitle(getmTitle());
                 invalidateOptionsMenu(); // creates call to
                 // onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(getString(R.string.menu_do_notecam));
+                //getActionBar().setTitle(getString(R.string.menu_do_notecam));
                 invalidateOptionsMenu(); // creates call to
                 // onPrepareOptionsMenu()
             }
@@ -290,14 +292,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         // Defer code dependent on restoration of previous instance state.
         // NB: required for the drawer indicator to show up!
-        drawerLayout.post(new Runnable() {
+        getDrawerLayout().post(new Runnable() {
             @Override
             public void run() {
                 mDrawerToggle.syncState();
             }
         });
 
-        drawerLayout.setDrawerListener(mDrawerToggle);
+        getDrawerLayout().setDrawerListener(mDrawerToggle);
     }
 
     @Override
@@ -312,13 +314,13 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             return true;
         }
 
-        if(item.getTitle().equals("Add Materia")){
+        /*if(item.getTitle().equals("Add Materia")){
 
             //Cria uma nova instância do Fragment addSubjectsFragment
             setAddSubjectsFragment(new AddMateriaFragment());
 
             changeFragments(getAddSubjectsFragment(), null);
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -470,7 +472,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
     public void toggleMenu(View v) {
-        drawerLayout.openDrawer(drawerView);
+        getDrawerLayout().openDrawer(drawerView);
     }
 
     public String getmTitle() {
@@ -485,9 +487,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         this.db = db;
     }
 
-    public AddMateriaFragment getAddSubjectsFragment() {
-        return addSubjectsFragment;
-    }
 
     public MateriasFragment getMateriasFragment() {
         return Singleton.materiasFragment;
@@ -513,10 +512,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     public void setEmptyFragments(boolean emptyFragments) {
         this.emptyFragments = emptyFragments;
-    }
-
-    public void setAddSubjectsFragment(AddMateriaFragment addSubjectsFragment) {
-        this.addSubjectsFragment = addSubjectsFragment;
     }
 
     private String SCAN_PATH ;
@@ -569,6 +564,39 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             conn.disconnect();
             conn = null;
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mPosition = position;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        switch(state) {
+            //Se for na posição 1 (Camera), vira fullscreen escondendo o statusbar
+            case ViewPager.SCROLL_STATE_IDLE:
+                if(mPosition == 1) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                }
+        }
+    }
+
+    public DrawerLayout getDrawerLayout() {
+        return drawerLayout;
+    }
+
+    public void setDrawerLayout(DrawerLayout drawerLayout) {
+        this.drawerLayout = drawerLayout;
     }
 }
 

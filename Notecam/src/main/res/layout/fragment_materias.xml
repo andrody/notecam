@@ -5,59 +5,132 @@
     android:tag="fragment_materias"
     tools:context="com.koruja.notecam.MateriasFragment">
 
+    <!-- Conteudo -->
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:id="@+id/topLinearLayout"
+        >
 
-        <GridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/materias_grid_view"
+        <!-- StatusBar -->
+        <RelativeLayout
+            android:id="@+id/padding"
+            android:layout_width="fill_parent"
+            android:layout_height="25dip"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:horizontalSpacing="0dp"
-            android:verticalSpacing="15dp"
-            android:columnWidth="115dp"
-            android:numColumns="auto_fit"
-            android:stretchMode="spacingWidthUniform"
-            android:layout_marginTop="15dp"
-            android:layout_weight="1" />
+            android:background="@color/black" />
+
+        <!-- FakeActionBar -->
+        <RelativeLayout
+            android:id="@+id/fake_action_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="48.0dip"
+            android:layout_below="@id/padding"
+            android:background="@color/background_header">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/menu"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="99">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:id="@+id/imageView"
+                        android:src="@drawable/ic_menu"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="12dp" />
+
+                    <ImageView
+                        android:layout_width="110dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/imageView2"
+                        android:src="@drawable/notecam_logo"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="1dp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/add_materia"
+                    android:src="@drawable/ic_action_new"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:padding="6dp" />
+
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="8dp"
-            android:background="#FFF"
-            android:visibility="gone">
+            android:layout_height="fill_parent">
 
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#e84f56"
-                android:layout_weight="7"></FrameLayout>
 
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#4496c4"
-                android:layout_weight="8"
-                android:id="@+id/frameLayout" />
 
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#ffc649"
-                android:layout_weight="9"
-                android:id="@+id/frameLayout2" />
+            <GridView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/materias_grid_view"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:horizontalSpacing="0dp"
+                android:verticalSpacing="15dp"
+                android:columnWidth="115dp"
+                android:numColumns="auto_fit"
+                android:stretchMode="spacingWidthUniform"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1" />
 
-            <FrameLayout
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#00b488"
-                android:layout_weight="7"
-                android:id="@+id/frameLayout3" />
+                android:layout_height="8dp"
+                android:background="#FFF"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#e84f56"
+                    android:layout_weight="7"></FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#4496c4"
+                    android:layout_weight="8"
+                    android:id="@+id/frameLayout" />
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#ffc649"
+                    android:layout_weight="9"
+                    android:id="@+id/frameLayout2" />
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#00b488"
+                    android:layout_weight="7"
+                    android:id="@+id/frameLayout3" />
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
+
+
 
 </RelativeLayout>

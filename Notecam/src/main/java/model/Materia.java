@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 import helper.DatabaseHelper;
+import helper.Singleton;
 
 /**
  * Created by Andrew on 10/24/13.
@@ -28,7 +29,7 @@ public class Materia {
     private List<Topico> topicos;
     private int color = -1;
     private int id = -1;
-    private int icon_id = 0;
+    private int icon_id = -1;
     private int numero_fotos = 0;
     private String name = "";
     Context context;
@@ -85,49 +86,24 @@ public class Materia {
 
     public void setRandomColor() {
         Random random = new Random();
-        int r = (random.nextInt(11));
-        switch (r){
-            case 0:
-                setColor(context.getResources().getColor(R.color.red));
-                break;
-            case 1:
-                setColor( context.getResources().getColor(R.color.blue));
-                break;
-            case 2:
-                setColor( context.getResources().getColor(R.color.green));
-                break;
-            case 3:
-                setColor( context.getResources().getColor(R.color.yellow));
-                break;
-            case 4:
-                setColor( context.getResources().getColor(R.color.pink));
-                break;
-            case 5:
-                setColor( context.getResources().getColor(R.color.orange));
-                break;
-            case 6:
-                setColor( context.getResources().getColor(R.color.roxo));
-                break;
-            case 7:
-                setColor( context.getResources().getColor(R.color.purple));
-                break;
-            case 8:
-                setColor( context.getResources().getColor(R.color.gray));
-                break;
-            case 9:
-                setColor( context.getResources().getColor(R.color.amarelo));
-                break;
-            case 10:
-                setColor( context.getResources().getColor(R.color.verde));
-                break;
-            default:
-                setColor( context.getResources().getColor(R.color.azul));
-                break;
-        };
+        int r = (random.nextInt(Singleton.getListaCores().size()));
+        setColor(Singleton.getListaCores().get(r));
+    }
+
+    public void setRandomIcon() {
+        Random random = new Random();
+        int r = (random.nextInt(Singleton.getListaIcones().size()));
+        setIcon_id(Singleton.getListaIcones().get(r));
     }
 
     public boolean isColored(){
         if(this.color != -1)
+            return true;
+        return false;
+    }
+
+    public boolean isIconed(){
+        if(this.icon_id != -1)
             return true;
         return false;
     }

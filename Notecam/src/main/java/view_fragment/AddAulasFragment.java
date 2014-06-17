@@ -51,7 +51,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
         int layout = R.layout.list;
 
         //Cria um novo adapter, passando como referencia a lista de classes
-        setAdapter(new ClassAdapter(getActivity(),layout, aulas));
+        setAdapter(new ClassAdapter(getActivity(),layout, aulas, materia));
         setListAdapter(getAdapter());
 
         //Se estamos no modo de edição, i.e. não estamos criando um novo subject
@@ -119,7 +119,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
         }
 
         //Se for o botão de remover
-        if(v.getId() == R.id.letra){
+        if(v.getId() == R.id.del_back){
 
             //Remove do adapter
             getAdapter().remove(getAdapter().getItem(getPosition(v)));

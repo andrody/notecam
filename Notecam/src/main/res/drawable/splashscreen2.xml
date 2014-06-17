@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:shape="rectangle">
+        <shape android:shape="rectangle">
+            <solid  android:color="@color/background_header"/>
+                    </shape>
+    </item>
+
+
+    <item>
+        <bitmap android:src="@drawable/ic_launcher"
+            android:scaleHeight="10"
+            android:scaleWidth="10"
+            android:gravity="center">
+
+        </bitmap>
+    </item>
+
+</layer-list>

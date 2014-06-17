@@ -17,9 +17,19 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:actionBarStyle">@style/RedActionBar</item>
+        <item name="android:actionBarStyle">@style/NoActionBar</item>
+        <item name="android:windowBackground">@drawable/splashscreen2</item>
+
 
     </style>
+
+
+    <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
 
     <style name="RedActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@drawable/header_style</item>
