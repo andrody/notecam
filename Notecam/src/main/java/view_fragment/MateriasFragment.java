@@ -57,8 +57,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         Singleton.setActionBarColor(getActivity().getResources().getColor(R.color.background_header));
         setFakeActionModeOn(false);
 
-        //getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
-        updateSubTitle();
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -120,9 +118,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             public boolean onItemLongClick(AdapterView<?> av, View v,
                                            int position, long id) {
 
-                //Inicia o ActionMode (Header especializado azul)
-                //MateriasFragment.this.getActivity().startActionMode(mActionModeCallback);
-
                 //Avisa que estamos no modo de edição (Selecionar e Deletar items)
                 setFakeActionModeOn(true);
 
@@ -134,10 +129,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
                 //Atualiza a lista
                 materiasAdapter.notifyDataSetChanged();
 
-
-
-
-
                 return true;
             }
         });
@@ -147,38 +138,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         materias.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
 
     }
-
-    /**
-     * Cria as opções do header
-     **/
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.main, menu);
-        //super.onCreateOptionsMenu(menu, inflater);
-
-        menu.clear();
-        inflater.inflate(R.menu.materias, menu);
-
-        Singleton.setActionBarTitle("Materias");
-
-        //getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
-        updateSubTitle();
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    public void updateSubTitle(){
-        /*if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 0) {
-
-            if (Singleton.getMateria_em_aula() != null)
-                getActivity().getActionBar().setSubtitle("Em aula de " + Singleton.getMateria_em_aula().getName());
-            else
-                getActivity().getActionBar().setSubtitle("Horário livre");
-
-            getActivity().getActionBar().setSubtitle("");
-        }*/
-    }
-
 
     private Singleton.OnFragmentInteractionListener mListener;
 
@@ -213,21 +172,27 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_materias, container, false);
 
+        //Setando listener do botão de Chamar o Menu
         View menu = view.findViewById(R.id.menu);
         menu.setOnClickListener(this);
 
+        //Setando listener do botão de Adicionar Matéria
         View add_materia = view.findViewById(R.id.add_materia);
         add_materia.setOnClickListener(this);
 
+        //Setando listener do botão de Deletar
         View deletar = view.findViewById(R.id.deletar);
         deletar.setOnClickListener(this);
 
+        //Setando listener do botão de Compartilhar
         View compartilhar = view.findViewById(R.id.compartilhar);
         compartilhar.setOnClickListener(this);
 
+        //Setando listener do botão de Cancelar
         View cancelar = view.findViewById(R.id.cancelar);
         cancelar.setOnClickListener(this);
 
+        //Setando listener do botão de Cancelar Também
         View cancelar2 = view.findViewById(R.id.cancelar2);
         cancelar2.setOnClickListener(this);
 
@@ -280,7 +245,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
     public void reload() {
         materiasAdapter = new MateriasAdapter(getActivity());
         gridview.setAdapter(materiasAdapter);
-        updateSubTitle();
 
     }
 
@@ -414,6 +378,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             //Cancela o Fake Action Mode
             case R.id.deletar:
                 deletar_materias();
+                setFakeActionModeOn(false);
                 break;
         }
     }

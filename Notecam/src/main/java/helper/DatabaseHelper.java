@@ -467,7 +467,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     * Deleting topico
     */
-    private void deleteTopico(long topico_id) {
+    public void deleteTopico(long topico_id) {
         Topico topico = getTopico(topico_id);
         Materia materia = getSubject(topico.getSubject_id());
         DeleteRecursive(new File(Singleton.NOTECAM_FOLDER + "/" + materia.getName() + "/" + topico.getName()));

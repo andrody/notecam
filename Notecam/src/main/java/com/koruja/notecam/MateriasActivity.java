@@ -67,7 +67,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     Singleton.setMateria_em_aula(null);
                     Singleton.singleMateriaFragment.reload(Singleton.getMateria_selecionada());
                     Singleton.getTopicosFragment().reload(Singleton.getMateria_selecionada());
-                    Singleton.materiasFragment.updateSubTitle();
+                    //Singleton.materiasFragment.updateSubTitle();
                     MateriasActivity.this.checarHorario();
                 }
             }
@@ -458,7 +458,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 }
                 else Toast.makeText(this, "Em aula de " + m.getName(), Toast.LENGTH_SHORT).show();
 
-                if(Singleton.materiasFragment != null) Singleton.materiasFragment.updateSubTitle();
+                //if(Singleton.materiasFragment != null) Singleton.materiasFragment.updateSubTitle();
                 break;
             }
         }

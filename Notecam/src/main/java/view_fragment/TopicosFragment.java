@@ -1,5 +1,6 @@
 package view_fragment;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,17 +12,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
+import java.util.List;
+
 import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
 import model.Materia;
+import model.Topico;
 
 public class TopicosFragment extends Fragment implements View.OnClickListener {
 
@@ -30,25 +36,15 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     private ListView lista;
     private Materia materia;
 
+    //Booleana que diz se o ActionMode (LongPress) foi ativado ou não. Caso sim ele ativa as checkboxes dos items da lista
+    private boolean fakeActionModeOn = false;
+
 
     @Override
     public void onResume() {
         super.onResume();
         reload(Singleton.getMateria_selecionada());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        //Se o botão selecionado pelo usuario for o de ver as fotos (icone pasta)
-        if (item.getTitle().equals(getResources().getString(R.string.add_topico))) {
-
-            AddTopicoFragment addTopicoFragment = AddTopicoFragment.newInstance(materia.getId(), -1);
-
-            ((MateriasActivity) getActivity()).changeFragments(addTopicoFragment, null);
-
-        }
-        return super.onOptionsItemSelected(item);
+        setFakeActionModeOn(false);
     }
 
     @Override
@@ -58,6 +54,28 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         setLista(list);
         list.setAdapter(new TopicosAdapter(getActivity(), materia));
 
+        //Seta um evento de Pressionar por longo tempo na lista
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            //Callback
+            public boolean onItemLongClick(AdapterView<?> av, View v,
+                                           int position, long id) {
+
+                //Avisa que estamos no modo de edição (Selecionar e Deletar items)
+                setFakeActionModeOn(true);
+
+                reload(materia);
+
+                //Seta o checkbox do item que foi pressionado como selecionado automaticamente
+                ((CheckBox) v.findViewById(R.id.checkbox)).setChecked(true);
+
+
+
+                return true;
+            }
+        });
+
+
         //Setando listener do botão de Menu
         view.findViewById(R.id.back).setOnClickListener(this);
 
@@ -66,6 +84,24 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
         //Setando listener do botão de Adicionar Topico
         view.findViewById(R.id.adicionar_topico).setOnClickListener(this);
+
+        //Setando listener do botão de Deletar
+        View deletar = view.findViewById(R.id.deletar);
+        deletar.setOnClickListener(this);
+
+        //Setando listener do botão de Compartilhar
+        View compartilhar = view.findViewById(R.id.compartilhar);
+        compartilhar.setOnClickListener(this);
+
+        //Setando listener do botão de Cancelar
+        View cancelar = view.findViewById(R.id.cancelar);
+        cancelar.setOnClickListener(this);
+
+        //Setando listener do botão de Cancelar Também
+        View cancelar2 = view.findViewById(R.id.cancelar2);
+        cancelar2.setOnClickListener(this);
+
+
 
 
         return view;
@@ -89,37 +125,6 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     public TopicosFragment() {
     }
 
-    /**
-     * Cria as opções do header
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.topicos, menu);
-
-        try {
-            Singleton.setActionBarTitle(materia.getName());
-
-            //updateSubTitle();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-
-        }
-        reload(Singleton.getMateria_selecionada());
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-
-    public void updateSubTitle() {
-        /*if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 2){
-            if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
-                getActivity().getActionBar().setSubtitle("Em aula!");
-            else
-                getActivity().getActionBar().setSubtitle("Sem aula agora");
-        }*/
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,7 +180,43 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
             //Cria um novo tópico
             case R.id.adicionar_topico:
                 OpenCreateTopicoDialog();
+
+            //Cancela o Fake Action Mode
+            case R.id.cancelar:
+                setFakeActionModeOn(false);
+                break;
+
+            //Cancela o Fake Action Mode
+            case R.id.deletar:
+                deletar_topicos();
+                setFakeActionModeOn(false);
+                break;
         }
+    }
+
+    public void deletar_topicos(){
+        //Pega a referencia do banco do Singleton
+        DatabaseHelper db = Singleton.getDb();
+
+        //Para cada subject da lista
+        for(model.Topico topico : materia.getTopicos()){
+
+            //Descobre em qual a view corresponde a este subject
+            View view = ((TopicosAdapter)getLista().getAdapter()).getView(topico.getId());
+
+            //Pega uma referência para o checkbox dele
+            CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
+
+            //Se ele estiver marcado
+            if(checkBox.isChecked()){
+
+                //Deleta esse subject e todas as suas classes
+                db.deleteTopico(topico.getId());
+            }
+        }
+
+        materia.popularTopicos();
+        reload(materia);
     }
 
     public void OpenCreateTopicoDialog() {
@@ -191,6 +232,21 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     public void setLista(ListView lista) {
         this.lista = lista;
+    }
+
+    public boolean isFakeActionModeOn() {
+        return fakeActionModeOn;
+    }
+
+    public void setFakeActionModeOn(boolean fakeActionModeOn) {
+        if(fakeActionModeOn){
+            getView().findViewById(R.id.fake_action_mode).setVisibility(View.VISIBLE);
+        }
+        else {
+            getView().findViewById(R.id.fake_action_mode).setVisibility(View.GONE);
+        }
+
+        this.fakeActionModeOn = fakeActionModeOn;
     }
 }
 

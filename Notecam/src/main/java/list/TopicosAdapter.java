@@ -7,15 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import helper.Singleton;
 import model.Materia;
 import model.Topico;
 
@@ -24,6 +28,8 @@ public class TopicosAdapter extends BaseAdapter {
     Context context;
     Materia materia;
     private LayoutInflater mInflater;
+    private HashMap<Integer, View> views = new HashMap<Integer, View>();
+
     private List<Topico> items = new ArrayList<Topico>();
 
     public TopicosAdapter(Context context, Materia materia) {
@@ -54,6 +60,7 @@ public class TopicosAdapter extends BaseAdapter {
         ImageView tag_labels;
         TextView numero_fotos_topico;
         TextView nome_topico;
+        CheckBox checkbox;
 
         ViewHolder(View v) {
             del_back = (FrameLayout) v.findViewById(R.id.del_back);
@@ -62,6 +69,7 @@ public class TopicosAdapter extends BaseAdapter {
             tag_labels = (ImageView) v.findViewById(R.id.tag_labels);
             numero_fotos_topico = (TextView) v.findViewById(R.id.numero_fotos_topico);
             nome_topico = (TextView) v.findViewById(R.id.nome_topico);
+            checkbox = (CheckBox) v.findViewById(R.id.checkbox);
         }
     }
 
@@ -103,9 +111,30 @@ public class TopicosAdapter extends BaseAdapter {
         drawable = holder.tag_labels.getDrawable();
         drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
 
+        //Se está no modo de edição?
+        boolean checkBoxFlag = Singleton.getTopicosFragment().isFakeActionModeOn();
+
+        //Se está no modo de edição (deletar) torna o checkbox visivel
+        if(checkBoxFlag) {
+            holder.checkbox.setVisibility(CheckBox.VISIBLE);
+            holder.tag_labels.setVisibility(CheckBox.GONE);
+        }
+        else {
+            holder.checkbox.setVisibility(CheckBox.GONE);
+            holder.tag_labels.setVisibility(CheckBox.VISIBLE);
+            holder.checkbox.setChecked(false);
+
+        }
+
+
+        views.put(items.get(i).getId(), row);
+
         return row;
     }
 
+    public View getView(int id){
+        return views.get(id);
+    }
 
 }
 

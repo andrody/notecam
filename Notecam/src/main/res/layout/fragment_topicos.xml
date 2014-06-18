@@ -108,56 +108,114 @@
         <ListView
             android:id="@+id/topicos_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="48.0dip"
+            android:layout_weight="999" />
 
-        <LinearLayout
+        <!-- FakeActionMode -->
+        <FrameLayout
+            android:id="@+id/fake_action_mode"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:layout_height="48.0dip"
+            android:background="@color/white"
+            android:layout_alignParentEnd="false"
+            android:gravity="bottom"
+            android:visibility="gone"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@color/azul"></FrameLayout>
 
             <LinearLayout
-                android:id="@+id/button_addTopico"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|left"
-                android:layout_marginTop="35dp"
-                android:background="@drawable/custom_btn_flat_blue"
-                android:clickable="false"
-                android:focusable="true"
                 android:orientation="horizontal"
-                android:paddingBottom="13dp"
-                android:paddingLeft="17dp"
-                android:paddingRight="17dp"
-                android:paddingTop="13dp"
-                android:text="nova aula"
-                android:textSize="18dp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="false"
-                    android:background="@drawable/circle_background"
-                    android:src="@drawable/ic_action_new_azul" />
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="2dp">
 
                 <TextView
-                    android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:text="novo tópico"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/white"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Cancelar"
+                    android:id="@+id/cancelar"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:padding="10dp" />
 
-        </LinearLayout>
+                <FrameLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/text_color2"
+                    android:id="@+id/frameLayout4"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="10dp" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/cancelar2"
+                    android:layout_weight="999" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/compartilhar"
+                    android:clickable="false"
+                    android:focusable="false">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_action_share" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Compartilhar"
+                        android:id="@+id/textView"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/deletar">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView2"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_action_del_red2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Deletar"
+                        android:id="@+id/textView2"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
     </LinearLayout>
 
 </FrameLayout>
