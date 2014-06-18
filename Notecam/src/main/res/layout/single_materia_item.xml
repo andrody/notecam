@@ -52,6 +52,14 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="2"></ImageView>
 
+            <CustomViews.CustomCheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkbox_materia"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

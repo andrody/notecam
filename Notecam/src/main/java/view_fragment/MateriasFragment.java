@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -47,7 +46,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
     MateriasAdapter materiasAdapter  = null;
 
     //Booleana que diz se o ActionMode (LongPress) foi ativado ou não. Caso sim ele ativa as checkboxes dos items da lista
-    private boolean checkboxFlag = false;
+    private boolean fakeActionModeOn = false;
 
     Resources resources;
 
@@ -56,6 +55,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         Singleton.setActionBarTitle("Materias");
         Singleton.setActionBarColor(getActivity().getResources().getColor(R.color.background_header));
+        setFakeActionModeOn(false);
 
         //getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.materias));
         updateSubTitle();
@@ -90,7 +90,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Seleciona ou deseleciona materia se estiver em modo de edição
-                if(checkboxFlag){
+                if(fakeActionModeOn){
                     CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkBox_subject));
                     checkbox.setChecked(!checkbox.isChecked());
                 }
@@ -121,16 +121,22 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
                                            int position, long id) {
 
                 //Inicia o ActionMode (Header especializado azul)
-                MateriasFragment.this.getActivity().startActionMode(mActionModeCallback);
+                //MateriasFragment.this.getActivity().startActionMode(mActionModeCallback);
 
                 //Avisa que estamos no modo de edição (Selecionar e Deletar items)
-                setCheckboxFlag(true);
+                setFakeActionModeOn(true);
+
+
+                //Seta o checkbox do item que foi pressionado como selecionado automaticamente
+                ((CheckBox) v.findViewById(R.id.checkbox_materia)).setChecked(true);
+
 
                 //Atualiza a lista
                 materiasAdapter.notifyDataSetChanged();
 
-                //Seta o checkbox do item que foi pressionado como selecionado automaticamente
-                ((CheckBox) v.findViewById(R.id.checkBox_subject)).setChecked(true);
+
+
+
 
                 return true;
             }
@@ -213,6 +219,18 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         View add_materia = view.findViewById(R.id.add_materia);
         add_materia.setOnClickListener(this);
 
+        View deletar = view.findViewById(R.id.deletar);
+        deletar.setOnClickListener(this);
+
+        View compartilhar = view.findViewById(R.id.compartilhar);
+        compartilhar.setOnClickListener(this);
+
+        View cancelar = view.findViewById(R.id.cancelar);
+        cancelar.setOnClickListener(this);
+
+        View cancelar2 = view.findViewById(R.id.cancelar2);
+        cancelar2.setOnClickListener(this);
+
 
         return view;
     }
@@ -243,12 +261,20 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-    public boolean isCheckboxFlag() {
-        return checkboxFlag;
+    public boolean isFakeActionModeOn() {
+        return fakeActionModeOn;
     }
 
-    public void setCheckboxFlag(boolean checkboxFlag) {
-        this.checkboxFlag = checkboxFlag;
+    public void setFakeActionModeOn(boolean fakeActionModeOn) {
+        if(fakeActionModeOn){
+            getView().findViewById(R.id.fake_action_mode).setVisibility(View.VISIBLE);
+        }
+        else {
+            getView().findViewById(R.id.fake_action_mode).setVisibility(View.GONE);
+        }
+
+        this.fakeActionModeOn = fakeActionModeOn;
+
     }
 
     public void reload() {
@@ -358,7 +384,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             //Quando o ActionMode sumir, seta a flag como falso
-            setCheckboxFlag(false);
+            setFakeActionModeOn(false);
 
             //Atualiza a tela
             syncDB();
@@ -374,12 +400,54 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
                 ((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
                 break;
 
-            //Abre Drawer Menu
+            //Adiciona nova materia
             case R.id.add_materia:
                 Singleton.setAddMateriaFragment(new AddMateriaFragment());
                 Singleton.changeFragments(Singleton.getAddMateriaFragment());
                 break;
+
+            //Cancela o Fake Action Mode
+            case R.id.cancelar:
+                setFakeActionModeOn(false);
+                break;
+
+            //Cancela o Fake Action Mode
+            case R.id.deletar:
+                deletar_materias();
+                break;
         }
+    }
+
+    public void deletar_materias(){
+
+        //Pede todos os subjects do adapter e põe numa lista
+        List<model.Materia> materias = materiasAdapter.materias;
+
+        //Pega a referencia do banco da activity
+        DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
+
+        //Para cada subject da lista
+        for(model.Materia materia : materias){
+
+            //Descobre em qual a view corresponde a este subject
+            View view = materiasAdapter.getView(materia.getId());
+
+            //Pega uma referência para o checkbox dele
+            CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox_materia);
+
+            //Se ele estiver marcado
+            if(checkBox.isChecked()){
+
+                //Deleta esse subject e todas as suas classes
+                db.deleteSubjectAndClasses(materia);
+            }
+        }
+
+        //Atualiza a tela
+        syncDB();
+        if(db.getAllSubjects().isEmpty())
+            MateriasFragment.this.reload();
+
     }
 }
 
@@ -431,7 +499,7 @@ class MateriasAdapter extends BaseAdapter {
         TextView nome_materia;
         View back_color;
         TextView numero_fotos;
-        CheckBox checkbox;
+        CheckBox checkbox_materia;
         Drawable drawable;
         View icon;
 
@@ -440,7 +508,7 @@ class MateriasAdapter extends BaseAdapter {
             nome_materia = (TextView) v.findViewById(R.id.materia_nome_text);
             numero_fotos = (TextView) v.findViewById(R.id.materia_numero_fotos_text);
             icon = v.findViewById(R.id.imagem_materia);
-            checkbox = (CheckBox) v.findViewById(R.id.checkBox_subject);
+            checkbox_materia = (CheckBox) v.findViewById(R.id.checkbox_materia);
             back_color = v.findViewById(R.id.single_materia_back);
             drawable  = context.getResources().getDrawable(R.drawable.materia);
         }
@@ -493,13 +561,19 @@ class MateriasAdapter extends BaseAdapter {
         views.put(item.getId(), row);
 
         //Se está no modo de edição?
-        boolean checkBoxFlag = ((MateriasActivity)context).getMateriasFragment().isCheckboxFlag();
+        boolean checkBoxFlag = ((MateriasActivity)context).getMateriasFragment().isFakeActionModeOn();
 
         //Se está no modo de edição (deletar) torna o checkbox visivel
-        if(checkBoxFlag)
-            holder.checkbox.setVisibility(CheckBox.VISIBLE);
-        else
-            holder.checkbox.setVisibility(CheckBox.GONE);
+        if(checkBoxFlag) {
+            holder.checkbox_materia.setVisibility(CheckBox.VISIBLE);
+            holder.icon.setVisibility(CheckBox.GONE);
+        }
+        else {
+            holder.checkbox_materia.setVisibility(CheckBox.GONE);
+            holder.icon.setVisibility(CheckBox.VISIBLE);
+            holder.checkbox_materia.setChecked(false);
+
+        }
 
         return row;
     }

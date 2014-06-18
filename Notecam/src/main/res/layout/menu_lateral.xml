@@ -114,7 +114,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Contato"
+            android:text="Feedback"
             android:textColor="@color/menu_text_b"
             android:textSize="18dp"
             android:layout_gravity="center" />

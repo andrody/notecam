@@ -98,7 +98,7 @@ public class FotosFragment extends Fragment {
                 MateriasFragment.this.getActivity().startActionMode(mActionModeCallback);
 
                 //Avisa que estamos no modo de edição (Selecionar e Deletar items)
-                setCheckboxFlag(true);
+                setFakeActionModeOn(true);
 
                 //Atualiza a lista
                 materiasAdapter.notifyDataSetChanged();

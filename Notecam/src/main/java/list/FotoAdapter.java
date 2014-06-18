@@ -94,7 +94,7 @@ public class FotoAdapter extends BaseAdapter {
         views.put(item.getId(), row);
 
         //Se está no modo de edição?
-        boolean checkBoxFlag = ((MateriasActivity)context).getMateriasFragment().isCheckboxFlag();
+        boolean checkBoxFlag = ((MateriasActivity)context).getMateriasFragment().isFakeActionModeOn();
 
         //Se está no modo de edição (deletar) torna o checkbox visivel
         if(checkBoxFlag)
