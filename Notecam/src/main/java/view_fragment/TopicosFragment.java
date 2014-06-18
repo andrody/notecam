@@ -11,30 +11,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
-import java.util.List;
-
+import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
-import list.TopicosAdapter_old;
-import model.*;
 import model.Materia;
 
 public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     private DatabaseHelper db;
 
-    ListView lista;
+    private ListView lista;
     private Materia materia;
-
 
 
     @Override
@@ -47,11 +41,11 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         //Se o botão selecionado pelo usuario for o de ver as fotos (icone pasta)
-        if(item.getTitle().equals(getResources().getString(R.string.add_topico))){
+        if (item.getTitle().equals(getResources().getString(R.string.add_topico))) {
 
             AddTopicoFragment addTopicoFragment = AddTopicoFragment.newInstance(materia.getId(), -1);
 
-            ((MateriasActivity)getActivity()).changeFragments(addTopicoFragment, null);
+            ((MateriasActivity) getActivity()).changeFragments(addTopicoFragment, null);
 
         }
         return super.onOptionsItemSelected(item);
@@ -59,9 +53,9 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_topicos, container, false);
-        final ListView list = (ListView)view.findViewById(R.id.topicos_list);
-        lista = list;
+        View view = inflater.inflate(R.layout.fragment_topicos, container, false);
+        final ListView list = (ListView) view.findViewById(R.id.topicos_list);
+        setLista(list);
         list.setAdapter(new TopicosAdapter(getActivity(), materia));
 
         //Setando listener do botão de Menu
@@ -70,6 +64,8 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         //Setando listener do botão de Editar Matéria
         view.findViewById(R.id.editar_materia).setOnClickListener(this);
 
+        //Setando listener do botão de Adicionar Topico
+        view.findViewById(R.id.adicionar_topico).setOnClickListener(this);
 
 
         return view;
@@ -95,7 +91,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Cria as opções do header
-     **/
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -105,8 +101,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
             Singleton.setActionBarTitle(materia.getName());
 
             //updateSubTitle();
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
 
         }
@@ -116,8 +111,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
-    public void updateSubTitle(){
+    public void updateSubTitle() {
         /*if(((MateriasActivity)getActivity()).getViewPager().getCurrentItem() == 2){
             if(Singleton.getMateria_em_aula() != null && Singleton.getMateria_selecionada().getId() == Singleton.getMateria_em_aula().getId())
                 getActivity().getActionBar().setSubtitle("Em aula!");
@@ -140,10 +134,10 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void reload(model.Materia nova_materia){
+    public void reload(model.Materia nova_materia) {
         this.materia = nova_materia;
 
-        lista.setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
+        getLista().setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
         Singleton.mudarCorHeader(this, materia.getColor());
 
         TextView nome_materia = (TextView) getView().findViewById(R.id.nome_materia);
@@ -160,11 +154,11 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
 
             //Abre Drawer Menu
             case R.id.back:
-                ((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
+                ((MateriasActivity) getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
                 break;
 
             //Abre tela de edição de matéria
@@ -179,19 +173,24 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                 break;
 
             //Cria um novo tópico
-            case R.id.button_addTopico:
-                addTopico();
-
-                //Recolher teclado
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-
+            case R.id.adicionar_topico:
+                OpenCreateTopicoDialog();
         }
     }
 
-    public void addTopico(){
-
+    public void OpenCreateTopicoDialog() {
+        //Cria um dialog passa os argumentos
+        CreateTopicoDialog dialog = new CreateTopicoDialog();
+        dialog.setMateria(materia);
+        dialog.show(getFragmentManager(), "Digite o nome do Tópico");
     }
 
+    public ListView getLista() {
+        return lista;
+    }
+
+    public void setLista(ListView lista) {
+        this.lista = lista;
+    }
 }
 

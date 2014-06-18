@@ -1,7 +1,6 @@
 package helper;
 
 import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
@@ -53,10 +52,11 @@ public class Singleton {
 
     public static MateriasFragment materiasFragment = null;
     public static SingleMateriaFragment singleMateriaFragment = null;
-    public static TopicosFragment topicosFragment = null;
+    private static TopicosFragment topicosFragment = null;
     private static AddMateriaFragment addMateriaFragment = null;
 
     private static MateriasActivity materiasActivity;
+    private static DatabaseHelper db;
 
     private static Materia materia_selecionada = null;
     private static Materia materia_em_aula = null;
@@ -108,6 +108,22 @@ public class Singleton {
 
     public static void setAddMateriaFragment(AddMateriaFragment addMateriaFragment) {
         Singleton.addMateriaFragment = addMateriaFragment;
+    }
+
+    public static DatabaseHelper getDb() {
+        return db;
+    }
+
+    public static void setDb(DatabaseHelper db) {
+        Singleton.db = db;
+    }
+
+    public static TopicosFragment getTopicosFragment() {
+        return topicosFragment;
+    }
+
+    public static void setTopicosFragment(TopicosFragment topicosFragment) {
+        Singleton.topicosFragment = topicosFragment;
     }
 
     /**

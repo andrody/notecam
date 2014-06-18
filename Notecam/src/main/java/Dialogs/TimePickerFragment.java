@@ -1,4 +1,4 @@
-package view_fragment;
+package Dialogs;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -13,6 +13,7 @@ import com.koruja.notecam.R;
 import java.util.Calendar;
 
 import model.Aula;
+import view_fragment.AddMateriaFragment;
 
 
 /**

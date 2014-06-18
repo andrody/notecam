@@ -12,13 +12,14 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal">
+        android:layout_height="55dp"
+        android:orientation="horizontal"
+        android:background="@drawable/soft_corner_light"
+        >
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:visibility="gone">
+            android:layout_height="fill_parent">
 
             <FrameLayout
                 android:layout_width="55dp"
@@ -51,45 +52,18 @@
             android:layout_marginLeft="10dp">
 
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="35dp"
-                android:id="@+id/tag_labels"
-                android:src="@drawable/ic_action_labels"
-                android:layout_gravity="center" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:text="Logaritmos"
+                android:id="@+id/nome_topico"
+                android:textSize="19sp"
+                android:textColor="@color/text_color"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="175dp"
-                    android:layout_height="wrap_content"
-                    android:text="Logaritmos"
-                    android:id="@+id/nome_topico"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="0dp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:maxWidth="175dp" />
-
-                <TextView
-                    android:layout_width="175dp"
-                    android:layout_height="wrap_content"
-                    android:text="10 fotos"
-                    android:id="@+id/numero_fotos_topico"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_color"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="0dp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:maxWidth="175dp" />
-            </LinearLayout>
+                android:layout_marginLeft="0dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:maxWidth="175dp"/>
 
             <FrameLayout
                 android:layout_width="fill_parent"
@@ -103,12 +77,37 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical">
 
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_btn_flat_light"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="20dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView2"
+                        android:src="@drawable/ic_action_picture" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="05"
+                        android:id="@+id/numero_fotos_topico"
+                        android:textColor="@color/text_color"
+                        android:textSize="18sp"
+                        android:layout_gravity="center_vertical"
+                        android:padding="5dp" />
+                </LinearLayout>
+
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="30dp"
                     android:id="@+id/seta_direita"
                     android:src="@drawable/ic_seta_direita"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="15dp" />
             </LinearLayout>
 
         </LinearLayout>

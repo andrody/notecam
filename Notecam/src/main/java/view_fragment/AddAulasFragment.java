@@ -16,6 +16,7 @@ import com.koruja.notecam.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Dialogs.TimePickerFragment;
 import helper.DatabaseHelper;
 import list.ClassAdapter;
 import model.Aula;

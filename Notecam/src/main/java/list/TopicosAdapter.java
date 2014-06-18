@@ -6,20 +6,16 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Aula;
 import model.Materia;
 import model.Topico;
 
@@ -55,6 +51,7 @@ public class TopicosAdapter extends BaseAdapter {
         FrameLayout del_back;
         ImageView del_x;
         ImageView seta_direita;
+        ImageView tag_labels;
         TextView numero_fotos_topico;
         TextView nome_topico;
 
@@ -62,6 +59,7 @@ public class TopicosAdapter extends BaseAdapter {
             del_back = (FrameLayout) v.findViewById(R.id.del_back);
             del_x = (ImageView) v.findViewById(R.id.del_x);
             seta_direita = (ImageView) v.findViewById(R.id.seta_direita);
+            tag_labels = (ImageView) v.findViewById(R.id.tag_labels);
             numero_fotos_topico = (TextView) v.findViewById(R.id.numero_fotos_topico);
             nome_topico = (TextView) v.findViewById(R.id.nome_topico);
         }
@@ -87,7 +85,7 @@ public class TopicosAdapter extends BaseAdapter {
         holder.nome_topico.setText(items.get(i).getName());
 
         //Seta numero de fotos do tópico
-        holder.numero_fotos_topico.setText("10");//items.get(i).getFotos().size());
+        holder.numero_fotos_topico.setText(materia.getNumero_fotos() + " fotos");    //items.get(i).getFotos().size());
 
         //Muda cor do fundo para cor da matéria
         Drawable drawable = holder.del_back.getBackground();
@@ -99,6 +97,10 @@ public class TopicosAdapter extends BaseAdapter {
 
         //Muda cor do fundo para cor da matéria da seta
         drawable = holder.seta_direita.getDrawable();
+        drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
+
+        //Muda cor do fundo para cor da matéria do icone de labels
+        drawable = holder.tag_labels.getDrawable();
         drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
 
         return row;

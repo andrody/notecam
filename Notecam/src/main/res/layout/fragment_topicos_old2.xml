@@ -82,17 +82,6 @@
                     android:visibility="gone" />
 
                 <ImageView
-                    android:id="@+id/adicionar_topico"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:paddingRight="0dp"
-                    android:src="@drawable/ic_action_new_label"
-                    android:layout_marginTop="2dp"
-                    android:padding="5dp" />
-
-                <ImageView
                     android:id="@+id/editar_materia"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
@@ -104,11 +93,6 @@
 
             </LinearLayout>
         </RelativeLayout>
-
-        <ListView
-            android:id="@+id/topicos_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -132,8 +116,7 @@
                 android:paddingRight="17dp"
                 android:paddingTop="13dp"
                 android:text="nova aula"
-                android:textSize="18dp"
-                android:visibility="gone">
+                android:textSize="18dp">
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -156,6 +139,12 @@
                     android:textSize="18dp"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            <ListView
+                android:id="@+id/topicos_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" />
 
         </LinearLayout>
     </LinearLayout>

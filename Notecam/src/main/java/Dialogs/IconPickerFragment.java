@@ -1,18 +1,16 @@
-package view_fragment;
+package Dialogs;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.koruja.notecam.R;
 
@@ -26,8 +24,7 @@ import model.Materia;
 /**
  * Dialog para escolher o Start Time ou End Time da Classe
  */
-public class ColorPickerFragment extends DialogFragment {
-    int color;
+public class IconPickerFragment extends DialogFragment {
     GridView gridview;
     private model.Materia materia;
 
@@ -47,10 +44,10 @@ public class ColorPickerFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialog_grid, null);
-        getDialog().setTitle("Selecione uma cor");
+        getDialog().setTitle("Selecione um ícone");
 
         //Cria o adapter
-        final ColorAdapter adapter = new ColorAdapter(getActivity(), this);
+        final IconAdapter adapter = new IconAdapter(getActivity(), this);
 
         gridview = (GridView) view.findViewById(R.id.dialog_grid_view);
         gridview.setAdapter(adapter);
@@ -59,16 +56,14 @@ public class ColorPickerFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //Seta a cor da matéria
-                getMateria().setColor(adapter.cores.get(position));
+                //Seta o icone da matéria
+                getMateria().setIcon_id(adapter.icons.get(position));
 
-                //Faz o header mudar para a cor selecionada
-                Singleton.mudarCorHeader(Singleton.getAddMateriaFragment(), getMateria().getColor());
+                //Faz o icone do header mudar pro icone selecionado
+                ImageView icone_materia = (ImageView) Singleton.getAddMateriaFragment().getView().findViewById(R.id.icone_materia);
+                icone_materia.setImageResource(getMateria().getIcon_id());
 
-                //Faz a cor dos icones de deletar das aulas mudarem de cor também
-                Singleton.getAddMateriaFragment().getAddAulasFragment().getAdapter().notifyDataSetChanged();
-
-                //Seleciona a cor nesse Dialog
+                //Seleciona o icone nesse Dialog
                 adapter.notifyDataSetChanged();
 
                 //Fecha a tela assim que clicar em uma cor
@@ -80,34 +75,34 @@ public class ColorPickerFragment extends DialogFragment {
     }
 
 
-
 }
+
 
 /**
  * O BaseAdapter é responsável por construir as views do gridview
  */
-class ColorAdapter extends BaseAdapter {
+class IconAdapter extends BaseAdapter {
 
-    ArrayList<Integer> cores;
+    ArrayList<Integer> icons;
     model.Materia materia;
     private HashMap<Integer, View> views = new HashMap<Integer, View>();
 
     Context context;
 
-    ColorAdapter(Context context, ColorPickerFragment fragment) {
+    IconAdapter(Context context, IconPickerFragment fragment) {
         this.context = context;
-        cores = Singleton.getListaCores();
+        icons = Singleton.getListaIcones();
         materia = fragment.getMateria();
     }
 
     @Override
     public int getCount() {
-        return cores.size();
+        return icons.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return cores.get(position);
+        return icons.get(position);
     }
 
     @Override
@@ -116,14 +111,14 @@ class ColorAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        View background;
+        ImageView icon;
         View tick_icon;
-        Drawable drawable;
+        Drawable drawable_tick_icon;
 
         ViewHolder(View v) {
-            background = v.findViewById(R.id.grid_back);
+            icon = (ImageView) v.findViewById(R.id.icon_image);
             tick_icon = v.findViewById(R.id.tick_icon);
-            drawable  = context.getResources().getDrawable(R.drawable.circle_background);
+            drawable_tick_icon  = context.getResources().getDrawable(R.drawable.ic_tick);
         }
     }
 
@@ -135,7 +130,7 @@ class ColorAdapter extends BaseAdapter {
         //Se estamos chamando o getView pela primeira vez (Operações custosas)
         if(row == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.single_color_item, parent, false);
+            row = inflater.inflate(R.layout.single_icon_item, parent, false);
             holder = new ViewHolder(row);
             row.setTag(holder);
         }
@@ -143,24 +138,26 @@ class ColorAdapter extends BaseAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
+        holder.icon.setImageResource(icons.get(position));
+
         //final model.Materia item = (model.Materia) getItem(position);
 
-        if(cores.get(position) == materia.getColor())
+        if(icons.get(position) == materia.getIcon_id())
             holder.tick_icon.setVisibility(View.VISIBLE);
         else
             holder.tick_icon.setVisibility(View.INVISIBLE);
 
 
         //Paint paint = new Paint();
-        holder.drawable.setColorFilter(cores.get(position), PorterDuff.Mode.SRC_ATOP);
+        //holder.drawable_tick_icon.setColorFilter(context.getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
 
         //Troca cor de fundo das matérias
-        int sdk = android.os.Build.VERSION.SDK_INT;
+        /*int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            holder.background.setBackgroundDrawable(holder.drawable);
+            holder.drawable_tick_icon.setBackgroundDrawable(holder.drawable);
         } else {
-            holder.background.setBackground(holder.drawable);
-        }
+            holder.drawable_tick_icon.setBackground(holder.drawable);
+        }*/
 
 
 

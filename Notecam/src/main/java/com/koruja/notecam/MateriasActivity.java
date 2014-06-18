@@ -37,7 +37,6 @@ import helper.Singleton;
 import model.Aula;
 import model.Materia;
 import photo.PictureTaker;
-import view_fragment.AddMateriaFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
@@ -67,7 +66,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 if (aula == null){
                     Singleton.setMateria_em_aula(null);
                     Singleton.singleMateriaFragment.reload(Singleton.getMateria_selecionada());
-                    Singleton.topicosFragment.reload(Singleton.getMateria_selecionada());
+                    Singleton.getTopicosFragment().reload(Singleton.getMateria_selecionada());
                     Singleton.materiasFragment.updateSubTitle();
                     MateriasActivity.this.checarHorario();
                 }
@@ -133,6 +132,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Singleton.resetarSingleton();
+        Singleton.setDb(this.db);
 
         Singleton.setMateriasActivity(this);
 
@@ -631,7 +631,7 @@ class PagerAdapter extends FragmentPagerAdapter {
             if (mFragmentAtPos2 == null) {
                 mFragmentAtPos2 = TopicosFragment.newInstance(Singleton.getMateria_selecionada().getId());
             }
-            Singleton.topicosFragment = (TopicosFragment) mFragmentAtPos2;
+            Singleton.setTopicosFragment((TopicosFragment) mFragmentAtPos2);
             return mFragmentAtPos2;
         }
         return fragment;
