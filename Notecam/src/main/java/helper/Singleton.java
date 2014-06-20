@@ -61,6 +61,8 @@ public class Singleton {
     private static Materia materia_selecionada = null;
     private static Materia materia_em_aula = null;
 
+    private static boolean primeiraFoto = true;
+
     private static PictureTaker pictureTaker;
 
     public static void resetarSingleton(){
@@ -124,6 +126,14 @@ public class Singleton {
 
     public static void setTopicosFragment(TopicosFragment topicosFragment) {
         Singleton.topicosFragment = topicosFragment;
+    }
+
+    public static boolean isPrimeiraFoto() {
+        return primeiraFoto;
+    }
+
+    public static void setPrimeiraFoto(boolean primeiraFoto) {
+        Singleton.primeiraFoto = primeiraFoto;
     }
 
     /**

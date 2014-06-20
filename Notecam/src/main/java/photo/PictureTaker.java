@@ -6,6 +6,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,8 @@ public class PictureTaker {
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final String PHOTO_MIME_TYPE = "image/png";
     private static final String TAG = "PictureTaker";
+
+    String photoFolder;
 
     //Referência para a activity
     private Activity activity;
@@ -74,7 +77,8 @@ public class PictureTaker {
         // Create an image file name
         //final String imagesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
         //final String appname = "Notecam";
-        final String photoFolder = Singleton.NOTECAM_FOLDER + "/" + folderMateriaName + "/" + folderMateriaName + "-" + folderTopicoName;
+        this.photoFolder = Singleton.NOTECAM_FOLDER + "/" + folderMateriaName + "/" + folderMateriaName + "-" + folderTopicoName;
+
         File storageDir = new File(photoFolder);
         if (!storageDir.isDirectory())
         {
@@ -101,8 +105,6 @@ public class PictureTaker {
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                new_foto = new Foto(photoName, photoFile.getAbsolutePath(), topico);
-                new_foto.save(activity);
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 Log.e(TAG, "Erro ao criar arquivo...");
@@ -120,6 +122,15 @@ public class PictureTaker {
     public void OnActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_OK){
+            File f = new File(photoFolder, photoName + ".jpg");
+            boolean a = savedPhoto.renameTo(f);
+            if (!a)
+                Toast.makeText(activity, "falha ao renomear " + savedPhoto.getName(), Toast.LENGTH_SHORT).show();
+
+
+            new_foto = new Foto(photoName, f.getAbsolutePath(), topico);
+            new_foto.save(activity);
+
             topico.popularFotos();
 
             //Faz a foto aparecer na galeria de fotos do android

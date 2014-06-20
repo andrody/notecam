@@ -1,6 +1,7 @@
 package model;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.koruja.notecam.MateriasActivity;
 
@@ -17,6 +18,7 @@ public class Foto {
     private int topico_id;
     private String name = "";
     private String path;
+    private Uri uri;
     private int createdAt;
     private Context context;
 
@@ -93,5 +95,13 @@ public class Foto {
 
     public void delete(Context context) {
         ((MateriasActivity) context).getDb().deleteFoto(this.getId());
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 }

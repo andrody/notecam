@@ -93,7 +93,7 @@ public class TopicosAdapter extends BaseAdapter {
         holder.nome_topico.setText(items.get(i).getName());
 
         //Seta numero de fotos do tópico
-        holder.numero_fotos_topico.setText(materia.getNumero_fotos() + " fotos");    //items.get(i).getFotos().size());
+        holder.numero_fotos_topico.setText(items.get(i).getFotos().size() + " fotos");    //items.get(i).getFotos().size());
 
         //Muda cor do fundo para cor da matéria
         Drawable drawable = holder.del_back.getBackground();

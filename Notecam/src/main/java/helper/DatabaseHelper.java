@@ -470,7 +470,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteTopico(long topico_id) {
         Topico topico = getTopico(topico_id);
         Materia materia = getSubject(topico.getSubject_id());
-        DeleteRecursive(new File(Singleton.NOTECAM_FOLDER + "/" + materia.getName() + "/" + topico.getName()));
+        deleteAllFotosByTopico(topico_id);
+        DeleteRecursive(new File(Singleton.NOTECAM_FOLDER + "/" + materia.getName() + "/" + materia.getName() + "-" + topico.getName()));
 
         SQLiteDatabase db = this.getWritableDatabase();
         assert db != null;

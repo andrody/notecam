@@ -1,9 +1,15 @@
 package view_fragment;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,20 +18,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
+import java.io.Console;
 import java.util.List;
+import java.util.Set;
 
 import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
+import model.Foto;
 import model.Materia;
 import model.Topico;
 
@@ -48,7 +59,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_topicos, container, false);
         final ListView list = (ListView) view.findViewById(R.id.topicos_list);
         setLista(list);
@@ -70,8 +81,58 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                 ((CheckBox) v.findViewById(R.id.checkbox)).setChecked(true);
 
 
-
                 return true;
+            }
+        });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                Singleton.setPrimeiraFoto(true);
+
+                //Faz fotos aparecerem na galeria de fotos do android
+                for (final Foto foto : materia.getTopicos().get(i).getFotos()) {
+                    MediaScannerConnection.scanFile(getActivity(),
+                            new String[]{foto.getPath()}, null,
+                            new MediaScannerConnection.OnScanCompletedListener() {
+                                public void onScanCompleted(String path, Uri uri) {
+                                    Log.d("LOG", "scanned : " + path);
+                                    foto.setUri(uri);
+                                    //foto.save(getActivity());
+
+                                    if (Singleton.isPrimeiraFoto()) {
+                                        Singleton.setPrimeiraFoto(false);
+
+                                        //Se houver fotos
+                                        if (!(materia.getTopicos().get(i).getFotos() == null || materia.getTopicos().get(i).getFotos().size() == 0)) {
+                                            //Metodo 2 - Funciona do jeito que eu quero! aewwwww!
+                                            Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                                            String mime = "image/*";
+                                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                            if (mimeTypeMap.hasExtension(
+                                                    mimeTypeMap.getFileExtensionFromUrl(uri.toString())))
+                                                mime = mimeTypeMap.getMimeTypeFromExtension(
+                                                        mimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+                                            intent.setDataAndType(uri,mime);
+                                            startActivity(intent);
+
+                                            //Metodo 3 - Também funciona do jeito que eu quero! aewwwww!
+                                            /*String[] strings = uri.toString().split("/");
+                                            String imageId = strings[strings.length - 1];
+                                            openInGallery(imageId);*/
+
+                                        } else {
+                                            Toast.makeText(getActivity(), "Não há fotos para exibir", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                            }
+                    );
+                }
+                /*Intent intent_gallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent_gallery, 1);*/
+
+
             }
         });
 
@@ -105,6 +166,12 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
 
         return view;
+    }
+
+    public void openInGallery(String imageId) {
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.buildUpon().appendPath(imageId).build();
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     private Singleton.OnFragmentInteractionListener mListener;
@@ -186,7 +253,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                 setFakeActionModeOn(false);
                 break;
 
-            //Cancela o Fake Action Mode
+            //Deleta os topicos
             case R.id.deletar:
                 deletar_topicos();
                 setFakeActionModeOn(false);

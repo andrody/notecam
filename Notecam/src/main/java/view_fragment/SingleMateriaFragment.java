@@ -93,7 +93,7 @@ public class SingleMateriaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_camera, container, false);
+        return inflater.inflate(R.layout.fragment_materia, container, false);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class SingleMateriaFragment extends Fragment {
                     background.setColor(0);
                     image_camera.setColorFilter(filter);
                     Singleton.getPictureTaker().TakePicture(materia.getName(), SingleMateriaFragment.this.topico.getName(),
-                            SingleMateriaFragment.this.topico.getName() + ""  + SingleMateriaFragment.this.topico.getFotos().size() + "",
+                            SingleMateriaFragment.this.topico.getName() + "_"  + SingleMateriaFragment.this.topico.getFotos().size() + "",
                             topico);
                 }
                 else if(event.getAction() == MotionEvent.ACTION_DOWN) {
