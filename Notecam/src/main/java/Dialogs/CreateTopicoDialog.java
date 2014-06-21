@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.koruja.notecam.R;
 
@@ -122,6 +123,7 @@ public class CreateTopicoDialog extends DialogFragment {
 
                 getTopico().setName(name);
                 getTopico().save(getActivity());
+                ((TextView)Singleton.getGaleriaFragment().getView().findViewById(R.id.header_text)).setText(name);
             }
         }
         else setTopico(new Topico(getActivity(), name, materia.getId()));
