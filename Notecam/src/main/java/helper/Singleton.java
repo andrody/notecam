@@ -255,18 +255,21 @@ public class Singleton {
         return icones;
     }
 
-    public static void move_fotos(ArrayList<Foto> fotos){
-        String photoFolder = Singleton.NOTECAM_FOLDER + "/" + getMateria_selecionada().getName() + "/" + getMateria_selecionada().getName() + "-" + getTopico_selecionado().getName();
+    /*public static void move_fotos2(ArrayList<Foto> fotos, String novo_topico){
+        String photoFolder = Singleton.NOTECAM_FOLDER + "/" + getMateria_selecionada().getName() + "/" + getMateria_selecionada().getName() + "-";
 
-        File storageDir = new File(photoFolder);
-        if (!storageDir.isDirectory())
-        {
-            storageDir.mkdirs();
-        }
+        File storageDir = new File(photoFolder + getTopico_selecionado().getName());
+        File novo_folder = new File(photoFolder + novo_topico);
+        storageDir.renameTo(novo_folder);
+
+        //if (!storageDir.isDirectory())
+        //{
+         //   storageDir.mkdirs();
+        //}
 
         File old_file = null;
         for (Foto foto : fotos) {
-            File new_file = new File(photoFolder, foto.getName() + ".jpg");
+            File new_file = new File(novo_folder, foto.getName() + ".jpg");
             old_file = new File(foto.getPath());
 
             old_file.renameTo(new_file);
@@ -274,13 +277,13 @@ public class Singleton {
             escanear_foto(foto, getTopico_selecionado());
         }
 
-        if(old_file != null)
-            getDb().DeleteRecursive(old_file.getParentFile());
+        //if(old_file != null)
+          //  getDb().DeleteRecursive(old_file.getParentFile());
 
         if(getGaleriaFragment() != null)
             //Setando Titulo do Action Bar
-            ((TextView)getGaleriaFragment().getView().findViewById(R.id.header_text)).setText(Singleton.getTopico_selecionado().getName());
-    }
+            ((TextView)getGaleriaFragment().getView().findViewById(R.id.header_text)).setText(novo_topico);
+    }*/
 
 
     public static void escanear_foto(final Foto foto, final Topico topico){
