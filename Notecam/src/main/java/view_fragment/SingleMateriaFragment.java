@@ -153,8 +153,9 @@ public class SingleMateriaFragment extends Fragment {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     background.setColor(0);
                     image_camera.setColorFilter(filter);
+                    ;
                     Singleton.getPictureTaker().TakePicture(materia.getName(), SingleMateriaFragment.this.topico.getName(),
-                            SingleMateriaFragment.this.topico.getName() + "_"  + SingleMateriaFragment.this.topico.getFotos().size() + "",
+                            get_proximo_nome_foto(),
                             topico);
                 }
                 else if(event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -227,6 +228,14 @@ public class SingleMateriaFragment extends Fragment {
 
         background.setColor(0);
         image_camera.setColorFilter(filter);
+    }
+
+    public String get_proximo_nome_foto(){
+        int ultima_foto_numero = 0;
+        if(SingleMateriaFragment.this.topico.getFotos() != null && SingleMateriaFragment.this.topico.getFotos().size() > 0)
+            ultima_foto_numero = Integer.parseInt(SingleMateriaFragment.this.topico.getFotos().get(0).getName().split("_")[1]) + 1;
+        String nome = SingleMateriaFragment.this.topico.getName() + "_"  + ultima_foto_numero + "";
+        return nome;
     }
 
     /**

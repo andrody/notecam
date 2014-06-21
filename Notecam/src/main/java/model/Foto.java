@@ -5,6 +5,8 @@ import android.net.Uri;
 
 import com.koruja.notecam.MateriasActivity;
 
+import helper.Singleton;
+
 /**
  * Created by Andrew on 30/04/14.
  */
@@ -32,8 +34,16 @@ public class Foto {
     }
     public Foto(){}
 
-    public void save(Context context){
-        this.id = (int) ((MateriasActivity) context).getDb().createFoto(this);
+    public void save(){
+        //Se foto não existe cria uma
+        if(this.id == -1)
+            this.id = (int) Singleton.getDb().createFoto(this);
+
+        //Se já existe apenas atualiza
+        else
+            Singleton.getDb().updateFoto(this);
+
+
     }
 
     public String getName() {
@@ -93,9 +103,11 @@ public class Foto {
         this.topico_id = topico_id;
     }
 
-    public void delete(Context context) {
-        ((MateriasActivity) context).getDb().deleteFoto(this.getId());
+    public void delete() {
+        Singleton.getDb().deleteFoto(this);
     }
+
+
 
     public Uri getUri() {
         return uri;

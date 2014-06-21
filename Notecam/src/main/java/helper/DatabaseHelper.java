@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -29,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     // Database Name
     private static final String DATABASE_NAME = "subjectsManager";
@@ -77,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_FOTO_NAME = "foto_name";
     private static final String KEY_FOTO_NUMBER = "foto_number";
     private static final String KEY_FOTO_PATH = "foto_path";
+    private static final String KEY_FOTO_URI = "foto_uri";
 
 
     // Table Create Statements
@@ -125,6 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_FOTO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_FOTO_NAME + " TEXT,"
             + KEY_FOTO_PATH + " TEXT,"
+            + KEY_FOTO_URI + " TEXT,"
             + KEY_FOTO_TOPICO + " INTEGER,"
             + KEY_FOTO_NUMBER + " INTEGER,"
             + KEY_CREATED_AT + " INTEGER"
@@ -611,6 +614,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_FOTO_TOPICO, foto.getTopico().getId());
         values.put(KEY_FOTO_PATH, foto.getPath());
 
+        if (foto.getUri() != null)
+            values.put(KEY_FOTO_URI, foto.getUri().toString());
+
         Time time = new Time();
         time.setToNow();
         values.put(KEY_CREATED_AT, time.toMillis(true));
@@ -631,6 +637,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_FOTO_NAME, foto.getName());
         values.put(KEY_FOTO_TOPICO, foto.getTopico().getId());
         values.put(KEY_FOTO_PATH, foto.getPath());
+        values.put(KEY_FOTO_URI, foto.getUri().toString());
+
 
 
         // updating foto
@@ -655,6 +663,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
+    * Deleting foto
+    */
+    public void deleteFoto(Foto foto) {
+        String path = foto.getPath();
+        File file = new File(path);
+        file.delete();
+        Singleton.deleteFile(path);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        assert db != null;
+        db.delete(TABLE_FOTO, KEY_ID + " = ?",
+                new String[] { String.valueOf(foto.getId()) });
+    }
+
+    /*
     * get single foto
     */
     public Foto getFoto(long foto_id) {
@@ -667,18 +690,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c != null)
+        Foto foto = null;
+
+        if (c != null) {
             c.moveToFirst();
 
-        Foto foto = new Foto();
-        foto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        foto.setName((c.getString(c.getColumnIndex(KEY_FOTO_NAME))));
-        foto.setPath((c.getString(c.getColumnIndex(KEY_FOTO_PATH))));
-        //foto.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
-        foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
-        foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+            foto = new Foto();
+            foto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            foto.setName((c.getString(c.getColumnIndex(KEY_FOTO_NAME))));
+            foto.setPath((c.getString(c.getColumnIndex(KEY_FOTO_PATH))));
 
-        c.close();
+            String s = c.getString(c.getColumnIndex(KEY_FOTO_URI));
+            if (s != null) foto.setUri(Uri.parse(s));
+
+            //foto.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
+            foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
+            foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
+
+            c.close();
+        }
 
         return foto;
     }
@@ -689,7 +719,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public List<Foto> getAllFotos() {
         List<Foto> fotos = new ArrayList<Foto>();
-        String selectQuery = "SELECT  * FROM " + TABLE_FOTO;
+        String selectQuery = "SELECT  * FROM " + TABLE_FOTO + " ORDER BY " + KEY_CREATED_AT + " DESC";
 
         Log.e(LOG, selectQuery);
 
@@ -703,6 +733,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 foto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 foto.setName((c.getString(c.getColumnIndex(KEY_FOTO_NAME))));
                 foto.setPath((c.getString(c.getColumnIndex(KEY_FOTO_PATH))));
+                foto.setUri(Uri.parse(c.getString(c.getColumnIndex(KEY_FOTO_URI))));
                 //foto.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
                 foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
                 foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
@@ -749,7 +780,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT  * FROM "
                 + TABLE_FOTO + " WHERE "
-                + KEY_FOTO_TOPICO + " = " + topico_id + " ORDER BY " + KEY_CREATED_AT + " ASC";
+                + KEY_FOTO_TOPICO + " = " + topico_id + " ORDER BY " + KEY_CREATED_AT + " DESC";
 
         Log.e(LOG, selectQuery);
 
@@ -763,6 +794,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 foto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 foto.setName((c.getString(c.getColumnIndex(KEY_FOTO_NAME))));
                 foto.setPath((c.getString(c.getColumnIndex(KEY_FOTO_PATH))));
+
+                String s = c.getString(c.getColumnIndex(KEY_FOTO_URI));
+                if(s != null) foto.setUri(Uri.parse(s));
                 //foto.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
                 foto.setTopico_id((c.getInt(c.getColumnIndex(KEY_FOTO_TOPICO))));
                 foto.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));

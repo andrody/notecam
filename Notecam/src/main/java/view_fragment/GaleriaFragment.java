@@ -1,6 +1,7 @@
 package view_fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -9,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
@@ -16,6 +18,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -44,6 +47,20 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
     //Booleana que diz se o ActionMode (LongPress) foi ativado ou não. Caso sim ele ativa as checkboxes dos items da lista
     private boolean fakeActionModeOn = false;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        galeriaAdapter.notifyDataSetChanged();
+        setFakeActionModeOn(false);
+    }
+
+    public void reload(){
+        Singleton.getTopico_selecionado().popularFotos();
+        //galeriaAdapter = new GaleriaAdapter(getActivity());
+        //galeriaAdapter.fotos =
+        gridview.setAdapter(new GaleriaAdapter(getActivity()));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,8 +92,9 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
                     CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkbox_galeria));
                     checkbox.setChecked(!checkbox.isChecked());
                 }
+                //Abre foto na galeria
                 else {
-                    ;
+                    abrir_foto_na_galeria(position);
                 }
             }
         });
@@ -121,6 +139,19 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
 
         return view;
+    }
+
+    public void abrir_foto_na_galeria(int position){
+        Uri uri = Singleton.getTopico_selecionado().getFotos().get(position).getUri();
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+        String mime = "image/*";
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        if (mimeTypeMap.hasExtension(
+                mimeTypeMap.getFileExtensionFromUrl(uri.toString())))
+            mime = mimeTypeMap.getMimeTypeFromExtension(
+                    mimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+        intent.setDataAndType(uri,mime);
+        startActivity(intent);
     }
 
     public boolean isFakeActionModeOn() {
@@ -233,15 +264,27 @@ class GaleriaAdapter extends BaseAdapter {
         try {
             exif = new ExifInterface(item.getPath());
             byte[] imageData=exif.getThumbnail();
-            Bitmap thumbnail= BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-            Drawable ob = new BitmapDrawable(context.getResources(), thumbnail);
 
-            //Troca cor de fundo das matérias
-            int sdk = android.os.Build.VERSION.SDK_INT;
-            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                holder.foto_back.setBackgroundDrawable(ob);
-            } else {
-                holder.foto_back.setBackground(ob);
+            //Se imagem foi deletada por algum motivo
+            if (imageData == null) {
+                item.delete();
+                Singleton.getTopico_selecionado().popularFotos();
+                fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
+                //Singleton.getGaleriaFragment().reload();
+                this.notifyDataSetChanged();
+            }
+            else {
+
+                Bitmap thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                Drawable ob = new BitmapDrawable(context.getResources(), thumbnail);
+
+                //Troca cor de fundo das matérias
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.foto_back.setBackgroundDrawable(ob);
+                } else {
+                    holder.foto_back.setBackground(ob);
+                }
             }
 
         } catch (IOException e) {

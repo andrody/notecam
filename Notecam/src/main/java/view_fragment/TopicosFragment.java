@@ -236,12 +236,19 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     public void reload(model.Materia nova_materia) {
         this.materia = nova_materia;
+        if(Singleton.getTopico_selecionado() != null )
+            Singleton.getTopico_selecionado().getFotos();
+
+        ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+
 
         getLista().setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
         Singleton.mudarCorHeader(this, materia.getColor());
 
         TextView nome_materia = (TextView) getView().findViewById(R.id.nome_materia);
         nome_materia.setText(materia.getName());
+
+
 
     }
 

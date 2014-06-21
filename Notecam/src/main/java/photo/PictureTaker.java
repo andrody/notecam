@@ -129,9 +129,10 @@ public class PictureTaker {
 
 
             new_foto = new Foto(photoName, f.getAbsolutePath(), topico);
-            new_foto.save(activity);
-
+            new_foto.save();
             topico.popularFotos();
+
+
 
             //Faz a foto aparecer na galeria de fotos do android
             MediaScannerConnection.scanFile(activity,
@@ -139,6 +140,9 @@ public class PictureTaker {
                     new MediaScannerConnection.OnScanCompletedListener() {
                         public void onScanCompleted(String path, Uri uri) {
                             Log.d("LOG", "scanned : " + path);
+                            new_foto.setUri(uri);
+                            new_foto.save();
+                            topico.popularFotos();
                         }
                     }
             );
@@ -146,7 +150,7 @@ public class PictureTaker {
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_CANCELED)
         {
             savedPhoto.delete();
-            new_foto.delete(activity);
+            new_foto.delete();
         }
     }
 }
