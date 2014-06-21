@@ -8,14 +8,17 @@
         android:layout_height="190dp"
         android:layout_centerInParent="true"
         android:id="@+id/foto_back"
-        android:background="@color/white">
+        android:background="@color/red">
 
         <CustomViews.CustomCheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:id="@+id/checkbox_galeria"
             android:layout_gravity="center"
-            android:visibility="gone" />
+            android:visibility="visible"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false" />
 
         <!--ImageView
             android:src="@drawable/ma"

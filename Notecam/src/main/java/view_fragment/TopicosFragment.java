@@ -89,18 +89,28 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                Singleton.setPrimeiraFoto(true);
-                Topico topico_selecionado = materia.getTopicos().get(i);
 
-                //ArrayList<String> strings = new ArrayList<String>();
-                //Faz fotos aparecerem na galeria de fotos do android
-                //for (final Foto foto : topico_selecionado.getFotos()) {
-                //    strings.add(foto.getPath());
-                //}
+                //Seleciona ou deseleciona topico se estiver em modo de edição
+                if(fakeActionModeOn){
+                    CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkbox));
+                    checkbox.setChecked(!checkbox.isChecked());
+                }
 
-                Singleton.setTopico_selecionado(topico_selecionado);
-                Singleton.setGaleriaFragment(new GaleriaFragment());
-                Singleton.changeFragments(Singleton.getGaleriaFragment());
+                else {
+
+                    Singleton.setPrimeiraFoto(true);
+                    Topico topico_selecionado = materia.getTopicos().get(i);
+
+                    //ArrayList<String> strings = new ArrayList<String>();
+                    //Faz fotos aparecerem na galeria de fotos do android
+                    //for (final Foto foto : topico_selecionado.getFotos()) {
+                    //    strings.add(foto.getPath());
+                    //}
+
+                    Singleton.setTopico_selecionado(topico_selecionado);
+                    Singleton.setGaleriaFragment(new GaleriaFragment());
+                    Singleton.changeFragments(Singleton.getGaleriaFragment());
+                }
 
                 //Cria uma nova instância do Fragment AddMateriaFragment e passa o id da materia como parametro para edição
                 //AddMateriaFragment addMateriaFragment = AddMateriaFragment.newInstance(materia.getId());

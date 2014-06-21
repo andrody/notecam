@@ -36,6 +36,17 @@ import model.Materia;
 public class AddMateriaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDetach() {
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         MateriasActivity activity = ((MateriasActivity)getActivity());
         activity.reload();
         super.onDetach();

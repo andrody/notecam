@@ -15,34 +15,6 @@
         android:layout_height="70dp"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:visibility="gone">
-
-            <FrameLayout
-                android:layout_width="55dp"
-                android:layout_height="fill_parent"
-                android:layout_gravity="left|top"
-                android:id="@+id/del_back"
-                android:text="x"
-                android:textColor="#fff"
-                android:textSize="30dp"
-                android:singleLine="false"
-                android:background="@drawable/custom_btn_flat_red"
-                android:padding="13dp">
-
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/del_x"
-                    android:layout_gravity="center"
-                    android:background="@drawable/circle_background"
-                    android:adjustViewBounds="false"
-                    android:src="@drawable/ic_action_del_red" />
-            </FrameLayout>
-        </FrameLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -56,15 +28,20 @@
                 android:layout_height="35dp"
                 android:id="@+id/tag_labels"
                 android:src="@drawable/ic_action_labels"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:visibility="visible" />
 
             <CustomViews.CustomCheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/checkbox"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                />
+                android:focusableInTouchMode="false"
+                android:longClickable="false"
+                android:focusable="false"
+                android:layout_marginRight="10dp"
+                android:checked="true" />
 
             <LinearLayout
                 android:orientation="vertical"

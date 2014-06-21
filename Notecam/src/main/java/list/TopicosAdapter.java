@@ -54,8 +54,6 @@ public class TopicosAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        FrameLayout del_back;
-        ImageView del_x;
         ImageView seta_direita;
         ImageView tag_labels;
         TextView numero_fotos_topico;
@@ -63,8 +61,6 @@ public class TopicosAdapter extends BaseAdapter {
         CheckBox checkbox;
 
         ViewHolder(View v) {
-            del_back = (FrameLayout) v.findViewById(R.id.del_back);
-            del_x = (ImageView) v.findViewById(R.id.del_x);
             seta_direita = (ImageView) v.findViewById(R.id.seta_direita);
             tag_labels = (ImageView) v.findViewById(R.id.tag_labels);
             numero_fotos_topico = (TextView) v.findViewById(R.id.numero_fotos_topico);
@@ -95,16 +91,10 @@ public class TopicosAdapter extends BaseAdapter {
         //Seta numero de fotos do tópico
         holder.numero_fotos_topico.setText(items.get(i).getFotos().size() + " fotos");    //items.get(i).getFotos().size());
 
-        //Muda cor do fundo para cor da matéria
-        Drawable drawable = holder.del_back.getBackground();
-        drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
 
-        //Muda cor do fundo para cor da matéria do X
-        drawable = holder.del_x.getDrawable();
-        drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
 
         //Muda cor do fundo para cor da matéria da seta
-        drawable = holder.seta_direita.getDrawable();
+        Drawable drawable = holder.seta_direita.getDrawable();
         drawable.setColorFilter(materia.getColor(), PorterDuff.Mode.SRC_ATOP);
 
         //Muda cor do fundo para cor da matéria do icone de labels

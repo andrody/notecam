@@ -88,7 +88,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Seleciona ou deseleciona materia se estiver em modo de edição
                 if(fakeActionModeOn){
-                    CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkBox_subject));
+                    CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkbox_materia));
                     checkbox.setChecked(!checkbox.isChecked());
                 }
                 else {

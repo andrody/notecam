@@ -14,19 +14,19 @@ public class CustomCheckBox extends CheckBox {
 
     public CustomCheckBox(Context context, AttributeSet attrs) {
         super(context, attrs);
-        //setButtonDrawable(new StateListDrawable());
+        setButtonDrawable(new StateListDrawable());
     }
 
     @Override
     public void setChecked(boolean t){
-        /*if(t)
+        if(t)
         {
-            this.setBackgroundResource(R.drawable.checkbox_select);
+            this.setBackgroundResource(R.drawable.ic_tick_green_black_stroke);
         }
         else
         {
-            this.setBackgroundResource(R.drawable.checkbox_deselect);
-        }*/
+            this.setBackgroundResource(R.drawable.deselect_circulo);
+        }
         super.setChecked(t);
     }
 }
