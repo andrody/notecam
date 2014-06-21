@@ -1,0 +1,265 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="fragment_galeria"
+    >
+
+    <!-- Conteudo -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/topLinearLayout"
+        >
+
+        <!-- StatusBar -->
+        <RelativeLayout
+            android:id="@+id/padding"
+            android:layout_width="fill_parent"
+            android:layout_height="25dip"
+            android:layout_alignParentTop="true"
+            android:background="@color/black" />
+
+        <!-- FakeActionBar -->
+
+        <RelativeLayout
+            android:id="@+id/fake_action_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="48.0dip"
+            android:layout_below="@id/padding"
+            android:background="@color/pink" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/back"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="99" >
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:id="@+id/imageView3"
+                        android:src="@drawable/abc_ic_ab_back_holo_light"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="0dp" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/icone_materia"
+                        android:src="@drawable/lab"
+                        android:layout_gravity="center_vertical"
+                        android:focusableInTouchMode="false"
+                        android:layout_marginRight="3dp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Criar Nova Matéria"
+                        android:id="@+id/header_text"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iconselect"
+                    android:src="@drawable/ic_mask"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingRight="0dp"
+                    android:padding="8dp" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/colorselect"
+                    android:src="@drawable/ic_paint"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="3"
+                    android:padding="8dp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teste"
+            android:layout_weight="999">
+
+
+
+            <GridView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/galeria_grid_view"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:horizontalSpacing="0dp"
+                android:verticalSpacing="1dp"
+                android:numColumns="auto_fit"
+                android:stretchMode="spacingWidthUniform"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:columnWidth="190dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="8dp"
+                android:background="#FFF"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#e84f56"
+                    android:layout_weight="7"></FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#4496c4"
+                    android:layout_weight="8"
+                    android:id="@+id/frameLayout" />
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#ffc649"
+                    android:layout_weight="9"
+                    android:id="@+id/frameLayout2" />
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#00b488"
+                    android:layout_weight="7"
+                    android:id="@+id/frameLayout3" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- FakeActionMode -->
+        <FrameLayout
+            android:id="@+id/fake_action_mode"
+            android:layout_width="fill_parent"
+            android:layout_height="48.0dip"
+            android:background="@color/white"
+            android:layout_alignParentEnd="false"
+            android:gravity="bottom"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@color/azul"></FrameLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="2dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Cancelar"
+                    android:id="@+id/cancelar"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:padding="10dp" />
+
+                <FrameLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/text_color2"
+                    android:id="@+id/frameLayout4"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="10dp" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/cancelar2"
+                    android:layout_weight="999" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/compartilhar"
+                    android:clickable="false"
+                    android:focusable="false">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_action_share" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Compartilhar"
+                        android:id="@+id/textView"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/deletar">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView2"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_action_del_red2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Deletar"
+                        android:id="@+id/textView2"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

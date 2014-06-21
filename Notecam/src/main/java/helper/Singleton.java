@@ -22,8 +22,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 import model.Materia;
+import model.Topico;
 import photo.PictureTaker;
 import view_fragment.AddMateriaFragment;
+import view_fragment.GaleriaFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
@@ -54,12 +56,14 @@ public class Singleton {
     public static SingleMateriaFragment singleMateriaFragment = null;
     private static TopicosFragment topicosFragment = null;
     private static AddMateriaFragment addMateriaFragment = null;
+    private static GaleriaFragment galeriaFragment = null;
 
     private static MateriasActivity materiasActivity;
     private static DatabaseHelper db;
 
     private static Materia materia_selecionada = null;
     private static Materia materia_em_aula = null;
+    private static Topico topico_selecionado = null;
 
     private static boolean primeiraFoto = true;
 
@@ -136,6 +140,22 @@ public class Singleton {
         Singleton.primeiraFoto = primeiraFoto;
     }
 
+    public static GaleriaFragment getGaleriaFragment() {
+        return galeriaFragment;
+    }
+
+    public static void setGaleriaFragment(GaleriaFragment galeriaFragment) {
+        Singleton.galeriaFragment = galeriaFragment;
+    }
+
+    public static Topico getTopico_selecionado() {
+        return topico_selecionado;
+    }
+
+    public static void setTopico_selecionado(Topico topico_selecionado) {
+        Singleton.topico_selecionado = topico_selecionado;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -197,8 +217,15 @@ public class Singleton {
 
     }
 
-    public static void changeFragments(android.support.v4.app.Fragment fragment){
-        getMateriasActivity().changeFragments(fragment, null);
+    public static void changeFragments(final android.support.v4.app.Fragment fragment){
+        getMateriasActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                getMateriasActivity().changeFragments(fragment, null);
+
+            }
+        });
     }
 
     public static void mudarCorHeader(android.support.v4.app.Fragment fragment, int color){

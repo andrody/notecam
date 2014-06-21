@@ -101,7 +101,7 @@ public class FotosFragment extends Fragment {
                 setFakeActionModeOn(true);
 
                 //Atualiza a lista
-                materiasAdapter.notifyDataSetChanged();
+                galeriaAdapter.notifyDataSetChanged();
 
                 //Seta o checkbox do item que foi pressionado como selecionado automaticamente
                 ((CheckBox) v.findViewById(R.id.checkBox_subject)).setChecked(true);*/

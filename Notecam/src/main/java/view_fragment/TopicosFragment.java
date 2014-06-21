@@ -89,9 +89,10 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
                 Singleton.setPrimeiraFoto(true);
+                final Topico topico_selecionado = materia.getTopicos().get(i);
 
                 //Faz fotos aparecerem na galeria de fotos do android
-                for (final Foto foto : materia.getTopicos().get(i).getFotos()) {
+                for (final Foto foto : topico_selecionado.getFotos()) {
                     MediaScannerConnection.scanFile(getActivity(),
                             new String[]{foto.getPath()}, null,
                             new MediaScannerConnection.OnScanCompletedListener() {
@@ -100,11 +101,18 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                                     foto.setUri(uri);
                                     //foto.save(getActivity());
 
-                                    if (Singleton.isPrimeiraFoto()) {
+                                    Singleton.setTopico_selecionado(topico_selecionado);
+                                    Singleton.setGaleriaFragment(new GaleriaFragment());
+                                    Singleton.changeFragments(Singleton.getGaleriaFragment());
+
+
+
+                                    /*if (Singleton.isPrimeiraFoto()) {
                                         Singleton.setPrimeiraFoto(false);
 
                                         //Se houver fotos
                                         if (!(materia.getTopicos().get(i).getFotos() == null || materia.getTopicos().get(i).getFotos().size() == 0)) {
+
                                             //Metodo 2 - Funciona do jeito que eu quero! aewwwww!
                                             Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
                                             String mime = "image/*";
@@ -121,17 +129,14 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                                             String imageId = strings[strings.length - 1];
                                             openInGallery(imageId);*/
 
-                                        } else {
-                                            Toast.makeText(getActivity(), "Não há fotos para exibir", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
+                                        //} else {
+                                        //    Toast.makeText(getActivity(), "Não há fotos para exibir", Toast.LENGTH_SHORT).show();
+                                        //}
+                                    //}
                                 }
                             }
                     );
                 }
-                /*Intent intent_gallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent_gallery, 1);*/
-
 
             }
         });

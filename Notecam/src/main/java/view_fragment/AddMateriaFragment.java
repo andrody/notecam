@@ -465,7 +465,7 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()){
 
-            //Abre Drawer Menu
+            //Volta para o fragment anterior
             case R.id.back:
                 getActivity().onBackPressed();
                 break;

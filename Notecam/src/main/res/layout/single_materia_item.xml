@@ -23,7 +23,7 @@
             android:background="@drawable/oval_background"
             android:textColor="@color/white"
             android:id="@+id/materia_numero_fotos_text"
-            android:layout_below="@+id/single_materia_back"
+            android:layout_below="@+id/foto_back"
             android:layout_centerHorizontal="true"
             android:textSize="14sp"
             android:textStyle="bold|italic"
@@ -37,7 +37,7 @@
         android:layout_height="115dp"
         android:background="@drawable/materia"
         android:layout_centerInParent="true"
-        android:id="@+id/single_materia_back">
+        android:id="@+id/foto_back">
 
         <LinearLayout
             android:orientation="vertical"
@@ -81,7 +81,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_color_light"
                     android:id="@+id/materia_nome_text"
-                    android:layout_below="@+id/single_materia_back"
+                    android:layout_below="@+id/foto_back"
                     android:layout_centerHorizontal="true"
                     android:textSize="22sp"
                     android:textStyle="bold|italic"

@@ -18,7 +18,6 @@ import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -263,12 +262,12 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             }
 
             //Limpa o adapter
-            //materiasAdapter.clear();
+            //galeriaAdapter.clear();
 
             //Se existir pelo menos um subject, adiciona no adapter
             if (!materias.isEmpty())
                 materiasAdapter.materias = materias;
-            //materiasAdapter.setData(subjects);
+            //galeriaAdapter.setData(subjects);
 
             //Atualiza tela
             materiasAdapter.notifyDataSetChanged();
@@ -474,7 +473,7 @@ class MateriasAdapter extends BaseAdapter {
             numero_fotos = (TextView) v.findViewById(R.id.materia_numero_fotos_text);
             icon = v.findViewById(R.id.imagem_materia);
             checkbox_materia = (CheckBox) v.findViewById(R.id.checkbox_materia);
-            back_color = v.findViewById(R.id.single_materia_back);
+            back_color = v.findViewById(R.id.foto_back);
             drawable  = context.getResources().getDrawable(R.drawable.materia);
         }
     }
@@ -508,7 +507,7 @@ class MateriasAdapter extends BaseAdapter {
         //holder.nome_materia.setTextSize(perfectSize);
         correctWidth(holder.nome_materia, 200);
 
-        //holder.numero_fotos.setText(materias.get(position).getNumero_fotos() + " fotos");
+        //holder.numero_fotos.setText(fotos.get(position).getNumero_fotos() + " fotos");
 
 
         holder.drawable.setColorFilter(materias.get(position).getColor(), PorterDuff.Mode.SRC_ATOP);
