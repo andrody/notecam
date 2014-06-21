@@ -7,6 +7,7 @@ import com.koruja.notecam.MateriasActivity;
 import java.util.List;
 
 import helper.DatabaseHelper;
+import helper.Singleton;
 
 /**
  * Created by Andrew on 10/24/13.
@@ -39,7 +40,10 @@ public class Topico {
     }
 
     public void save(Context context){
-        this.id = (int) ((MateriasActivity) context).getDb().createTopico(this);
+        if(this.id == -1)
+            this.id = (int) Singleton.getDb().createTopico(this);
+        else
+            Singleton.getDb().updateTopico(this);
     }
 
     public void popularFotos(){
@@ -112,5 +116,9 @@ public class Topico {
 
     public void setFotos(List<Foto> fotos) {
         this.fotos = fotos;
+    }
+
+    public void delete(){
+        Singleton.getDb().deleteTopico(this.getId());
     }
 }

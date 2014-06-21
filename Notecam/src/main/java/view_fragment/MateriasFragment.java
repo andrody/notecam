@@ -52,8 +52,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        Singleton.setActionBarTitle("Materias");
-        Singleton.setActionBarColor(getActivity().getResources().getColor(R.color.background_header));
         setFakeActionModeOn(false);
 
     }

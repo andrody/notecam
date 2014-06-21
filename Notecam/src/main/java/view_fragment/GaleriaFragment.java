@@ -4,17 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +17,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -31,13 +25,12 @@ import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Dialogs.CreateTopicoDialog;
 import helper.Singleton;
 import model.Foto;
-import model.Topico;
 
 
 public class GaleriaFragment extends Fragment implements View.OnClickListener {
@@ -55,13 +48,6 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
         setFakeActionModeOn(false);
     }
 
-    public void reload(){
-        Singleton.getTopico_selecionado().popularFotos();
-        //galeriaAdapter = new GaleriaAdapter(getActivity());
-        //galeriaAdapter.fotos =
-        gridview.setAdapter(new GaleriaAdapter(getActivity()));
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +55,6 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_galeria, container, false);
 
-        Singleton.setActionBarTitle(Singleton.getTopico_selecionado().getName());
 
         //Faz o header mudar para a cor selecionada
         View fake_action_bar = view.findViewById(R.id.fake_action_bar);
@@ -126,7 +111,13 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.back).setOnClickListener(this);
 
         //Setando listener do botão de Deletar
-        view.findViewById(R.id.deletar).setOnClickListener(this);;
+        view.findViewById(R.id.deletar).setOnClickListener(this);
+
+        //Setando listener do botão de Editar topico
+        view.findViewById(R.id.edit_topic).setOnClickListener(this);
+
+        //Setando listener do botão de Adiciona Imagem
+        view.findViewById(R.id.add_picture).setOnClickListener(this);
 
         //Setando listener do botão de Compartilhar
         view.findViewById(R.id.compartilhar).setOnClickListener(this);
@@ -137,6 +128,9 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
         //Setando listener do botão de Cancelar Também
         view.findViewById(R.id.cancelar2).setOnClickListener(this);
 
+
+        //Setando Titulo do Action Bar
+        ((TextView)view.findViewById(R.id.header_text)).setText(Singleton.getTopico_selecionado().getName());
 
         return view;
     }
@@ -169,6 +163,14 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public void open_edit_topic_dialog() {
+        //Cria um dialog passa os argumentos
+        CreateTopicoDialog dialog = new CreateTopicoDialog();
+        dialog.setMateria(Singleton.getMateria_selecionada());
+        dialog.setTopico(Singleton.getTopico_selecionado());
+        dialog.show(getFragmentManager(), "Digite o nome do Tópico");
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -177,6 +179,15 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
             case R.id.back:
                 //getActivity().onBackPressed();
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
+                break;
+
+            //Volta para o fragment anterior
+            case R.id.edit_topic:
+                open_edit_topic_dialog();
+                break;
+
+            //Volta para o fragment anterior
+            case R.id.add_picture:
                 break;
 
             //Cancela o Fake Action Mode

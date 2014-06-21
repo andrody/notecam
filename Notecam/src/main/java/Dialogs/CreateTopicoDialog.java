@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.koruja.notecam.R;
+
+import java.util.Random;
 
 import helper.Singleton;
 import model.Materia;
@@ -23,8 +24,12 @@ import model.Topico;
 public class CreateTopicoDialog extends DialogFragment {
     private model.Materia materia;
     private boolean flagEdit;
-    Topico topico;
+    private Topico topico;
     View view;
+
+    public CreateTopicoDialog(){
+
+    }
 
     public Materia getMateria() {
         return materia;
@@ -32,6 +37,14 @@ public class CreateTopicoDialog extends DialogFragment {
 
     public void setMateria(Materia materia) {
         this.materia = materia;
+    }
+
+    public Topico getTopico() {
+        return topico;
+    }
+
+    public void setTopico(Topico topico) {
+        this.topico = topico;
     }
 
     public interface Communicator {
@@ -42,8 +55,18 @@ public class CreateTopicoDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        LayoutInflater i = getActivity().getLayoutInflater();
+        view = i.inflate(R.layout.add_topico,null);
+
+        String title = "Adicionar Tópico";
+
+        if(topico != null){
+            ((EditText)view.findViewById(R.id.topico_input)).setText(topico.getName());
+            title = "Editar Tópico";
+        }
+
         AlertDialog.Builder b =  new  AlertDialog.Builder(getActivity())
-                .setTitle("Adicionar Tópico")
+                .setTitle(title)
                 .setPositiveButton("Salvar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -65,9 +88,7 @@ public class CreateTopicoDialog extends DialogFragment {
                         }
                 );
 
-        LayoutInflater i = getActivity().getLayoutInflater();
 
-        view = i.inflate(R.layout.add_topico,null);
         b.setView(view);
 
         return b.create();
@@ -78,26 +99,40 @@ public class CreateTopicoDialog extends DialogFragment {
         //Pega o nome do topico digitado pelo usuario
         String nome_topico = ((EditText)view.findViewById(R.id.topico_input)).getText().toString();
 
+
+
         //Se não digitar o nome do tópico, dá um nome automático
-        if(nome_topico.length() < 0) {
-            nome_topico = "Topico " + 1;
+        if(nome_topico.length() <= 0) {
+            Random random = new Random();
+            int r = (random.nextInt(9999));
+
+            nome_topico = "Topico " + r;
         }
 
         //Primeira letra maiuscula
         String name = Character.toUpperCase(nome_topico.charAt(0)) + nome_topico.substring(1).toLowerCase();
 
         //Se é modo edição
-        if (topico != null)
+        if (getTopico() != null) {
             this.flagEdit = true;
-        else topico = new Topico(getActivity(), name, materia.getId());
+
+            //Se mudou o nome
+            if(!name.equals(getTopico().getName())){
+                getTopico().setName(name);
+                getTopico().save(getActivity());
+                Singleton.move_fotos((java.util.ArrayList<model.Foto>) getTopico().getFotos());
+            }
+        }
+        else setTopico(new Topico(getActivity(), name, materia.getId()));
 
         //Se Não existe no DB ainda, então não possui ID
         if(!flagEdit)
-            Singleton.getDb().createTopico(topico);
+            Singleton.getDb().createTopico(getTopico());
 
         //Se já existe no Banco, apenas da um update
-        else
-            Singleton.getDb().updateTopico(topico);
+        else {
+            Singleton.getDb().updateTopico(getTopico());
+        }
     }
 
 

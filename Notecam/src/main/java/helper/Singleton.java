@@ -7,13 +7,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -21,6 +24,7 @@ import com.koruja.notecam.R;
 import java.io.File;
 import java.util.ArrayList;
 
+import model.Foto;
 import model.Materia;
 import model.Topico;
 import photo.PictureTaker;
@@ -199,16 +203,6 @@ public class Singleton {
         return (int) (padding_in_dp * scale + 0.5f);
     }
 
-    public static void setActionBarTitle(String title) {
-        Spannable actionBarTitle = new SpannableString(title);
-        actionBarTitle.setSpan(
-                new ForegroundColorSpan(Color.WHITE),
-                0,
-                actionBarTitle.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        getMateriasActivity().getActionBar().setTitle(actionBarTitle);
-    }
-
     public static void setActionBarColor(int color) {
         ActionBar actionBar = getMateriasActivity().getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(color));
@@ -259,6 +253,51 @@ public class Singleton {
         icones.add(R.drawable.ic_sobre);
         icones.add(R.drawable.ic_salvar);
         return icones;
+    }
 
+    public static void move_fotos(ArrayList<Foto> fotos){
+        String photoFolder = Singleton.NOTECAM_FOLDER + "/" + getMateria_selecionada().getName() + "/" + getMateria_selecionada().getName() + "-" + getTopico_selecionado().getName();
+
+        File storageDir = new File(photoFolder);
+        if (!storageDir.isDirectory())
+        {
+            storageDir.mkdirs();
+        }
+
+        File old_file = null;
+        for (Foto foto : fotos) {
+            File new_file = new File(photoFolder, foto.getName() + ".jpg");
+            old_file = new File(foto.getPath());
+
+            old_file.renameTo(new_file);
+            foto.setPath(new_file.getAbsolutePath());
+            escanear_foto(foto, getTopico_selecionado());
+        }
+
+        if(old_file != null)
+            getDb().DeleteRecursive(old_file.getParentFile());
+
+        if(getGaleriaFragment() != null)
+            //Setando Titulo do Action Bar
+            ((TextView)getGaleriaFragment().getView().findViewById(R.id.header_text)).setText(Singleton.getTopico_selecionado().getName());
+    }
+
+
+    public static void escanear_foto(final Foto foto, final Topico topico){
+
+        //Faz a foto aparecer na galeria de fotos do android
+        MediaScannerConnection.scanFile(getMateriasActivity(),
+                new String[]{foto.getPath()}, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.d("LOG", "scanned : " + path);
+                        foto.setUri(uri);
+                        foto.save();
+
+                        if (topico != null)
+                            topico.popularFotos();
+                    }
+                }
+        );
     }
 }

@@ -2,7 +2,6 @@ package photo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -132,20 +131,8 @@ public class PictureTaker {
             new_foto.save();
             topico.popularFotos();
 
-
-
-            //Faz a foto aparecer na galeria de fotos do android
-            MediaScannerConnection.scanFile(activity,
-                    new String[]{new_foto.getPath()}, null,
-                    new MediaScannerConnection.OnScanCompletedListener() {
-                        public void onScanCompleted(String path, Uri uri) {
-                            Log.d("LOG", "scanned : " + path);
-                            new_foto.setUri(uri);
-                            new_foto.save();
-                            topico.popularFotos();
-                        }
-                    }
-            );
+            //Para aparecer na galeria precisa escanear
+            Singleton.escanear_foto(new_foto, topico);
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == activity.RESULT_CANCELED)
         {

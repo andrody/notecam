@@ -635,8 +635,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_FOTO_NAME, foto.getName());
-        values.put(KEY_FOTO_TOPICO, foto.getTopico().getId());
+
+        if(foto.getTopico() != null)
+            values.put(KEY_FOTO_TOPICO, foto.getTopico().getId());
+
         values.put(KEY_FOTO_PATH, foto.getPath());
+
+        if(foto.getUri() != null)
         values.put(KEY_FOTO_URI, foto.getUri().toString());
 
 

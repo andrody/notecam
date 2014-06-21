@@ -1,43 +1,26 @@
 package view_fragment;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
-
-import java.io.Console;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
-import model.Foto;
 import model.Materia;
 import model.Topico;
 
@@ -281,7 +264,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
             //Cria um novo tópico
             case R.id.adicionar_topico:
-                OpenCreateTopicoDialog();
+                open_create_topic_dialog();
 
                 //Cancela o Fake Action Mode
             case R.id.cancelar:
@@ -321,7 +304,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         reload(materia);
     }
 
-    public void OpenCreateTopicoDialog() {
+    public void open_create_topic_dialog() {
         //Cria um dialog passa os argumentos
         CreateTopicoDialog dialog = new CreateTopicoDialog();
         dialog.setMateria(materia);
