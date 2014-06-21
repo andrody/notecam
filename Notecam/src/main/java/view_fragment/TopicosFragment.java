@@ -29,6 +29,7 @@ import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -89,21 +90,36 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
                 Singleton.setPrimeiraFoto(true);
-                final Topico topico_selecionado = materia.getTopicos().get(i);
+                Topico topico_selecionado = materia.getTopicos().get(i);
 
+                //ArrayList<String> strings = new ArrayList<String>();
                 //Faz fotos aparecerem na galeria de fotos do android
-                for (final Foto foto : topico_selecionado.getFotos()) {
-                    MediaScannerConnection.scanFile(getActivity(),
-                            new String[]{foto.getPath()}, null,
-                            new MediaScannerConnection.OnScanCompletedListener() {
-                                public void onScanCompleted(String path, Uri uri) {
-                                    Log.d("LOG", "scanned : " + path);
-                                    foto.setUri(uri);
-                                    //foto.save(getActivity());
+                //for (final Foto foto : topico_selecionado.getFotos()) {
+                //    strings.add(foto.getPath());
+                //}
 
-                                    Singleton.setTopico_selecionado(topico_selecionado);
+                Singleton.setTopico_selecionado(topico_selecionado);
+                Singleton.setGaleriaFragment(new GaleriaFragment());
+                Singleton.changeFragments(Singleton.getGaleriaFragment());
+
+                //Cria uma nova instância do Fragment AddMateriaFragment e passa o id da materia como parametro para edição
+                //AddMateriaFragment addMateriaFragment = AddMateriaFragment.newInstance(materia.getId());
+                //Singleton.setAddMateriaFragment(addMateriaFragment);
+                //Muda o fragment
+                //Singleton.changeFragments(Singleton.getAddMateriaFragment());
+
+                //MediaScannerConnection.scanFile(getActivity(),
+                 //       strings.toArray(), null,
+                  //      new MediaScannerConnection.OnScanCompletedListener() {
+                   //         public void onScanCompleted(String path, Uri uri) {
+                    //            Log.d("LOG", "scanned : " + path);
+                     //           foto.setUri(uri);
+                                //foto.save(getActivity());
+
+                                    /*Singleton.setTopico_selecionado(topico_selecionado);
                                     Singleton.setGaleriaFragment(new GaleriaFragment());
-                                    Singleton.changeFragments(Singleton.getGaleriaFragment());
+                                    Singleton.changeFragments(Singleton.getGaleriaFragment());*/
+
 
 
 
@@ -129,15 +145,14 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                                             String imageId = strings[strings.length - 1];
                                             openInGallery(imageId);*/
 
-                                        //} else {
-                                        //    Toast.makeText(getActivity(), "Não há fotos para exibir", Toast.LENGTH_SHORT).show();
-                                        //}
-                                    //}
-                                }
-                            }
-                    );
-                }
+                                //} else {
+                                //    Toast.makeText(getActivity(), "Não há fotos para exibir", Toast.LENGTH_SHORT).show();
+                                //}
+                                //}
 
+                            //}
+                        //}
+                //);
             }
         });
 
@@ -166,8 +181,6 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         //Setando listener do botão de Cancelar Também
         View cancelar2 = view.findViewById(R.id.cancelar2);
         cancelar2.setOnClickListener(this);
-
-
 
 
         return view;
@@ -253,7 +266,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
             case R.id.adicionar_topico:
                 OpenCreateTopicoDialog();
 
-            //Cancela o Fake Action Mode
+                //Cancela o Fake Action Mode
             case R.id.cancelar:
                 setFakeActionModeOn(false);
                 break;
@@ -266,21 +279,21 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void deletar_topicos(){
+    public void deletar_topicos() {
         //Pega a referencia do banco do Singleton
         DatabaseHelper db = Singleton.getDb();
 
         //Para cada subject da lista
-        for(model.Topico topico : materia.getTopicos()){
+        for (model.Topico topico : materia.getTopicos()) {
 
             //Descobre em qual a view corresponde a este subject
-            View view = ((TopicosAdapter)getLista().getAdapter()).getView(topico.getId());
+            View view = ((TopicosAdapter) getLista().getAdapter()).getView(topico.getId());
 
             //Pega uma referência para o checkbox dele
             CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 
             //Se ele estiver marcado
-            if(checkBox.isChecked()){
+            if (checkBox.isChecked()) {
 
                 //Deleta esse subject e todas as suas classes
                 db.deleteTopico(topico.getId());
@@ -311,10 +324,9 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setFakeActionModeOn(boolean fakeActionModeOn) {
-        if(fakeActionModeOn){
+        if (fakeActionModeOn) {
             getView().findViewById(R.id.fake_action_mode).setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             getView().findViewById(R.id.fake_action_mode).setVisibility(View.GONE);
         }
 

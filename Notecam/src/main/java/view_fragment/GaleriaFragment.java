@@ -27,6 +27,7 @@ import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -142,7 +143,8 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
             //Volta para o fragment anterior
             case R.id.back:
-                getActivity().onBackPressed();
+                //getActivity().onBackPressed();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
                 break;
 
             //Cancela o Fake Action Mode
@@ -156,6 +158,13 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
                 setFakeActionModeOn(false);
                 break;
         }
+    }
+
+    @Override
+    public void onDetach() {
+        MateriasActivity activity = ((MateriasActivity)getActivity());
+        activity.reload();
+        super.onDetach();
     }
 
 

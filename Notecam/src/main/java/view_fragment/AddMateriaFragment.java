@@ -36,20 +36,8 @@ import model.Materia;
 public class AddMateriaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDetach() {
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
         MateriasActivity activity = ((MateriasActivity)getActivity());
         activity.reload();
-        //activity.changeFragments(activity.getMateriasFragment(),this);
         super.onDetach();
     }
 
@@ -176,7 +164,6 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         //Se matéria ainda não possui cor
         if(!materia.isIconed()) {
             materia.setRandomIcon();
-
         }
 
         //Faz o icone do header mudar pro icone selecionado
@@ -365,88 +352,6 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
 
     }
 
-    //Callback para criar e manipular o ActionMode
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-
-            //Cria opção de cancelar alterações
-            menu.add("Cancel")
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            return true;
-        }
-
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            //Se clicou no icone de cancelar, ativa a flag para não salvar mudanças
-            if(item.getTitle().equals("Cancel")){
-                flagActionModeCancel = true;
-            }
-
-            mode.finish();
-            return true;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            //Pega o nome do materia digitado pelo usuario
-            String subjectName = ((EditText)getView().findViewById(R.id.editText_subject)).getText().toString();
-
-            //Se ele clicou no icone de OK e digitou um nome com mais de 1 letra, salva mudanças
-            if(!flagActionModeCancel && subjectName.length() > 0){
-
-                //Primeira letra maiuscula
-                String name = Character.toUpperCase(subjectName.charAt(0)) + subjectName.substring(1).toLowerCase();
-
-                //Atualiza o nome do materia no model do materia
-                materia.setName(name);
-
-                if(!materia.isColored())
-                    materia.setRandomColor();
-
-                //Pega as classes que foram adicionadas/alteradas
-                List<Aula> aulas = addAulasFragment.getAdapter().getItems();
-
-                //Pega a referência do banco de dados
-                DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
-
-                //Se Não existe no DB ainda, então não possui ID
-                if(materia.getId() <= 0){
-                    db.createSubjectAndClasses(materia, aulas);
-                    List<model.Materia> materias = db.getAllSubjects();
-                    Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
-                }
-
-                //Se já existe no Banco, apenas da um update
-                else {
-                    db.updateSubjectAndClasses(materia, aulas);
-                }
-
-                ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
-                ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
-                ((MateriasActivity)getActivity()).checarHorario();
-
-
-            }
-
-            //if (flagEditFromHome)
-            getActivity().onBackPressed();
-            //else
-            //Volta pra tela anterior
-            //    getActivity().getSupportFragmentManager().popBackStackImmediate();
-
-
-        }
-    };
 
     //Cria uma nova classe
     public void addClass(View v){
