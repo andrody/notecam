@@ -1,4 +1,4 @@
-package photo;
+package camera;
 
 import android.app.Activity;
 import android.content.Intent;

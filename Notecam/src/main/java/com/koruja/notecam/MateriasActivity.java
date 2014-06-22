@@ -28,6 +28,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.commonsware.cwac.camera.SimpleCameraHost;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +37,13 @@ import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Aula;
 import model.Materia;
-import photo.PictureTaker;
+import camera.PictureTaker;
 import view_fragment.CameraFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
 
-public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener {
+public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener  {
 
     private ViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
@@ -597,12 +599,13 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     public void setDrawerLayout(DrawerLayout drawerLayout) {
         this.drawerLayout = drawerLayout;
     }
+
 }
 
 class PagerAdapter extends FragmentPagerAdapter {
 
     Context context;
-    private CameraFragment mFragmentAtPos1 = null;
+    private Fragment mFragmentAtPos1 = null;
     private Fragment mFragmentAtPos2 = null;
     final private FragmentManager mFragmentManager;
 
@@ -612,6 +615,8 @@ class PagerAdapter extends FragmentPagerAdapter {
         this.context = context;
     }
 
+    private final String TAG_CAMERA_FRAGMENT = "camera_fragment";
+
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
@@ -620,10 +625,13 @@ class PagerAdapter extends FragmentPagerAdapter {
             Singleton.materiasFragment = (MateriasFragment) fragment;
         }
         else if(position == 1){
+            CameraFragment c = null;
             if (mFragmentAtPos1 == null) {
-                mFragmentAtPos1 = CameraFragment.newInstance(false);
+                c = new CameraFragment(); //CameraFragment.newInstance(false);
+                c.setHost(new SimpleCameraHost(context));
+                mFragmentAtPos1 = c;
             }
-            Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
+            //Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
             return mFragmentAtPos1;
         }
         else if(position == 2){
