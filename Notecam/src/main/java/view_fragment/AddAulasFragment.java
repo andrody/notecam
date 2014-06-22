@@ -3,8 +3,8 @@ package view_fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.ListFragment;
+import android.app.DialogFragment;
+import android.app.ListFragment;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.ListView;
@@ -106,7 +106,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
                 args.putBoolean(Aula.STARTIME, true);
 
                 //Abre o dialog
-                dialogFragment.show(getActivity().getSupportFragmentManager(), "StartTime");
+                dialogFragment.show(getActivity().getFragmentManager(), "StartTime");
             }
 
             //Se for o botão de End time
@@ -115,7 +115,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
                 args.putBoolean(Aula.STARTIME, false);
 
                 //Abre o dialog
-                dialogFragment.show(getActivity().getSupportFragmentManager(), "EndTime");
+                dialogFragment.show(getActivity().getFragmentManager(), "EndTime");
             }
         }
 

@@ -11,6 +11,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -29,6 +30,7 @@ import model.Materia;
 import model.Topico;
 import photo.PictureTaker;
 import view_fragment.AddMateriaFragment;
+import view_fragment.CameraFragment;
 import view_fragment.GaleriaFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
@@ -61,6 +63,7 @@ public class Singleton {
     private static TopicosFragment topicosFragment = null;
     private static AddMateriaFragment addMateriaFragment = null;
     private static GaleriaFragment galeriaFragment = null;
+    private static CameraFragment cameraFragment = null;
 
     private static MateriasActivity materiasActivity;
     private static DatabaseHelper db;
@@ -160,6 +163,14 @@ public class Singleton {
         Singleton.topico_selecionado = topico_selecionado;
     }
 
+    public static CameraFragment getCameraFragment() {
+        return cameraFragment;
+    }
+
+    public static void setCameraFragment(CameraFragment cameraFragment) {
+        Singleton.cameraFragment = cameraFragment;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -211,7 +222,7 @@ public class Singleton {
 
     }
 
-    public static void changeFragments(final android.support.v4.app.Fragment fragment){
+    public static void changeFragments(final Fragment fragment){
         getMateriasActivity().runOnUiThread(new Runnable() {
 
             @Override
@@ -222,7 +233,7 @@ public class Singleton {
         });
     }
 
-    public static void mudarCorHeader(android.support.v4.app.Fragment fragment, int color){
+    public static void mudarCorHeader(Fragment fragment, int color){
         View fake_action_bar = fragment.getView().findViewById(R.id.fake_action_bar);
         fake_action_bar.setBackgroundColor(color);
     }

@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -178,7 +178,7 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
             //Volta para o fragment anterior
             case R.id.back:
                 //getActivity().onBackPressed();
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                getActivity().getFragmentManager().popBackStackImmediate();
                 break;
 
             //Volta para o fragment anterior

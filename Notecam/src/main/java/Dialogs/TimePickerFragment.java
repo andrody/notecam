@@ -3,7 +3,7 @@ package Dialogs;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -63,7 +63,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
            // id = R.id.mainLinearLayout_land;
          //  id = 0;
 
-        OnOkDialogListener fragment = ((AddMateriaFragment) getActivity().getSupportFragmentManager().findFragmentById(id)).getAddAulasFragment();
+        OnOkDialogListener fragment = ((AddMateriaFragment) getActivity().getFragmentManager().findFragmentById(id)).getAddAulasFragment();
         fragment.onOkDialog(hourOfDay,minute,position,startime);
 
 

@@ -2,7 +2,7 @@ package view_fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -158,9 +158,9 @@ public class AddTopicoFragment extends Fragment {
             //Volta pra tela anterior
             ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
-            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null);
+            getActivity().getFragmentManager().beginTransaction().addToBackStack(null);
             //getActivity().getSupportFragmentManager().beginTransaction().replace(AddTopicoFragment.this);
-            getActivity().getSupportFragmentManager().popBackStackImmediate();
+            getActivity().getFragmentManager().popBackStackImmediate();
             Singleton.singleMateriaFragment.reload(materia);
             Singleton.getTopicosFragment().reload(materia);
 

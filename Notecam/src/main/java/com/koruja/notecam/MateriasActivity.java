@@ -1,5 +1,7 @@
 package com.koruja.notecam;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +12,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,6 +36,7 @@ import helper.Singleton;
 import model.Aula;
 import model.Materia;
 import photo.PictureTaker;
+import view_fragment.CameraFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
@@ -159,7 +159,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         drawerView = findViewById(R.id.drawer);
         setViewPager((ViewPager) findViewById(R.id.pager));
 
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), this);
+        pagerAdapter = new PagerAdapter(getFragmentManager(), this);
 
         getViewPager().setAdapter(pagerAdapter);
         getViewPager().setOnPageChangeListener(this);
@@ -325,7 +325,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         return super.onOptionsItemSelected(item);
     }
 
-    DrawerListener myDrawerListener = new DrawerListener(){
+    DrawerLayout.DrawerListener myDrawerListener = new DrawerLayout.DrawerListener(){
 
         @Override
         public void onDrawerClosed(View drawerView) {
@@ -402,7 +402,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         seleciona_option_certo_no_menu(fragment);
 
         //Inicia a transação
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         if(fragment instanceof MateriasFragment){
             //Se clicou no menu Materias (enquanto estava com o viewpager invisivel)
@@ -413,7 +413,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             }
             getViewPager().setCurrentItem(0);
         }
-        else if(fragment instanceof SingleMateriaFragment){  }
 
         else {
             getViewPager().setVisibility(View.GONE);
@@ -433,7 +432,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
     public void reload(){
-        getViewPager().setAdapter(new PagerAdapter(getSupportFragmentManager(), this));
+        getViewPager().setAdapter(new PagerAdapter(getFragmentManager(), this));
         changeFragments(getMateriasFragment(), null);
 
         if(Singleton.getMateria_selecionada() != null)
@@ -603,7 +602,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 class PagerAdapter extends FragmentPagerAdapter {
 
     Context context;
-    private Fragment mFragmentAtPos1 = null;
+    private CameraFragment mFragmentAtPos1 = null;
     private Fragment mFragmentAtPos2 = null;
     final private FragmentManager mFragmentManager;
 
@@ -622,9 +621,9 @@ class PagerAdapter extends FragmentPagerAdapter {
         }
         else if(position == 1){
             if (mFragmentAtPos1 == null) {
-                mFragmentAtPos1 = SingleMateriaFragment.newInstance(Singleton.getMateria_selecionada().getId());
+                mFragmentAtPos1 = CameraFragment.newInstance(false);
             }
-            Singleton.singleMateriaFragment = (SingleMateriaFragment) mFragmentAtPos1;
+            Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
             return mFragmentAtPos1;
         }
         else if(position == 2){
