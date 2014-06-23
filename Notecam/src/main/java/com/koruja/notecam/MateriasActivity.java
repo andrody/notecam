@@ -426,7 +426,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 if(fragment_origin != null)
                     transaction.remove(fragment_origin);
             }
-            getViewPager().setCurrentItem(0);
+            //getViewPager().setCurrentItem(0);
         }
 
         else {

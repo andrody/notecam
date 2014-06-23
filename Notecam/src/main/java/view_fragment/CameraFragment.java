@@ -146,12 +146,5 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment i
         Drawable drawable = botao_take_picture.getDrawable();
         drawable.setColorFilter(Singleton.getMateria_selecionada().getColor(), PorterDuff.Mode.SRC_ATOP);
 
-        //Muda cor do botão de Labels
-        ImageView go_to_topicos = (ImageView) v.findViewById(R.id.go_to_topicos);
-        drawable = go_to_topicos.getDrawable();
-        drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-
-
-
     }
 }
