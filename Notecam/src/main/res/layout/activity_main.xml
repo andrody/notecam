@@ -19,11 +19,11 @@
     </LinearLayout>
 
 
-    <android.support.v4.view.ViewPager
+    <android.support.v4.view.SlowViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/pager">
-    </android.support.v4.view.ViewPager>
+    </android.support.v4.view.SlowViewPager>
 
     <!-- Menu Lateral -->
     <include layout="@layout/menu_lateral"/>

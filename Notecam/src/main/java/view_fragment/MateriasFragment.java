@@ -91,20 +91,22 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
                 }
                 else {
                     //Pede ao Activity para mudar fragment (Materia)
-                    if (mListener != null) {
+                    //if (mListener != null) {
 
                         //Pega a materia selecionada
                         model.Materia materia = (model.Materia)materiasAdapter.getItem(position);
                         Singleton.setMateria_selecionada(materia);
-                        ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+                        Singleton.getCameraFragment().reload(null);
+                        Singleton.getMateriasActivity().getViewPager().setCurrentItem(1, true);
+                        //((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
-                        ContentValues values = new ContentValues();
-                        values.put(Singleton.REPLACE_FRAGMENT, Singleton.MATERIA);
-                        values.put(Singleton.MATERIA_ID, materia.getId());
+                        //ContentValues values = new ContentValues();
+                        //values.put(Singleton.REPLACE_FRAGMENT, Singleton.MATERIA);
+                        //values.put(Singleton.MATERIA_ID, materia.getId());
 
-                        mListener.onFragmentInteraction(null, values);
+                        //mListener.onFragmentInteraction(null, values);
                     }
-                }
+                //}
             }
         });
 

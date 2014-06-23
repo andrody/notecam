@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.app.FragmentTransaction;
+import android.support.v4.view.SlowViewPager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -45,7 +46,7 @@ import view_fragment.TopicosFragment;
 
 public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener  {
 
-    private ViewPager viewPager = null;
+    private SlowViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
     View drawerView;
@@ -67,9 +68,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 Aula aula = Singleton.getMateria_em_aula().ChecarHorario();
                 if (aula == null){
                     Singleton.setMateria_em_aula(null);
-                    Singleton.singleMateriaFragment.reload(Singleton.getMateria_selecionada());
+                    Singleton.getCameraFragment().reload(null);
                     Singleton.getTopicosFragment().reload(Singleton.getMateria_selecionada());
-                    //Singleton.materiasFragment.updateSubTitle();
                     MateriasActivity.this.checarHorario();
                 }
             }
@@ -105,10 +105,23 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        // turn on the Navigation Drawer image;
-        // this is called in the LowerLevelFragments
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
+
+        // check to see if stack is empty
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStackImmediate();
+        }
+        else {
+            if(mPosition == 1){
+                getViewPager().setCurrentItem(0, true);
+            }
+            else if(mPosition == 2){
+                getViewPager().setCurrentItem(1, true);
+            }
+            else
+                super.onBackPressed();
+        }
+
+
     }
 
     //Referencia para colocar uma custom font
@@ -159,7 +172,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         setDrawerLayout((DrawerLayout)findViewById(R.id.drawer_layout));
         drawerView = findViewById(R.id.drawer);
-        setViewPager((ViewPager) findViewById(R.id.pager));
+        setViewPager((SlowViewPager) findViewById(R.id.pager));
 
         pagerAdapter = new PagerAdapter(getFragmentManager(), this);
 
@@ -377,7 +390,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     int materia_id = content.getAsInteger(Singleton.MATERIA_ID);
                     //singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
 
-                    Singleton.singleMateriaFragment.reload(db.getSubject(materia_id));
+                    //Singleton.getCameraFragment().reload(null);
                     getViewPager().getAdapter().notifyDataSetChanged();
                     getViewPager().setCurrentItem(1, true);
                     //TrocaFragments
@@ -421,7 +434,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
             //TrocaFragments
             //transaction.replace(R.id.mainLinearLayout, fragment);
-            transaction.add(R.id.mainLinearLayout, fragment);
+            transaction.replace(R.id.mainLinearLayout, fragment);
             mDrawerToggle.setDrawerIndicatorEnabled(false);
 
             //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
@@ -434,11 +447,12 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
     public void reload(){
-        getViewPager().setAdapter(new PagerAdapter(getFragmentManager(), this));
-        changeFragments(getMateriasFragment(), null);
 
-        if(Singleton.getMateria_selecionada() != null)
-            getSingleMateriasFragment().reload(Singleton.getMateria_selecionada());
+            //getViewPager().setAdapter(new PagerAdapter(getFragmentManager(), this));
+            changeFragments(getMateriasFragment(), null);
+
+        //if(Singleton.getMateria_selecionada() != null)
+         //   getSingleMateriasFragment().reload(Singleton.getMateria_selecionada());
 
     }
 
@@ -499,11 +513,11 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         return Singleton.singleMateriaFragment;
     }
 
-    public ViewPager getViewPager() {
+    public SlowViewPager getViewPager() {
         return viewPager;
     }
 
-    public void setViewPager(ViewPager viewPager) {
+    public void setViewPager(SlowViewPager viewPager) {
         this.viewPager = viewPager;
     }
 
@@ -583,6 +597,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             //Se for na posição 1 (Camera), vira fullscreen escondendo o statusbar
             case ViewPager.SCROLL_STATE_IDLE:
                 if(mPosition == 1) {
+                    //if(Singleton.getCameraFragment() != null)
+                    //    Singleton.getCameraFragment().reload(null);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
                 } else {
@@ -631,7 +647,7 @@ class PagerAdapter extends FragmentPagerAdapter {
                 c.setHost(new SimpleCameraHost(context));
                 mFragmentAtPos1 = c;
             }
-            //Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
+            Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
             return mFragmentAtPos1;
         }
         else if(position == 2){

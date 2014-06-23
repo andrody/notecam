@@ -128,6 +128,8 @@ public class Materia {
     public void popularTopicos(){
         DatabaseHelper db = ((MateriasActivity)context).getDb();
         setTopicos(db.getAllTopicosBySubject(this.getId()));
+
+
     }
 
     /*

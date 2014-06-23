@@ -595,6 +595,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
 
+        //Se não existe tópico cria um
+        if (topicos.isEmpty()) {
+            Topico t = new Topico(context);
+            t.setName("Geral");
+            t.setNumber(0);
+            t.setSubject_id((int) subject_id);
+            t.save(context);
+
+            topicos.add(t);
+        }
+
         return topicos;
     }
 

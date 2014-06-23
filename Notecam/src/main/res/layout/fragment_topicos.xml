@@ -47,7 +47,7 @@
                         android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="12dp"
-                        android:src="@drawable/ic_menu" />
+                        android:src="@drawable/abc_ic_ab_back_holo_light" />
 
                     <ImageView
                         android:id="@+id/icone_materia"

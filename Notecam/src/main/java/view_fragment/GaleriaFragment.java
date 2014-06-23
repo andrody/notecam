@@ -177,8 +177,8 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
             //Volta para o fragment anterior
             case R.id.back:
-                //getActivity().onBackPressed();
-                getActivity().getFragmentManager().popBackStackImmediate();
+                getActivity().onBackPressed();
+                //getActivity().getFragmentManager().popBackStackImmediate();
                 break;
 
             //Volta para o fragment anterior

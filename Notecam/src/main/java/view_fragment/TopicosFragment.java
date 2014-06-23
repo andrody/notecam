@@ -248,7 +248,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
             //Abre Drawer Menu
             case R.id.back:
-                ((MateriasActivity) getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
+                getActivity().onBackPressed();
                 break;
 
             //Abre tela de edição de matéria

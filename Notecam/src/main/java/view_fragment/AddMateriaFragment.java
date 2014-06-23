@@ -47,10 +47,12 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
             throw new RuntimeException(e);
         }
 
-        MateriasActivity activity = ((MateriasActivity)getActivity());
+        MateriasActivity activity = Singleton.getMateriasActivity();
         activity.reload();
         super.onDetach();
     }
+
+
 
     //Armazena o model do Subject em questão
     private Materia materia;
