@@ -52,6 +52,10 @@ public class Topico {
 
     }
 
+    public String get_path(){
+        return Singleton.NOTECAM_FOLDER + "/" + Singleton.getMateria_selecionada().getName() + "/" + Singleton.getMateria_selecionada().getName() + "-" + this.getName() + "/";
+    }
+
     public String getName() {
         return name;
     }

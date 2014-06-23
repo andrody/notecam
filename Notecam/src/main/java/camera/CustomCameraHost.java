@@ -41,7 +41,7 @@ public class CustomCameraHost extends SimpleCameraHost {
         return Singleton.getTopico_selecionado().getName() + "_" + get_proxima_foto_numero();
     }
 
-    public int get_proxima_foto_numero(){
+    static public int get_proxima_foto_numero(){
         int ultima_foto_numero = 0;
         if(Singleton.getTopico_selecionado().getFotos() != null && Singleton.getTopico_selecionado().getFotos().size() > 0)
             ultima_foto_numero = Integer.parseInt(Singleton.getTopico_selecionado().getFotos().get(0).getName().split("_")[1]) + 1;

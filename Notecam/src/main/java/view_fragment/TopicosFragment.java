@@ -22,6 +22,7 @@ import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
+import model.Foto;
 import model.Materia;
 import model.Topico;
 
@@ -235,6 +236,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
         TextView nome_materia = (TextView) getView().findViewById(R.id.nome_materia);
         nome_materia.setText(materia.getName());
+
 
 
 

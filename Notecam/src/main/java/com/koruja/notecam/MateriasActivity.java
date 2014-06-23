@@ -83,12 +83,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Singleton.getPictureTaker().OnActivityResult(requestCode, resultCode, data);
-        /*Uri currImageURI = data.getData();
-        String s = currImageURI.toString().substring(0, currImageURI.toString().length()-6);
-        s+= "/" + 784;
-        Intent intent = new Intent(Intent.ACTION_VIEW, currImageURI);
-        startActivity(intent);*/
+        if(requestCode == Singleton.IMAGE_PICKER_SELECT)
+            Singleton.getGaleriaFragment().onActivityResult2(requestCode, resultCode, data);
+
 
     }
 

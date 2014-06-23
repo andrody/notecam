@@ -44,9 +44,11 @@ public class Singleton {
     public static String TOPICO_ID = "topico_id";
     public static String REDIRECT = "redirect";
     public static String COLOR = "color";
+    public static int IMAGE_PICKER_SELECT = 2;
     public static int THUMBNAIL_SIZE = 100;
     public static String APPNAME = "Notecam";
-    public static final String NOTECAM_FOLDER = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" +APPNAME;
+    //public static final String NOTECAM_FOLDER = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" +APPNAME;
+    public static final String NOTECAM_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM" + "/" +APPNAME;
 
     public static String FRAGMENT_TYPE = "fragment_type";
     public static String FRAGMENT_TYPE_MATERIAS = "fragment_materias";
@@ -306,6 +308,8 @@ public class Singleton {
 
                         BaseAdapter adapter = (BaseAdapter) getTopicosFragment().getLista().getAdapter();
                         adapter.notifyDataSetChanged();
+
+                        getGaleriaFragment().reload();
                     }
                 }
         );
