@@ -34,6 +34,7 @@ import com.commonsware.cwac.camera.SimpleCameraHost;
 import java.util.ArrayList;
 import java.util.List;
 
+import camera.CustomCameraHost;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Aula;
@@ -120,7 +121,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             else
                 super.onBackPressed();
         }
-
 
     }
 
@@ -644,7 +644,7 @@ class PagerAdapter extends FragmentPagerAdapter {
             CameraFragment c = null;
             if (mFragmentAtPos1 == null) {
                 c = new CameraFragment(); //CameraFragment.newInstance(false);
-                c.setHost(new SimpleCameraHost(context));
+                c.setHost(new CustomCameraHost(context));
                 mFragmentAtPos1 = c;
             }
             Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);

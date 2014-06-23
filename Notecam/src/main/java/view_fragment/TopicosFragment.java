@@ -222,7 +222,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         if(Singleton.getTopico_selecionado() != null )
             Singleton.getTopico_selecionado().getFotos();
 
-        ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+        //((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
 
         getLista().setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));

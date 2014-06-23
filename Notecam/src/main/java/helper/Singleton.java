@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.View;
+import android.widget.BaseAdapter;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -305,6 +306,9 @@ public class Singleton {
 
                         if (topico != null)
                             topico.popularFotos();
+
+                        BaseAdapter adapter = (BaseAdapter) getTopicosFragment().getLista().getAdapter();
+                        adapter.notifyDataSetChanged();
                     }
                 }
         );
