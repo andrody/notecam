@@ -14,6 +14,7 @@ import android.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -262,17 +263,12 @@ public class Singleton {
         return icones;
     }
 
-    /*public static void move_fotos2(ArrayList<Foto> fotos, String novo_topico){
+    public static void move_fotos(ArrayList<Foto> fotos, String novo_topico){
         String photoFolder = Singleton.NOTECAM_FOLDER + "/" + getMateria_selecionada().getName() + "/" + getMateria_selecionada().getName() + "-";
 
         File storageDir = new File(photoFolder + getTopico_selecionado().getName());
         File novo_folder = new File(photoFolder + novo_topico);
         storageDir.renameTo(novo_folder);
-
-        //if (!storageDir.isDirectory())
-        //{
-         //   storageDir.mkdirs();
-        //}
 
         File old_file = null;
         for (Foto foto : fotos) {
@@ -280,17 +276,18 @@ public class Singleton {
             old_file = new File(foto.getPath());
 
             old_file.renameTo(new_file);
+
+            //Desescaneia arquivo antigo
+            deleteFile(foto.getPath());
+
             foto.setPath(new_file.getAbsolutePath());
             escanear_foto(foto, getTopico_selecionado());
         }
 
-        //if(old_file != null)
-          //  getDb().DeleteRecursive(old_file.getParentFile());
-
         if(getGaleriaFragment() != null)
             //Setando Titulo do Action Bar
             ((TextView)getGaleriaFragment().getView().findViewById(R.id.header_text)).setText(novo_topico);
-    }*/
+    }
 
 
     public static void escanear_foto(final Foto foto, final Topico topico){

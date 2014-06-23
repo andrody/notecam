@@ -12,9 +12,11 @@ import android.widget.TextView;
 
 import com.koruja.notecam.R;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import helper.Singleton;
+import model.Foto;
 import model.Materia;
 import model.Topico;
 
@@ -119,7 +121,8 @@ public class CreateTopicoDialog extends DialogFragment {
 
             //Se mudou o nome
             if(!name.equals(getTopico().getName())){
-                //Singleton.move_fotos2((java.util.ArrayList<model.Foto>) getTopico().getFotos(), name);
+
+                Singleton.move_fotos((java.util.ArrayList<model.Foto>) getTopico().getFotos(), name);
 
                 getTopico().setName(name);
                 getTopico().save(getActivity());
