@@ -70,7 +70,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 if (aula == null){
                     Singleton.setMateria_em_aula(null);
                     Singleton.getCameraFragment().reload(null);
-                    Singleton.getTopicosFragment().reload(Singleton.getMateria_selecionada());
+                    Singleton.getTopicosFragment().reload();
                     MateriasActivity.this.checarHorario();
                 }
             }
@@ -110,6 +110,8 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         // check to see if stack is empty
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStackImmediate();
+            if(mPosition == 2)
+                Singleton.getTopicosFragment().reload();
         }
         else {
             if(mPosition == 1){

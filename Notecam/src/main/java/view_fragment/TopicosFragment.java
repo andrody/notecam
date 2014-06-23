@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        reload(Singleton.getMateria_selecionada());
+        reload();
         setFakeActionModeOn(false);
     }
 
@@ -59,7 +60,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                 //Avisa que estamos no modo de edição (Selecionar e Deletar items)
                 setFakeActionModeOn(true);
 
-                reload(materia);
+                reload();
 
                 //Seta o checkbox do item que foi pressionado como selecionado automaticamente
                 ((CheckBox) v.findViewById(R.id.checkbox)).setChecked(true);
@@ -217,15 +218,19 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void reload(model.Materia nova_materia) {
-        this.materia = nova_materia;
-        if(Singleton.getTopico_selecionado() != null )
-            Singleton.getTopico_selecionado().getFotos();
+    public void reload() {
+        this.materia = Singleton.getMateria_selecionada();
+        //if(Singleton.getTopico_selecionado() != null )
+        //    Singleton.getTopico_selecionado().getFotos();
 
         //((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
+        TopicosAdapter adapter = (TopicosAdapter) getLista().getAdapter();
+        adapter.materia = this.materia;
+        adapter.items = materia.getTopicos();
+        adapter.notifyDataSetChanged();
 
-        getLista().setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
+        //getLista().setAdapter(new TopicosAdapter(getActivity(), Singleton.getMateria_selecionada()));
         Singleton.mudarCorHeader(this, materia.getColor());
 
         TextView nome_materia = (TextView) getView().findViewById(R.id.nome_materia);
@@ -301,7 +306,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         }
 
         materia.popularTopicos();
-        reload(materia);
+        reload();
     }
 
     public void open_create_topic_dialog() {

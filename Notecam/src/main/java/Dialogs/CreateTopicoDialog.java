@@ -74,7 +74,7 @@ public class CreateTopicoDialog extends DialogFragment {
                                 salvarTopico();
 
                                 materia.popularTopicos();
-                                Singleton.getTopicosFragment().reload(materia);
+                                Singleton.getTopicosFragment().reload();
                                 //((BaseAdapter)Singleton.getTopicosFragment().getLista().getAdapter()).notifyDataSetChanged();
 
                                 dialog.dismiss();

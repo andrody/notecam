@@ -31,6 +31,7 @@ import java.util.HashMap;
 import Dialogs.CreateTopicoDialog;
 import helper.Singleton;
 import model.Foto;
+import model.Topico;
 
 
 public class GaleriaFragment extends Fragment implements View.OnClickListener {
@@ -197,10 +198,36 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
             //Cancela o Fake Action Mode
             case R.id.deletar:
-                //deletar_materias();
+                deletar_fotos();
+
                 setFakeActionModeOn(false);
                 break;
         }
+    }
+
+
+    public void deletar_fotos(){
+
+        //Para cada foto da lista
+        for(Foto foto : Singleton.getTopico_selecionado().getFotos()) {
+
+            //Descobre em qual a view corresponde a esta foto
+            View view = galeriaAdapter.getView(foto.getId());
+
+            //Pega uma referência para o checkbox dele
+            CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox_galeria);
+
+            //Se ele estiver marcado
+            if(checkBox.isChecked()){
+
+                //Deleta essa foto
+                Singleton.getDb().deleteFoto(foto);
+            }
+        }
+
+        Singleton.getTopico_selecionado().popularFotos();
+        galeriaAdapter.fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
+        galeriaAdapter.notifyDataSetChanged();
     }
 
     @Override

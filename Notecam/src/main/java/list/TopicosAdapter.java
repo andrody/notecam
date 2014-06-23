@@ -26,11 +26,11 @@ import model.Topico;
 
 public class TopicosAdapter extends BaseAdapter {
     Context context;
-    Materia materia;
+    public Materia materia;
     private LayoutInflater mInflater;
     private HashMap<Integer, View> views = new HashMap<Integer, View>();
 
-    private List<Topico> items = new ArrayList<Topico>();
+    public List<Topico> items = new ArrayList<Topico>();
 
     public TopicosAdapter(Context context, Materia materia) {
         this.context = context;
