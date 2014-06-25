@@ -18,6 +18,9 @@ import android.widget.TextView;
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
@@ -155,6 +158,9 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         //Setando listener do botão de Menu
         view.findViewById(R.id.back).setOnClickListener(this);
 
+        //Setando listener do botão de Gerar PDF
+        view.findViewById(R.id.gerar_pdf).setOnClickListener(this);
+
         //Setando listener do botão de Editar Matéria
         view.findViewById(R.id.editar_materia).setOnClickListener(this);
 
@@ -269,6 +275,11 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
                 Singleton.changeFragments(Singleton.getAddMateriaFragment());
                 break;
 
+            //Gera pdf da matéria
+            case R.id.gerar_pdf:
+                Singleton.gerar_pdf(Singleton.getMateria_selecionada(), Singleton.getMateria_selecionada().getTopicos());
+                break;
+
             //Cria um novo tópico
             case R.id.adicionar_topico:
                 open_create_topic_dialog();
@@ -281,6 +292,12 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
             //Deleta os topicos
             case R.id.deletar:
                 deletar_topicos();
+                setFakeActionModeOn(false);
+                break;
+
+            //Deleta os topicos
+            case R.id.compartilhar:
+                gerar_pdf_apenas_selecionados();
                 setFakeActionModeOn(false);
                 break;
         }
@@ -309,6 +326,34 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
 
         materia.popularTopicos();
         reload();
+    }
+    public void gerar_pdf_apenas_selecionados() {
+        List<Topico> topicos_selecionados = new ArrayList<Topico>();
+
+        //Pega a referencia do banco do Singleton
+        DatabaseHelper db = Singleton.getDb();
+
+        //Para cada subject da lista
+        for (model.Topico topico : materia.getTopicos()) {
+
+            //Descobre em qual a view corresponde a este subject
+            View view = ((TopicosAdapter) getLista().getAdapter()).getView(topico.getId());
+
+            //Pega uma referência para o checkbox dele
+            CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
+
+            //Se ele estiver marcado
+            if (checkBox.isChecked()) {
+
+                //Deleta esse subject e todas as suas classes
+                topicos_selecionados.add(topico);
+            }
+        }
+
+        if(!topicos_selecionados.isEmpty()) {
+            Singleton.gerar_pdf(Singleton.getMateria_selecionada(), topicos_selecionados);
+        }
+
     }
 
     public void open_create_topic_dialog() {

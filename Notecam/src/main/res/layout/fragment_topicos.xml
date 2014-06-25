@@ -83,24 +83,35 @@
 
                 <ImageView
                     android:id="@+id/adicionar_topico"
-                    android:layout_width="60dp"
+                    android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingRight="0dp"
-                    android:src="@drawable/ic_action_new_label"
+                    android:src="@drawable/ic_action_new_thin"
                     android:layout_marginTop="2dp"
                     android:padding="5dp" />
 
                 <ImageView
                     android:id="@+id/editar_materia"
-                    android:layout_width="60dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:padding="8dp"
                     android:paddingRight="0dp"
                     android:src="@drawable/ic_action_edit" />
+
+                <ImageView
+                    android:id="@+id/gerar_pdf"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingRight="0dp"
+                    android:src="@drawable/ic_pdf"
+                    android:layout_marginTop="2dp"
+                    android:padding="8dp" />
 
             </LinearLayout>
         </RelativeLayout>
@@ -169,17 +180,19 @@
                     android:focusable="false">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/imageView"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_action_share" />
+                        android:src="@drawable/ic_pdf_dark"
+                        android:layout_marginRight="5dp"
+                        android:padding="4dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Compartilhar"
+                        android:text="Gerar PDF"
                         android:id="@+id/textView"
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"

@@ -132,7 +132,14 @@ public class PdfCreator {
 
 
         } catch (Exception e) {
-            Toast.makeText(Singleton.getMateriasActivity(), "Erro ao gerar pdf", Toast.LENGTH_SHORT).show();
+            Singleton.getMateriasActivity().runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(Singleton.getMateriasActivity(), "Erro ao gerar pdf", Toast.LENGTH_SHORT).show();
+
+                }
+            });
             e.printStackTrace();
         }
 

@@ -76,7 +76,7 @@
                     android:layout_width="60dp"
                     android:layout_height="52dp"
                     android:id="@+id/add_picture"
-                    android:src="@drawable/ic_action_new_picture"
+                    android:src="@drawable/ic_action_attachment"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingRight="0dp"
