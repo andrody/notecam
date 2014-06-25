@@ -60,6 +60,7 @@ public class PdfCreator {
     PdfWriter writer;
     BaseColor cor_materia;
     int MARGIN = 20;
+    int progresso = 0;
 
     private static String file;
     //private static String FILE = Singleton.NOTECAM_FOLDER + File.separator+ "p""firstPdf.pdf";
@@ -113,6 +114,7 @@ public class PdfCreator {
 
 
         this.file = Singleton.NOTECAM_FOLDER + File.separator + this.materia.getName() + File.separator + this.materia.getName() + ".pdf";
+        Singleton.getAsyncTask().updatePathGerado(file);
 
         //font_nome_da_materia.setColor(new BaseColor(materia.getColor()));
 
@@ -123,12 +125,11 @@ public class PdfCreator {
             document.open();
             document.setMargins(MARGIN,MARGIN,MARGIN,MARGIN);
             addMetaData(document);
+            updateProgress(5);
             addTitlePage(document);
             addContent(document);
             document.close();
 
-            //Retorna ao original
-            Collections.reverse(materia.getTopicos());
 
         } catch (Exception e) {
             Toast.makeText(Singleton.getMateriasActivity(), "Erro ao gerar pdf", Toast.LENGTH_SHORT).show();
@@ -136,6 +137,11 @@ public class PdfCreator {
         }
 
 
+    }
+
+    private void updateProgress(int i){
+        progresso = i;
+        Singleton.getAsyncTask().updateProgress(progresso);
     }
 
     private void addMetaData(Document document) {
@@ -161,6 +167,8 @@ public class PdfCreator {
         p_data.setAlignment(Element.ALIGN_RIGHT);
         document.add(p_data);
 
+        updateProgress(7);
+
         Paragraph preface = new Paragraph();
 
 
@@ -170,11 +178,17 @@ public class PdfCreator {
         titulo.setAlignment(Element.ALIGN_CENTER);
         preface.add(titulo);
 
+        updateProgress(10);
+
+
         //Adicionar "Topicos abordados"
         addEmptyLine(preface, 2);
         font_black_transparente.setSize(24);
         Paragraph subtitulo = new Paragraph("      Tópicos Abordados: ", font_black_transparente_30);
         preface.add(subtitulo);
+
+        updateProgress(14);
+
 
         /*Image image = null;
         try {
@@ -191,8 +205,13 @@ public class PdfCreator {
 
         addEmptyLine(preface, 1);
 
+        updateProgress(15);
+
+
         preface.add(create_topicos_title());
         addEmptyLine(preface, 10);
+        updateProgress(18);
+
         preface.add(create_logo_rodape());
 
         document.add(preface);
@@ -201,6 +220,8 @@ public class PdfCreator {
 
         // Start a new page
         document.newPage();
+
+        updateProgress(20);
     }
 
     public PdfPTable create_topicos_title() throws DocumentException, IOException {
@@ -269,7 +290,7 @@ public class PdfCreator {
         Paragraph p2 = new Paragraph(new Phrase("Gerado pelo app Notecam", font_rodape));
         p2.add(NEWLINE);
         p2.add(link);
-        cell2.addElement(p2);
+                cell2.addElement(p2);
         table.addCell(cell2);
 
         table.setHorizontalAlignment(Element.ALIGN_BOTTOM);
@@ -281,10 +302,13 @@ public class PdfCreator {
 
 
         int height = 80;
-        Collections.reverse(materia.getTopicos());
 
-        for(Topico topico : materia.getTopicos()) {
+        int progresso_por_topico = new Float(80 / this.topicos.size()).intValue();
+
+        for(Topico topico : this.topicos) {
             int i = 0;
+            int progresso_por_foto = new Float(progresso_por_topico / topico.getFotos().size()).intValue();
+
             for(Foto foto : topico.getFotos()) {
                 i++;
                 Rectangle title_back = new Rectangle(MARGIN, document.getPageSize().getHeight() - MARGIN, document.getPageSize().getWidth() - MARGIN, document.getPageSize().getHeight() - MARGIN - height);
@@ -328,7 +352,9 @@ public class PdfCreator {
 
                 document.add(content);
                 document.newPage();
+                updateProgress(progresso + progresso_por_foto);
             }
+
         }
 
 

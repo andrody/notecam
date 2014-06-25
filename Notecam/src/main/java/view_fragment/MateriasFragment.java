@@ -362,7 +362,8 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             //Abre Drawer Menu
             case R.id.menu:
                 //((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
-                new PdfCreator().criarPDF(Singleton.getMateria_selecionada(), Singleton.getMateria_selecionada().getTopicos());
+                //new PdfCreator().criarPDF(Singleton.getMateria_selecionada(), Singleton.getMateria_selecionada().getTopicos());
+                Singleton.gerar_pdf(Singleton.getMateria_selecionada(), Singleton.getMateria_selecionada().getTopicos());
                 break;
 
             //Adiciona nova materia

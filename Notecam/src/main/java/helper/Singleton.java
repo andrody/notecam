@@ -1,8 +1,11 @@
 package helper;
 
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +24,8 @@ import com.koruja.notecam.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import model.Foto;
 import model.Materia;
@@ -74,6 +79,11 @@ public class Singleton {
     private static boolean primeiraFoto = true;
 
     private static PictureTaker pictureTaker;
+
+    private static ProgressDialog progress;
+    private static  CustomAsyncTask asyncTask;
+
+
 
     public static void resetarSingleton(){
         singleMateriaFragment = null;
@@ -168,6 +178,22 @@ public class Singleton {
 
     public static void setCameraFragment(CameraFragment cameraFragment) {
         Singleton.cameraFragment = cameraFragment;
+    }
+
+    public static ProgressDialog getProgress() {
+        return progress;
+    }
+
+    public static void setProgress(ProgressDialog progress) {
+        Singleton.progress = progress;
+    }
+
+    public static CustomAsyncTask getAsyncTask() {
+        return asyncTask;
+    }
+
+    public static void setAsyncTask(CustomAsyncTask asyncTask) {
+        Singleton.asyncTask = asyncTask;
     }
 
     /**
@@ -313,5 +339,71 @@ public class Singleton {
                     }
                 }
         );
+
     }
+
+    public static void showProgressDialog(String mensagem){
+        setProgress(new ProgressDialog(getMateriasActivity()));
+
+        getProgress().setMessage(mensagem);
+        getProgress().setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        getProgress().setIndeterminate(false);
+        getProgress().setMax(100);
+        getProgress().show();
+    }
+
+
+
+    public static void gerar_pdf(final Materia materia,final List<Topico> topicos){
+        setAsyncTask(new CustomAsyncTask() {
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+                getProgress().setProgress(values[0]);
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showProgressDialog("Gerando PDF...");
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                getProgress().dismiss();
+
+
+
+                //Open PDF
+                File file = new File(this.path_gerado);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                getMateriasActivity().startActivity(intent);
+            }
+
+            @Override
+            protected String doInBackground(Context... params) {
+
+                PdfCreator pdfCreator = new PdfCreator();
+                Collections.reverse(topicos);
+                pdfCreator.criarPDF(materia, topicos);
+                return null;
+            }
+
+            @Override
+            public void updateProgress(int i) {
+                publishProgress(i);
+            }
+
+        });
+
+        getAsyncTask().execute();
+
+    }
+
+
 }
+
+
