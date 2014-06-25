@@ -735,7 +735,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public List<Foto> getAllFotos() {
         List<Foto> fotos = new ArrayList<Foto>();
-        String selectQuery = "SELECT  * FROM " + TABLE_FOTO + " ORDER BY " + KEY_CREATED_AT + " DESC";
+        String selectQuery = "SELECT  * FROM " + TABLE_FOTO + " ORDER BY " + KEY_CREATED_AT + " ASC";
 
         Log.e(LOG, selectQuery);
 
@@ -796,7 +796,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT  * FROM "
                 + TABLE_FOTO + " WHERE "
-                + KEY_FOTO_TOPICO + " = " + topico_id + " ORDER BY " + KEY_CREATED_AT + " DESC";
+                + KEY_FOTO_TOPICO + " = " + topico_id + " ORDER BY " + KEY_CREATED_AT + " ASC";
 
         Log.e(LOG, selectQuery);
 

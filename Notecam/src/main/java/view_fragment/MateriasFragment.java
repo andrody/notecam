@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import helper.DatabaseHelper;
+import helper.PdfCreator;
 import helper.Singleton;
 
 
@@ -360,7 +361,8 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
 
             //Abre Drawer Menu
             case R.id.menu:
-                ((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
+                //((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
+                new PdfCreator().criarPDF(Singleton.getMateria_selecionada(), Singleton.getMateria_selecionada().getTopicos());
                 break;
 
             //Adiciona nova materia

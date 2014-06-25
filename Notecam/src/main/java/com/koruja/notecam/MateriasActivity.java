@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -27,11 +28,15 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.commonsware.cwac.camera.SimpleCameraHost;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import camera.CustomCameraHost;
@@ -45,7 +50,11 @@ import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
 
+
+
+
 public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener  {
+
 
     private SlowViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
@@ -145,6 +154,10 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
         Singleton.resetarSingleton();
         Singleton.setDb(this.db);
 
@@ -461,7 +474,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
      */
     public void checarHorario(){
         Aula aula = null;
-        List<Materia> materias = db.getAllSubjects();
+        java.util.List<Materia> materias = db.getAllSubjects();
         for(Materia m: materias){
             aula = m.ChecarHorario();
             if(aula != null){
