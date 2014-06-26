@@ -347,11 +347,14 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
                 db.updateSubjectAndClasses(materia, aulas);
             }
 
+            Singleton.setMateria_selecionada(materia);
+            Singleton.setNova_materia_selecionada(true);
+
+
             ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
             ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
             ((MateriasActivity)getActivity()).checarHorario();
 
-            Singleton.setNova_materia_selecionada(true);
 
         }
 

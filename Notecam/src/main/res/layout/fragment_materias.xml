@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="fragment_materias"
-    tools:context="com.koruja.notecam.MateriasFragment">
+    tools:context="com.koruja.notecam.MateriasFragment"
+    android:background="@color/white">
 
     <!-- Conteudo -->
     <LinearLayout

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ import com.koruja.notecam.R;
 import helper.Singleton;
 
 public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment implements View.OnClickListener {
-    String flashMode=null;
+    boolean flashMode = false;
 
     @Override
     public void onResume() {
@@ -50,6 +51,7 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment i
         results.findViewById(R.id.change_flash).setOnClickListener(this);
         results.findViewById(R.id.change_topico).setOnClickListener(this);
         results.findViewById(R.id.take_picture).setOnClickListener(this);
+        results.findViewById(R.id.camera).setOnClickListener(this);
 
         reload(results);
 
@@ -77,6 +79,8 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment i
 
             //Apertou no botão de Mudar modo Flash
             case R.id.change_flash:
+                change_flash_mode();
+
                 break;
 
             //Apertou no botão de Mudar Topico
@@ -84,9 +88,25 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment i
                 mudar_topico();
                 break;
 
+            //Apertou no botão de Mudar Topico
+            case R.id.camera:
+                cancelAutoFocus();
+                autoFocus();
+                break;
+
         }
 
     }
+
+    void change_flash_mode(){
+        CheckBox flash_checkbox = (CheckBox) getView().findViewById(R.id.change_flash);
+        if (flash_checkbox.isChecked())
+            setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+        else
+            setFlashMode(Parameters.FLASH_MODE_OFF);
+    }
+
+
 
     public void mudar_topico(){
         //Coloca o view como final para ser acessível dentro da inner class

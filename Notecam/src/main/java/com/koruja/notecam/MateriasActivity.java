@@ -6,11 +6,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -28,16 +31,9 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.commonsware.cwac.camera.SimpleCameraHost;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import camera.CustomCameraHost;
 import helper.DatabaseHelper;
@@ -452,10 +448,21 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         }
 
         else {
+
+            //Troca cor de fundo das matérias
+            int sdk = android.os.Build.VERSION.SDK_INT;
+            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                findViewById(R.id.mainLinearLayout).setBackgroundDrawable(getScreenShot());
+            } else {
+                findViewById(R.id.mainLinearLayout).setBackground(getScreenShot());
+            }
+
             getViewPager().setVisibility(View.GONE);
+
 
             //TrocaFragments
             //transaction.replace(R.id.mainLinearLayout, fragment);
+            transaction.setCustomAnimations(R.animator.frag_slide_in_from_left, R.animator.frag_slide_out_from_right, R.animator.frag_slide_in_from_left, R.animator.frag_slide_out_from_right);
             transaction.replace(R.id.mainLinearLayout, fragment);
             mDrawerToggle.setDrawerIndicatorEnabled(false);
 
@@ -466,6 +473,19 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         //Efetuar a transação do novo fragment
         transaction.commit();
 
+    }
+
+    private Drawable getScreenShot() {
+        View view = getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap drawingCache = view.getDrawingCache();
+        Rect frame = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        //int statusBarHeight = frame.top;
+        Bitmap b = Bitmap.createBitmap(drawingCache, 0, 0, drawingCache.getWidth(), drawingCache.getHeight());
+        view.destroyDrawingCache();
+        return new BitmapDrawable(getResources(),b);
     }
 
     public void reload(){

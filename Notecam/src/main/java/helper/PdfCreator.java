@@ -314,7 +314,12 @@ public class PdfCreator {
 
         for(Topico topico : this.topicos) {
             int i = 0;
-            int progresso_por_foto = new Float(progresso_por_topico / topico.getFotos().size()).intValue();
+            int progresso_por_foto;
+
+            if(topico.getFotos().size() > 0)
+                progresso_por_foto = new Float(progresso_por_topico / topico.getFotos().size()).intValue();
+            else
+                progresso_por_foto = 1;
 
             for(Foto foto : topico.getFotos()) {
                 i++;
