@@ -25,6 +25,7 @@
         android:id="@+id/pager">
     </android.support.v4.view.SlowViewPager>
 
+
     <!-- Menu Lateral -->
     <include layout="@layout/menu_lateral"/>
 

@@ -40,7 +40,7 @@
     <include layout="@layout/separador_menu"/>
 
     <!-- Opção 2 - EXPORTAR -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <!--LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/menu_option_exportar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -65,7 +65,7 @@
             android:layout_gravity="center" />
     </LinearLayout>
 
-    <include layout="@layout/separador_menu"/>
+    <include layout="@layout/separador_menu"/-->
 
     <!-- Opção 3 - Sobre -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -74,7 +74,11 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment i
 
             //Apertou no botão de tirar foto
             case R.id.take_picture:
-                takePicture();
+                try {
+                    takePicture();
+                }catch(IllegalStateException e){
+                    e.printStackTrace();
+                }
                 break;
 
             //Apertou no botão de Mudar modo Flash

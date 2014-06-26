@@ -239,14 +239,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     public void setUpClickListenersMenu(){
         final LinearLayout materias = (LinearLayout)findViewById(R.id.menu_option_materias);
-        final LinearLayout exportar_tudo = (LinearLayout)findViewById(R.id.menu_option_exportar);
+        //final LinearLayout exportar_tudo = (LinearLayout)findViewById(R.id.menu_option_exportar);
         final LinearLayout contato = (LinearLayout)findViewById(R.id.menu_option_contato);
         final LinearLayout sobre = (LinearLayout)findViewById(R.id.menu_option_sobre);
         final LinearLayout ajuda = (LinearLayout)findViewById(R.id.menu_option_ajuda);
         final LinearLayout premium = (LinearLayout)findViewById(R.id.menu_option_premium);
 
         lista_options_menu.add(materias);
-        lista_options_menu.add(exportar_tudo);
+        //lista_options_menu.add(exportar_tudo);
         lista_options_menu.add(contato);
         lista_options_menu.add(sobre);
         lista_options_menu.add(ajuda);
