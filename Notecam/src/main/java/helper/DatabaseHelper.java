@@ -223,8 +223,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //    createTodoTag(subject_id, class_id);
         // }
 
-        ((MateriasActivity)context).getViewPager().getAdapter().notifyDataSetChanged();
-        ((MateriasActivity)context).getMateriasFragment().syncDB();
+        //((MateriasActivity)context).getViewPager().getAdapter().notifyDataSetChanged();
+        //((MateriasActivity)context).getMateriasFragment().syncDB();
         return subject_id;
     }
 

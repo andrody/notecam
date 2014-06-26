@@ -28,12 +28,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 import camera.CustomCameraHost;
 import helper.DatabaseHelper;
@@ -45,8 +48,9 @@ import view_fragment.CameraFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
-
-
+import welcome_fragments.WelcomeFragment_1;
+import welcome_fragments.WelcomeFragment_2;
+import welcome_fragments.WelcomeFragment_3;
 
 
 public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener  {
@@ -56,11 +60,12 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
     View drawerView;
-    PagerAdapter pagerAdapter;
+    public PagerAdapter pagerAdapter;
     private String mTitle = "Notecam";
     private boolean emptyFragments = false;
     private boolean primeira_vez = true;
     private int mPosition;
+    private boolean modo_welcome = false;
 
     //Handler para atualizar a cada 30 segundos
     Handler handler = new Handler();
@@ -90,13 +95,6 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == Singleton.IMAGE_PICKER_SELECT)
             Singleton.getGaleriaFragment().onActivityResult2(requestCode, resultCode, data);
-
-
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
 
@@ -122,7 +120,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
-            if(mPosition == 2)
+            if(mPosition == 2 && !isEmptyFragments())
                 Singleton.getTopicosFragment().reload();
         }
         else {
@@ -159,23 +157,14 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_main);
-
-
-
 
         Singleton.resetarSingleton();
         Singleton.setDb(this.db);
-
         Singleton.setMateriasActivity(this);
 
-        //Singleton.setActionBarTitle("Notecam2");
-
-
-        //Muda o ícone no Actionbar do app
-        /*int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if(SDK_INT >= 14)
-            getActionBar().setIcon(R.drawable.ic_launcher_stroke);*/
 
         //Seleciona a primeira matéria selecionada
         if(!db.getAllSubjects().isEmpty())
@@ -263,7 +252,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
                     //Se clicou na opção Matérias, troca de fragmentos para Materias
                     if(view.equals(materias)) {
-                        changeFragments(Singleton.materiasFragment, null);
+                        changeFragments(Singleton.getMateriasFragment(), null);
                     }
 
 
@@ -328,7 +317,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         getDrawerLayout().post(new Runnable() {
             @Override
             public void run() {
-                mDrawerToggle.syncState();
+                //mDrawerToggle.syncState();
             }
         });
 
@@ -424,7 +413,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             v.setBackgroundColor(0);
 
         //Se novo fragmento for o materiasFragment
-        if(Singleton.materiasFragment != null && fragment.equals(Singleton.materiasFragment)) {
+        if(Singleton.getMateriasFragment() != null && fragment.equals(Singleton.getMateriasFragment())) {
             //Seleciona a opção Materia
             lista_options_menu.get(0).setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
         }
@@ -437,7 +426,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         //Inicia a transação
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        if(fragment instanceof MateriasFragment){
+        if(fragment instanceof MateriasFragment || fragment instanceof WelcomeFragment_3){
             //Se clicou no menu Materias (enquanto estava com o viewpager invisivel)
             if(!(getViewPager().getVisibility() == View.VISIBLE)){
                 getViewPager().setVisibility(View.VISIBLE);
@@ -464,7 +453,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
             //transaction.replace(R.id.mainLinearLayout, fragment);
             transaction.setCustomAnimations(R.animator.frag_slide_in_from_left, R.animator.frag_slide_out_from_right, R.animator.frag_slide_in_from_left, R.animator.frag_slide_out_from_right);
             transaction.replace(R.id.mainLinearLayout, fragment);
-            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            //mDrawerToggle.setDrawerIndicatorEnabled(false);
 
             //Adiciona ele na pilha de retorno (Para quando apertar o botão de voltar, voltar para este fragment)
             transaction.addToBackStack(null);
@@ -491,7 +480,12 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     public void reload(){
 
             //getViewPager().setAdapter(new PagerAdapter(getFragmentManager(), this));
-            changeFragments(getMateriasFragment(), null);
+        if(isEmptyFragments())
+            changeFragments(pagerAdapter.mFragmentAtPos2, null);
+        else {
+            changeFragments(Singleton.getMateriasFragment(), null);
+
+        }
 
         //if(Singleton.getMateria_selecionada() != null)
          //   getSingleMateriasFragment().reload(Singleton.getMateria_selecionada());
@@ -546,7 +540,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
 
     public MateriasFragment getMateriasFragment() {
-        return Singleton.materiasFragment;
+        return Singleton.getMateriasFragment();
     }
 
 
@@ -567,8 +561,58 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
         return emptyFragments;
     }
 
+    List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
+    @Override
+    public void onAttachFragment (Fragment fragment) {
+        fragList.add(new WeakReference(fragment));
+    }
+
+    public List<Fragment> getActiveFragments() {
+        ArrayList<Fragment> ret = new ArrayList<Fragment>();
+        for(WeakReference<Fragment> ref : fragList) {
+            Fragment f = ref.get();
+            if(f != null) {
+                //if(f.isVisible()) {
+                    ret.add(f);
+                //}
+            }
+        }
+        return ret;
+    }
+
     public void setEmptyFragments(boolean emptyFragments) {
+        //Se acabou de criar uma matéria, Zera o pageview
+        if(this.emptyFragments && !emptyFragments) {
+            this.emptyFragments = emptyFragments;
+            recarregar_view_pager();
+        }
+
         this.emptyFragments = emptyFragments;
+
+
+    }
+
+    public void recarregar_view_pager(){
+        mPosition = 2;
+
+        pagerAdapter.mFragmentAtPos0 = null;
+        pagerAdapter.mFragmentAtPos1 = null;
+        pagerAdapter.mFragmentAtPos2 = null;
+
+        //getViewPager().getAdapter().notifyDataSetChanged();
+
+        //getViewPager().setAdapter(null);
+
+        //pagerAdapter = new PagerAdapter(getFragmentManager(), this);
+        FragmentManager fragmentManager = pagerAdapter.getmFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        List<Fragment> fragments = getActiveFragments();
+        for (Fragment f : fragments) {
+            transaction.remove(f);
+        }
+        transaction.commit();
+        getViewPager().setAdapter(pagerAdapter);
+        getViewPager().getAdapter().notifyDataSetChanged();
     }
 
     private String SCAN_PATH ;
@@ -635,30 +679,43 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        switch(state) {
-            //Se for na posição 1 (Camera), vira fullscreen escondendo o statusbar
-            case ViewPager.SCROLL_STATE_IDLE:
-                if(mPosition == 1) {
-                    //if(Singleton.getCameraFragment() != null)
-                    //    Singleton.getCameraFragment().reload(null);
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        if(!isEmptyFragments()) {
+            switch (state) {
+                //Se for na posição 1 (Camera), vira fullscreen escondendo o statusbar
+                case ViewPager.SCROLL_STATE_IDLE:
+                    if (mPosition == 1) {
+                        //if(Singleton.getCameraFragment() != null)
+                        //    Singleton.getCameraFragment().reload(null);
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-                    if(Singleton.isNova_materia_selecionada()){
-                        Singleton.getCameraFragment().reload(null);
-                        Singleton.setNova_materia_selecionada(false);
+                        if (Singleton.isNova_materia_selecionada()) {
+                            Singleton.getCameraFragment().reload(null);
+                            Singleton.setNova_materia_selecionada(false);
+                        }
+                    } else {
+                        if (mPosition == 2) {
+                            try {
+                                Singleton.getTopicosFragment().reload();
+                            }catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
+                            Singleton.setNova_materia_selecionada_topicos(false);
+
+                        }
+
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
                     }
-                } else {
-                    if(mPosition == 2){
-                        Singleton.getTopicosFragment().reload();
-                        Singleton.setNova_materia_selecionada_topicos(false);
-
-                    }
-
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-                }
+            }
         }
+        else
+            onWelcomePageScrollStateChanged(state);
+    }
+
+    public void onWelcomePageScrollStateChanged(int state){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
     }
 
     public DrawerLayout getDrawerLayout() {
@@ -674,8 +731,9 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 class PagerAdapter extends FragmentPagerAdapter {
 
     Context context;
-    private Fragment mFragmentAtPos1 = null;
-    private Fragment mFragmentAtPos2 = null;
+    public Fragment mFragmentAtPos0 = null;
+    public Fragment mFragmentAtPos1 = null;
+    public Fragment mFragmentAtPos2 = null;
     final private FragmentManager mFragmentManager;
 
     public PagerAdapter(FragmentManager fm, Context context) {
@@ -684,42 +742,95 @@ class PagerAdapter extends FragmentPagerAdapter {
         this.context = context;
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        return super.getItemPosition(object);
+        //return POSITION_NONE;
+    }
+
     private final String TAG_CAMERA_FRAGMENT = "camera_fragment";
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
-        if(position == 0){
-            fragment = MateriasFragment.newInstance();
-            Singleton.materiasFragment = (MateriasFragment) fragment;
-        }
-        else if(position == 1){
-            CameraFragment c = null;
-            if (mFragmentAtPos1 == null) {
-                c = new CameraFragment(); //CameraFragment.newInstance(false);
-                c.setHost(new CustomCameraHost(context));
-                mFragmentAtPos1 = c;
+
+        //Se houver matérias criadas vai para a tela normal
+        if(!Singleton.getMateriasActivity().isEmptyFragments()) {
+
+            if (position == 0) {
+                if(mFragmentAtPos0 == null) {
+                    mFragmentAtPos0 = MateriasFragment.newInstance();
+                    Singleton.setMateriasFragment((MateriasFragment) mFragmentAtPos0);
+               }
+                return mFragmentAtPos0;
+
+
+            } else if (position == 1) {
+
+                CameraFragment c = null;
+                if (mFragmentAtPos1 == null) {
+                    c = new CameraFragment(); //CameraFragment.newInstance(false);
+                    c.setHost(new CustomCameraHost(context));
+                    mFragmentAtPos1 = c;
+                }
+                Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
+                return mFragmentAtPos1;
+
+
+            } else if (position == 2) {
+
+                if (mFragmentAtPos2 == null) {
+                    mFragmentAtPos2 = TopicosFragment.newInstance(Singleton.getMateria_selecionada().getId());
+                }
+                Singleton.setTopicosFragment((TopicosFragment) mFragmentAtPos2);
+                return mFragmentAtPos2;
             }
-            Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
+
+            return mFragmentAtPos0;
+
+        }
+
+        //Se não, vai para a tela de boas vindas
+        else
+            return getWelcomeItem(position);
+    }
+
+    public Fragment getWelcomeItem(int position) {
+
+
+        if (position == 0) {
+            if(mFragmentAtPos0 == null) {
+                mFragmentAtPos0 = new WelcomeFragment_1();
+            }
+            return mFragmentAtPos0;
+
+
+        } else if (position == 1) {
+
+            if(mFragmentAtPos1 == null) {
+                mFragmentAtPos1 = new WelcomeFragment_2();
+            }
             return mFragmentAtPos1;
-        }
-        else if(position == 2){
-            if (mFragmentAtPos2 == null) {
-                mFragmentAtPos2 = TopicosFragment.newInstance(Singleton.getMateria_selecionada().getId());
+
+        } else if (position == 2) {
+
+            if(mFragmentAtPos2 == null) {
+                mFragmentAtPos2 = new WelcomeFragment_3();
             }
-            Singleton.setTopicosFragment((TopicosFragment) mFragmentAtPos2);
             return mFragmentAtPos2;
+
         }
-        return fragment;
+
+        return mFragmentAtPos0;
+
     }
 
     @Override
     public int getCount() {
-        if(((MateriasActivity)context).isEmptyFragments()){
-            return 1;
-        }
-        else
             return 3;
+    }
+
+    public FragmentManager getmFragmentManager() {
+        return mFragmentManager;
     }
 }
 

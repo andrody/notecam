@@ -62,7 +62,7 @@ public class Singleton {
     public static int DIRECT_EDIT_SUBJECT = 0;
     public static int DIRECT_ADD_SUBJECT = 1;
 
-    public static MateriasFragment materiasFragment = null;
+    private static MateriasFragment materiasFragment = null;
     public static SingleMateriaFragment singleMateriaFragment = null;
     private static TopicosFragment topicosFragment = null;
     private static AddMateriaFragment addMateriaFragment = null;
@@ -89,7 +89,8 @@ public class Singleton {
 
 
     public static void resetarSingleton(){
-        singleMateriaFragment = null;
+        //addMateriaFragment = null;
+        materiasFragment = null;
     }
 
     public static Materia getMateria_selecionada() {
@@ -220,6 +221,14 @@ public class Singleton {
 
     public static void setNova_materia_selecionada_topicos(boolean nova_materia_selecionada_topicos) {
         Singleton.nova_materia_selecionada_topicos = nova_materia_selecionada_topicos;
+    }
+
+    public static MateriasFragment getMateriasFragment() {
+        return materiasFragment;
+    }
+
+    public static void setMateriasFragment(MateriasFragment materiasFragment) {
+        Singleton.materiasFragment = materiasFragment;
     }
 
     /**

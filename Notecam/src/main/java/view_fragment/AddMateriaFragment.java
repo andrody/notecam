@@ -1,6 +1,7 @@
 package view_fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -31,6 +32,8 @@ import model.Materia;
 
 
 public class AddMateriaFragment extends Fragment implements View.OnClickListener {
+    private boolean criando_primeira_materia = false;
+
     @Override
     public void onDetach() {
         try {
@@ -44,8 +47,11 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
             throw new RuntimeException(e);
         }
 
+
         MateriasActivity activity = Singleton.getMateriasActivity();
-        activity.reload();
+
+        if(!criando_primeira_materia)
+            activity.reload();
         super.onDetach();
     }
 
@@ -81,7 +87,7 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         setHasOptionsMenu(true);
 
         // update the actionbar to show the up carat/affordance
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -139,8 +145,8 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
                 flagEditFromHome = true;
                 int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
 
-                materia.setId(getArguments().getInt(Materia.ID));
-                materia = db.getSubject(materia_id);
+                //materia.setId(getArguments().getInt(Materia.ID));
+                materia = db.getSubject(Singleton.getMateria_selecionada().getId());
 
                 assert view != null;
                 ((EditText)view.findViewById(R.id.editText_subject)).setText(materia.getName());
@@ -309,8 +315,6 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         iconDialog.setMateria(materia);
         iconDialog.show(getFragmentManager(), "Selecione um icone");
 
-
-
     }
 
     public void criar_ou_editar_materia(){
@@ -337,9 +341,9 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
 
             //Se Não existe no DB ainda, então não possui ID
             if(materia.getId() <= 0){
-                db.createSubjectAndClasses(materia, aulas);
-                List<model.Materia> materias = db.getAllSubjects();
-                Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
+                materia.setId(db.createSubjectAndClasses(materia, aulas));
+                //List<model.Materia> materias = db.getAllSubjects();
+                //Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
             }
 
             //Se já existe no Banco, apenas da um update
@@ -350,16 +354,27 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
             Singleton.setMateria_selecionada(materia);
             Singleton.setNova_materia_selecionada(true);
 
+            if(((MateriasActivity)getActivity()).isEmptyFragments()){
+                ((MateriasActivity)getActivity()).setEmptyFragments(false);
+                this.criando_primeira_materia = true;
+                Singleton.changeFragments(new MateriasFragment());
+            }
 
-            ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
-            ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
-            ((MateriasActivity)getActivity()).checarHorario();
 
+
+            ((MateriasActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+            if (!criando_primeira_materia) {
+                Singleton.getMateriasFragment().syncDB();
+                //((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
+                ((MateriasActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+                ((MateriasActivity) getActivity()).checarHorario();
+            }
 
         }
 
-        //if (flagEditFromHome)
-        getActivity().onBackPressed();
+        if (!criando_primeira_materia)
+            getActivity().onBackPressed();
+
         //else
         //Volta pra tela anterior
         //    getActivity().getSupportFragmentManager().popBackStackImmediate();

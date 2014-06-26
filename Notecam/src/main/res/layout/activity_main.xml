@@ -13,16 +13,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/background_light"
-        android:id="@+id/mainLinearLayout"
-        tools:context=".MainActivity" >
-
+        tools:context=".MainActivity"
+        android:id="@+id/mainLinearLayout">
     </LinearLayout>
 
 
     <android.support.v4.view.SlowViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/pager">
+        android:id="@+id/pager"
+        android:textAlignment="center">
     </android.support.v4.view.SlowViewPager>
 
 

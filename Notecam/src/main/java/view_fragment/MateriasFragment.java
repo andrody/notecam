@@ -274,7 +274,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             materiasAdapter.notifyDataSetChanged();
 
             ((MateriasActivity)getActivity()).setEmptyFragments(db.getAllSubjects().isEmpty());
-            ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+//            ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
             //Atualiza tela
             materiasAdapter.notifyDataSetChanged();
@@ -378,7 +378,9 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             //Cancela o Fake Action Mode
             case R.id.deletar:
                 deletar_materias();
-                setFakeActionModeOn(false);
+
+                if(!Singleton.getMateriasActivity().isEmptyFragments())
+                    setFakeActionModeOn(false);
                 break;
         }
     }
@@ -415,8 +417,12 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
 
         //Atualiza a tela
         syncDB();
-        if(db.getAllSubjects().isEmpty())
-            MateriasFragment.this.reload();
+
+        if(db.getAllSubjects().isEmpty()){
+            //MateriasFragment.this.reload();
+            Singleton.getMateriasActivity().setEmptyFragments(true);
+            Singleton.getMateriasActivity().recarregar_view_pager();
+        }
 
     }
 }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    tools:context=".MainActivity"
+    android:id="@+id/tela"
+    android:textAlignment="center">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="95dp"
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginBottom="20dp">
+
+            <FrameLayout
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/welcome_circulo"
+                android:id="@+id/frameLayout"
+                android:layout_marginRight="5dp" />
+
+            <FrameLayout
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/welcome_circulo"
+                android:id="@+id/frameLayout2"
+                android:layout_marginRight="5dp" />
+
+            <FrameLayout
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/welcome_circulo_preenchido"></FrameLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/custom_btn_flat_blue"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Criar uma matéria"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24dp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="110dp">
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Quando for estudar veja suas fotos ou gere um PDF"
+            android:id="@+id/textView2"
+            android:layout_gravity="top|center"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="25sp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:singleLine="false"
+            android:gravity="center"
+            android:layout_marginBottom="30dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/welcome_screen_3"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</FrameLayout>
