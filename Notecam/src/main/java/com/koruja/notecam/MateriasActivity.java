@@ -120,7 +120,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
-            if(mPosition == 2 && !isEmptyFragments())
+            if(mPosition == 2 && !isEmptyFragments() && Singleton.getTopicosFragment() != null)
                 Singleton.getTopicosFragment().reload();
         }
         else {
