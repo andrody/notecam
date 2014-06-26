@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 20;
 
     // Database Name
     private static final String DATABASE_NAME = "subjectsManager";
@@ -46,8 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_CREATED_AT = "created_at";
 
-    // SUBJECTS Table - column names
+    // MATERIAS Table - column names
     private static final String KEY_SUBJECT = "subject";
+    private static final String KEY_MATERIA_ORIGINAL_NAME = "materia_original_name";
     private static final String KEY_STATUS = "status";
     private static final String KEY_COLOR = "color";
     private static final String KEY_ICON = "icon";
@@ -71,6 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // TOPICOS Table - column names
     private static final String KEY_TOPICO_SUBJECT = "topico_subjectID";
     private static final String KEY_TOPICO_NAME = "topico_name";
+    private static final String KEY_ORIGINAL_TOPICO_NAME = "original_topico_name";
     private static final String KEY_TOPICO_NUMBER = "topico_number";
 
     // FOTOS Table - column names
@@ -86,6 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SUBJECT = "CREATE TABLE "
             + TABLE_SUBJECT + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_SUBJECT + " TEXT,"
+            + KEY_MATERIA_ORIGINAL_NAME + " TEXT,"
             + KEY_COLOR + " INTEGER,"
             + KEY_ICON + " INTEGER,"
             + KEY_CREATED_AT + " DATETIME"
@@ -117,6 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_TOPICO = "CREATE TABLE "
             + TABLE_TOPICO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_TOPICO_NAME + " TEXT,"
+            + KEY_ORIGINAL_TOPICO_NAME + " TEXT,"
             + KEY_TOPICO_SUBJECT + " INTEGER,"
             + KEY_TOPICO_NUMBER + " INTEGER,"
             + KEY_CREATED_AT + " INTEGER"
@@ -205,6 +209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT, materia.getName());
+        values.put(KEY_MATERIA_ORIGINAL_NAME, materia.getOriginal_name());
         values.put(KEY_COLOR, materia.getColorNumber());
         values.put(KEY_ICON, materia.getIcon_id());
         values.put(KEY_CREATED_AT, getDateTime());
@@ -242,6 +247,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Materia sb = new Materia(context);
         sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
+        sb.setOriginal_name((c.getString(c.getColumnIndex(KEY_MATERIA_ORIGINAL_NAME))));
         sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
         sb.setIcon_id((c.getInt(c.getColumnIndex(KEY_ICON))));
 
@@ -270,6 +276,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Materia sb = new Materia(context);
                 sb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 sb.setName((c.getString(c.getColumnIndex(KEY_SUBJECT))));
+                sb.setOriginal_name((c.getString(c.getColumnIndex(KEY_MATERIA_ORIGINAL_NAME))));
                 sb.setColor((c.getInt(c.getColumnIndex(KEY_COLOR))));
                 sb.setIcon_id((c.getInt(c.getColumnIndex(KEY_ICON))));
 
@@ -436,6 +443,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_TOPICO_NAME, topico.getName());
+        values.put(KEY_ORIGINAL_TOPICO_NAME, topico.getOriginal_name());
         values.put(KEY_TOPICO_SUBJECT, topico.getSubject_id());
         values.put(KEY_TOPICO_NUMBER, topico.getNumber());
 
@@ -501,6 +509,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Topico topico = new Topico(context);
         topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
+        topico.setOriginal_name((c.getString(c.getColumnIndex(KEY_ORIGINAL_TOPICO_NAME))));
         topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
         topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_TOPICO_SUBJECT))));
         topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
@@ -529,6 +538,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Topico topico = new Topico(context);
                 topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
+                topico.setOriginal_name((c.getString(c.getColumnIndex(KEY_ORIGINAL_TOPICO_NAME))));
                 topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
                 topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_SUBJECT))));
                 topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
@@ -584,6 +594,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Topico topico = new Topico(context);
                 topico.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 topico.setName((c.getString(c.getColumnIndex(KEY_TOPICO_NAME))));
+                topico.setOriginal_name((c.getString(c.getColumnIndex(KEY_ORIGINAL_TOPICO_NAME))));
                 topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
                 topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_TOPICO_SUBJECT))));
                 topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));

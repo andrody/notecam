@@ -408,6 +408,11 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+        if(!db.getAllSubjects().isEmpty()){
+            Singleton.setMateria_selecionada(db.getAllSubjects().get(0));
+            Singleton.setNova_materia_selecionada(true);
+        }
+
         //Atualiza a tela
         syncDB();
         if(db.getAllSubjects().isEmpty())

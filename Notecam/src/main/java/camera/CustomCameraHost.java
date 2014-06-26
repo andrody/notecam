@@ -21,7 +21,7 @@ public class CustomCameraHost extends SimpleCameraHost {
 
     @Override
     protected File getPhotoDirectory() {
-        return new File(Singleton.NOTECAM_FOLDER + "/" + Singleton.getMateria_selecionada().getName() + "/" + Singleton.getMateria_selecionada().getName() +  "-" + Singleton.getTopico_selecionado().getName());
+        return new File(Singleton.NOTECAM_FOLDER + "/" + Singleton.getMateria_selecionada().getOriginal_name() + "/" + Singleton.getMateria_selecionada().getOriginal_name() +  "-" + Singleton.getTopico_selecionado().getOriginal_name());
     }
 
     @Override
@@ -43,8 +43,10 @@ public class CustomCameraHost extends SimpleCameraHost {
 
     static public int get_proxima_foto_numero(){
         int ultima_foto_numero = 0;
-        if(Singleton.getTopico_selecionado().getFotos() != null && Singleton.getTopico_selecionado().getFotos().size() > 0)
-            ultima_foto_numero = Integer.parseInt(Singleton.getTopico_selecionado().getFotos().get(0).getName().split("_")[1]) + 1;
+        if(Singleton.getTopico_selecionado().getFotos() != null && Singleton.getTopico_selecionado().getFotos().size() > 0) {
+            int size = Singleton.getTopico_selecionado().getFotos().size();
+            ultima_foto_numero = Integer.parseInt(Singleton.getTopico_selecionado().getFotos().get(size - 1).getName().split("_")[1]) + 1;
+        }
         return ultima_foto_numero;
     }
 

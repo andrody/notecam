@@ -76,6 +76,9 @@ public class Singleton {
     private static Materia materia_em_aula = null;
     private static Topico topico_selecionado = null;
 
+    private static boolean nova_materia_selecionada = false;
+    private static boolean nova_materia_selecionada_topicos = false;
+
     private static boolean primeiraFoto = true;
 
     private static PictureTaker pictureTaker;
@@ -91,13 +94,16 @@ public class Singleton {
 
     public static Materia getMateria_selecionada() {
         return materia_selecionada;
+
     }
 
     public static void setMateria_selecionada(Materia materia) {
         materia_selecionada = materia;
-        if(singleMateriaFragment != null) {
-            singleMateriaFragment.reload(materia);
-        }
+        setNova_materia_selecionada(true);
+
+        //if(cameraFragment != null) {
+        //    cameraFragment.reload(null);
+        //}
     }
 
     public static PictureTaker getPictureTaker() {
@@ -194,6 +200,26 @@ public class Singleton {
 
     public static void setAsyncTask(CustomAsyncTask asyncTask) {
         Singleton.asyncTask = asyncTask;
+    }
+
+    public static boolean isNova_materia_selecionada() {
+        return nova_materia_selecionada;
+    }
+
+    public static void setNova_materia_selecionada(boolean nova_materia_selecionada) {
+        Singleton.nova_materia_selecionada = nova_materia_selecionada;
+
+        if (nova_materia_selecionada) {
+            Singleton.setNova_materia_selecionada_topicos(true);
+        }
+    }
+
+    public static boolean isNova_materia_selecionada_topicos() {
+        return nova_materia_selecionada_topicos;
+    }
+
+    public static void setNova_materia_selecionada_topicos(boolean nova_materia_selecionada_topicos) {
+        Singleton.nova_materia_selecionada_topicos = nova_materia_selecionada_topicos;
     }
 
     /**
@@ -335,7 +361,8 @@ public class Singleton {
                         BaseAdapter adapter = (BaseAdapter) getTopicosFragment().getLista().getAdapter();
                         adapter.notifyDataSetChanged();
 
-                        getGaleriaFragment().reload();
+                        if(getGaleriaFragment() != null)
+                            getGaleriaFragment().reload();
                     }
                 }
         );

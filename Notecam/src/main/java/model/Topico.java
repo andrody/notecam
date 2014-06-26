@@ -22,6 +22,7 @@ public class Topico {
     private int number = 0;
     private int subject_id;
     private String name = "";
+    private String original_name;
     private int createdAt;
     private Context context;
 
@@ -29,6 +30,10 @@ public class Topico {
         this.name = name;
         this.subject_id = subject_id;
         this.context = context;
+
+        if (this.original_name == null) {
+            this.original_name= name;
+        }
     }
 
     public Topico(Context context){ this.context = context;}
@@ -36,6 +41,10 @@ public class Topico {
     public Topico(Context context, String nome){
         this.name = nome;
         this.context = context;
+
+        if (this.original_name == null) {
+            this.original_name= name;
+        }
 
     }
 
@@ -62,6 +71,10 @@ public class Topico {
 
     public void setName(String name) {
         this.name = name;
+
+        if (this.original_name == null) {
+            this.original_name= name;
+        }
     }
 
     public int getId() {
@@ -124,5 +137,13 @@ public class Topico {
 
     public void delete(){
         Singleton.getDb().deleteTopico(this.getId());
+    }
+
+    public String getOriginal_name() {
+        return original_name;
+    }
+
+    public void setOriginal_name(String original_name) {
+        this.original_name = original_name;
     }
 }

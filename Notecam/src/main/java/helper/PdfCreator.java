@@ -113,7 +113,7 @@ public class PdfCreator {
         //Typeface mFace = Typeface.createFromAsset(Singleton.getMateriasActivity().getAssets(), "fonts/fontType.ttf");
 
 
-        this.file = Singleton.NOTECAM_FOLDER + File.separator + this.materia.getName() + File.separator + this.materia.getName() + ".pdf";
+        this.file = Singleton.NOTECAM_FOLDER + File.separator + this.materia.getOriginal_name() + File.separator + this.materia.getName() + ".pdf";
         Singleton.getAsyncTask().updatePathGerado(file);
 
         //font_nome_da_materia.setColor(new BaseColor(materia.getColor()));

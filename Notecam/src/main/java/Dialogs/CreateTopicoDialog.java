@@ -122,7 +122,7 @@ public class CreateTopicoDialog extends DialogFragment {
             //Se mudou o nome
             if(!name.equals(getTopico().getName())){
 
-                Singleton.move_fotos((java.util.ArrayList<model.Foto>) getTopico().getFotos(), name);
+                //Singleton.move_fotos((java.util.ArrayList<model.Foto>) getTopico().getFotos(), name);
 
                 getTopico().setName(name);
                 getTopico().save(getActivity());

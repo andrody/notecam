@@ -115,7 +115,17 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         // check to see if stack is empty
         if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStackImmediate();
+            try {
+                getFragmentManager().popBackStackImmediate();
+            }catch (IllegalStateException e){
+
+                //Se der erro reinicia o app
+                e.printStackTrace();
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
             if(mPosition == 2)
                 Singleton.getTopicosFragment().reload();
         }
@@ -613,7 +623,18 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                     //    Singleton.getCameraFragment().reload(null);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
+                    if(Singleton.isNova_materia_selecionada()){
+                        Singleton.getCameraFragment().reload(null);
+                        Singleton.setNova_materia_selecionada(false);
+                    }
                 } else {
+                    if(mPosition == 2){
+                        Singleton.getTopicosFragment().reload();
+                        Singleton.setNova_materia_selecionada_topicos(false);
+
+                    }
+
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
                 }

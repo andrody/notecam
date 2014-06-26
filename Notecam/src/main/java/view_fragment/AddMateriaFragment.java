@@ -6,10 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -259,7 +256,7 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         getAddAulasFragment().setMateria(materia);
 
         //Faz as transactions do fragmento das classes
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, getAddAulasFragment());
         transaction.commit();
 
@@ -354,6 +351,7 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
             ((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
             ((MateriasActivity)getActivity()).checarHorario();
 
+            Singleton.setNova_materia_selecionada(true);
 
         }
 

@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -231,7 +232,7 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
     public void add_picture(){
         Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, Singleton.IMAGE_PICKER_SELECT);
+        Singleton.getMateriasActivity().startActivityForResult(i, Singleton.IMAGE_PICKER_SELECT);
 
         // To open up a gallery browser
         //Intent intent = new Intent();
@@ -242,14 +243,26 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
 
     /** * Photo Selection result */
     public void onActivityResult2(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getActivity(), "falha ao mover arquivo", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "falha ao mover arquivo", Toast.LENGTH_SHORT).show();
         if (requestCode == Singleton.IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             Foto new_foto = new Foto(Singleton.getTopico_selecionado().getName() + "_" + CustomCameraHost.get_proxima_foto_numero(),
                     "", Singleton.getTopico_selecionado());
             new_foto.setUri(uri);
+            try {
+                new_foto.setPath(getRealPathFromURI(uri));
+            }catch (IllegalStateException e){
+                Toast.makeText(getActivity(), "Falha! Selecione somente arquivos locais.", Toast.LENGTH_SHORT).show();
+            }
             new_foto.save();
+
+            //Singleton.escanear_foto(new_foto, Singleton.getTopico_selecionado());
+
+
+
             Singleton.getTopico_selecionado().popularFotos();
+            galeriaAdapter.fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
+            galeriaAdapter.notifyDataSetChanged();
 
 
             /*InputStream is = null;
@@ -314,14 +327,18 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
             //Descobre em qual a view corresponde a esta foto
             View view = galeriaAdapter.getView(foto.getId());
 
-            //Pega uma referência para o checkbox dele
-            CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox_galeria);
+            try {
+                //Pega uma referência para o checkbox dele
+                CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox_galeria);
 
-            //Se ele estiver marcado
-            if(checkBox.isChecked()){
+                //Se ele estiver marcado
+                if (checkBox.isChecked()) {
 
-                //Deleta essa foto
-                Singleton.getDb().deleteFoto(foto);
+                    //Deleta essa foto
+                    Singleton.getDb().deleteFoto(foto);
+                }
+            }catch (NullPointerException e){
+
             }
         }
 
@@ -497,8 +514,24 @@ class GaleriaAdapter extends BaseAdapter {
             exif = new ExifInterface(item.getPath());
             byte[] imageData=exif.getThumbnail();
 
+
+            Bitmap thumbnail = null;
+
+            if(imageData == null){
+                final int THUMBSIZE = 128;
+
+                try {
+                    //thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(item.getPath()),THUMBSIZE, THUMBSIZE);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(Singleton.getMateriasActivity().getContentResolver(), item.getUri());
+                    thumbnail = ThumbnailUtils.extractThumbnail(bitmap, THUMBSIZE, THUMBSIZE);
+                }catch (SecurityException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Singleton.getMateriasActivity(), "Erro ao carregar uma imagem, excluindo ela...", Toast.LENGTH_SHORT).show();
+                }
+            }
+
             //Se imagem foi deletada por algum motivo
-            if (imageData == null) {
+            if (imageData == null && thumbnail == null) {
                 item.delete();
                 Singleton.getTopico_selecionado().popularFotos();
                 fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
@@ -507,7 +540,9 @@ class GaleriaAdapter extends BaseAdapter {
             }
             else {
 
-                Bitmap thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                if(thumbnail == null)
+                    thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+
                 Drawable ob = new BitmapDrawable(context.getResources(), thumbnail);
 
                 //Troca cor de fundo das matérias

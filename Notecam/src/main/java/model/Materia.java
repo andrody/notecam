@@ -32,11 +32,16 @@ public class Materia {
     private int icon_id = -1;
     private int numero_fotos = 0;
     private String name = "";
+    private String original_name;
     Context context;
 
     public Materia(String name, Context context){
         this.name = name;
         this.context = context;
+
+        if (this.original_name == null) {
+            this.original_name= name;
+        }
     }
     public Materia(Context context){
         this.context = context;
@@ -48,6 +53,10 @@ public class Materia {
 
     public void setName(String name) {
         this.name = name;
+
+        if (this.original_name == null) {
+            this.original_name= name;
+        }
     }
 
     public int getId() {
@@ -174,5 +183,13 @@ public class Materia {
 
     public void setTopicos(List<Topico> topicos) {
         this.topicos = topicos;
+    }
+
+    public String getOriginal_name() {
+        return original_name;
+    }
+
+    public void setOriginal_name(String original_name) {
+        this.original_name = original_name;
     }
 }
