@@ -1,10 +1,12 @@
 package helper;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,6 +59,9 @@ public class Singleton {
 
     public static String FRAGMENT_TYPE = "fragment_type";
     public static String FRAGMENT_TYPE_MATERIAS = "fragment_materias";
+
+
+    public static String PRO_VERSION_PACKAGE = "instituto.iracema.portactil";
     public static String FRAGMENT_TYPE_MATERIA = "fragment_materia";
 
     public static int DIRECT_EDIT_SUBJECT = 0;
@@ -85,6 +90,35 @@ public class Singleton {
 
     private static ProgressDialog progress;
     private static  CustomAsyncTask asyncTask;
+
+    public static boolean isPaidVersion(){
+        return false;
+    }
+
+    public static void show_only_pro_dialog(String message, String yes_button, String no_button){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getMateriasActivity());
+        builder.setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton(yes_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        //final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                        try {
+                            getMateriasActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PRO_VERSION_PACKAGE)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            getMateriasActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE)));
+                        }
+                    }
+                })
+                .setNegativeButton(no_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 
 
 
@@ -323,7 +357,15 @@ public class Singleton {
         icones.add(R.drawable.lab);
         icones.add(R.drawable.ic_sobre);
         icones.add(R.drawable.ic_salvar);
+        icones.add(R.drawable.ic_salvar);
+        icones.add(R.drawable.ic_salvar);
+        icones.add(R.drawable.ic_salvar);
+        icones.add(R.drawable.ic_salvar);
         return icones;
+    }
+
+    public static int get_icon(int i){
+        return getListaIcones().get(i);
     }
 
     public static void move_fotos(ArrayList<Foto> fotos, String novo_topico){

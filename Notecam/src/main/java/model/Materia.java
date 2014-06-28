@@ -95,14 +95,26 @@ public class Materia {
 
     public void setRandomColor() {
         Random random = new Random();
-        int r = (random.nextInt(Singleton.getListaCores().size()));
-        setColor(Singleton.getListaCores().get(r));
+
+        int numero;
+        if(Singleton.isPaidVersion())
+            numero = random.nextInt(Singleton.getListaCores().size());
+        else
+            numero = random.nextInt(4);
+
+        setColor(Singleton.getListaCores().get(numero));
     }
 
     public void setRandomIcon() {
         Random random = new Random();
-        int r = (random.nextInt(Singleton.getListaIcones().size()));
-        setIcon_id(Singleton.getListaIcones().get(r));
+
+        int numero;
+        if(Singleton.isPaidVersion())
+            numero = random.nextInt(Singleton.getListaIcones().size());
+        else
+            numero = random.nextInt(4);
+
+        setIcon_id(numero);
     }
 
     public boolean isColored(){
@@ -170,7 +182,7 @@ public class Materia {
     }
 
     public int getIcon_id() {
-        return icon_id;
+        return Singleton.get_icon(icon_id);
     }
 
     public void setIcon_id(int icon_id) {

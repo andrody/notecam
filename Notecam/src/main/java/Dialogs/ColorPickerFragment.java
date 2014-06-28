@@ -1,5 +1,6 @@
 package Dialogs;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -25,7 +26,7 @@ import model.Materia;
  * Dialog para escolher o Start Time ou End Time da Classe
  */
 public class ColorPickerFragment extends DialogFragment {
-    int color;
+    public static int ITEMS_LIBERADOS_FREE = 3;
     GridView gridview;
     private model.Materia materia;
 
@@ -57,17 +58,26 @@ public class ColorPickerFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //Seta a cor da matéria
-                getMateria().setColor(adapter.cores.get(position));
+                if(Singleton.isPaidVersion() || position <= ITEMS_LIBERADOS_FREE) {
 
-                //Faz o header mudar para a cor selecionada
-                Singleton.mudarCorHeader(Singleton.getAddMateriaFragment(), getMateria().getColor());
+                    //Seta a cor da matéria
+                    getMateria().setColor(adapter.cores.get(position));
 
-                //Faz a cor dos icones de deletar das aulas mudarem de cor também
-                Singleton.getAddMateriaFragment().getAddAulasFragment().getAdapter().notifyDataSetChanged();
+                    //Faz o header mudar para a cor selecionada
+                    Singleton.mudarCorHeader(Singleton.getAddMateriaFragment(), getMateria().getColor());
 
-                //Seleciona a cor nesse Dialog
-                adapter.notifyDataSetChanged();
+                    //Faz a cor dos icones de deletar das aulas mudarem de cor também
+                    Singleton.getAddMateriaFragment().getAddAulasFragment().getAdapter().notifyDataSetChanged();
+
+                    //Seleciona a cor nesse Dialog
+                    adapter.notifyDataSetChanged();
+
+                }
+                else {
+                    Singleton.show_only_pro_dialog("DESCULPAAA!!\n\n Essa cor é apenas para a versão completa, senhor usuario! \n" +
+                            "\nGostaria de pegar a " +
+                            "VERSÃO COMPLETA?", "Sim!!!", "Agora não...");
+                }
 
                 //Fecha a tela assim que clicar em uma cor
                 dismiss();
@@ -116,11 +126,13 @@ class ColorAdapter extends BaseAdapter {
     class ViewHolder {
         View background;
         View tick_icon;
+        View paid;
         Drawable drawable;
 
         ViewHolder(View v) {
             background = v.findViewById(R.id.grid_back);
             tick_icon = v.findViewById(R.id.tick_icon);
+            paid = v.findViewById(R.id.paid);
             drawable  = context.getResources().getDrawable(R.drawable.circle_background);
         }
     }
@@ -146,7 +158,17 @@ class ColorAdapter extends BaseAdapter {
         if(cores.get(position) == materia.getColor())
             holder.tick_icon.setVisibility(View.VISIBLE);
         else
-            holder.tick_icon.setVisibility(View.INVISIBLE);
+            holder.tick_icon.setVisibility(View.GONE);
+
+        //Se for versão free, só libera 4 tipos de cores
+        if(!Singleton.isPaidVersion() && position > ColorPickerFragment.ITEMS_LIBERADOS_FREE) {
+            holder.paid.setVisibility(View.VISIBLE);
+        }
+        //Versão Completa libera todas cores
+        else {
+            holder.paid.setVisibility(View.GONE);
+        }
+
 
 
         //Paint paint = new Paint();

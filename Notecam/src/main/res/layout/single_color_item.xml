@@ -22,7 +22,16 @@
                 android:id="@+id/tick_icon"
                 android:background="@drawable/ic_tick"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="2"></FrameLayout>
+                android:layout_weight="2"
+                android:visibility="gone"></FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/paid"
+                android:background="@drawable/ic_action_del"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="2" />
 
         </LinearLayout>
 
