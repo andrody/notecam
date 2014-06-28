@@ -1,14 +1,13 @@
 apply plugin: 'android'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
-
+    compileSdkVersion 20
+    buildToolsVersion '20.0.0'
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 19
+        minSdkVersion 13
+        targetSdkVersion 20
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
     }
     buildTypes {
         release {
@@ -16,21 +15,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:19.1.0'
-    compile 'com.android.support:gridlayout-v7:19.1.0'
-    compile 'com.android.support:support-v4:19.1.0'
-    compile 'com.android.support:support-v13:19.1.0'
+    compile 'com.android.support:appcompat-v7:20.+'
+    compile 'com.android.support:support-v13:20.+'
+    compile 'com.android.support:support-v4:20.+'
+    compile 'com.android.support:gridlayout-v7:20.+'
+    compile 'com.google.android.gms:play-services:4.+'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/itextg-5.5.1.jar')
 }
 
 repositories {
-    maven {
-        url "https://repo.commonsware.com.s3.amazonaws.com"
-    }
+    maven { url 'https://repo.commonsware.com.s3.amazonaws.com' }
 }
 
 dependencies {

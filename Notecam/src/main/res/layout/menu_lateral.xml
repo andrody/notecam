@@ -10,7 +10,78 @@
     <!-- Opção 1 - Materias -->
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="30dp"></FrameLayout>
+        android:layout_height="200dp"
+        android:background="@color/background_header"
+        android:id="@+id/notecam">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="notecam"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textSize="30dp"
+                style="@style/MagicTextLayer"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/MagicTextLayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="PRO"
+                android:id="@+id/pro"
+                android:layout_gravity="center"
+                android:textColor="@color/verde"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/menu_option_premium"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_premium" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/versao_premium"
+            android:textColor="@color/menu_text_b"
+            android:textSize="18dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/menu_option_materias"
@@ -19,7 +90,8 @@
         android:layout_gravity="start"
         android:orientation="horizontal"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="35dp"
@@ -31,7 +103,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/materias"
+            android:text="Abrir diretório"
             android:textColor="@color/menu_text_b"
             android:textSize="18dp"
             android:layout_gravity="center" />
@@ -151,30 +223,6 @@
     <include layout="@layout/separador_menu"/>
 
     <!-- Opção 1 - Premium -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/menu_option_premium"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="start"
-        android:orientation="horizontal"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp" >
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_premium" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/versao_premium"
-            android:textColor="@color/menu_text_b"
-            android:textSize="18dp"
-            android:layout_gravity="center" />
-    </LinearLayout>
 
     <include layout="@layout/separador_menu"/>
 

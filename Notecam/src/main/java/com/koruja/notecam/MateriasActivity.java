@@ -2,6 +2,7 @@ package com.koruja.notecam;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +16,8 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.app.FragmentTransaction;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.SlowViewPager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -32,18 +32,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import camera.CustomCameraHost;
+import camera.PictureTaker;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Aula;
 import model.Materia;
-import camera.PictureTaker;
 import view_fragment.CameraFragment;
 import view_fragment.MateriasFragment;
 import view_fragment.SingleMateriaFragment;
@@ -53,7 +55,7 @@ import welcome_fragments.WelcomeFragment_2;
 import welcome_fragments.WelcomeFragment_3;
 
 
-public class MateriasActivity extends ActionBarActivity implements Singleton.OnFragmentInteractionListener, MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener  {
+public class MateriasActivity extends ActionBarActivity implements MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener  {
 
 
     private SlowViewPager viewPager = null;
@@ -227,39 +229,67 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
     }
 
     public void setUpClickListenersMenu(){
-        final LinearLayout materias = (LinearLayout)findViewById(R.id.menu_option_materias);
+        final LinearLayout folder = (LinearLayout)findViewById(R.id.menu_option_materias);
         //final LinearLayout exportar_tudo = (LinearLayout)findViewById(R.id.menu_option_exportar);
         final LinearLayout contato = (LinearLayout)findViewById(R.id.menu_option_contato);
         final LinearLayout sobre = (LinearLayout)findViewById(R.id.menu_option_sobre);
         final LinearLayout ajuda = (LinearLayout)findViewById(R.id.menu_option_ajuda);
         final LinearLayout premium = (LinearLayout)findViewById(R.id.menu_option_premium);
+        final TextView pro = (TextView)findViewById(R.id.pro);
+        //final LinearLayout notecam = (LinearLayout)findViewById(R.id.notecam);
 
-        lista_options_menu.add(materias);
+        lista_options_menu.add(folder);
         //lista_options_menu.add(exportar_tudo);
         lista_options_menu.add(contato);
         lista_options_menu.add(sobre);
         lista_options_menu.add(ajuda);
         lista_options_menu.add(premium);
 
+
+        if(!Singleton.isPaidVersion()) {
+            pro.setText("Free Version");
+            premium.setVisibility(View.VISIBLE);
+        }
+
         for(final LinearLayout view : lista_options_menu) {
             view.setOnClickListener(new OnClickListener(){
                 @Override
                 public void onClick(View arg0) {
-                    for(LinearLayout v : lista_options_menu)
-                        v.setBackgroundColor(0);
-                    view.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
+                    //for(LinearLayout v : lista_options_menu)
+                    //    v.setBackgroundColor(0);
+                    //view.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
                     getDrawerLayout().closeDrawers();
 
-                    //Se clicou na opção Matérias, troca de fragmentos para Materias
-                    if(view.equals(materias)) {
-                        changeFragments(Singleton.getMateriasFragment(), null);
+                    //Se clicou na opção abrir diretórios
+                    if(view.equals(folder)) {
+                        Uri startDir = Uri.fromFile(new File(Singleton.NOTECAM_FOLDER));
+                        Intent intent = new Intent();
+                        intent.setData(startDir);
+                        intent.setType("text/csv");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivity(Intent.createChooser(intent, "Escolha como abrir o diretório"));
                     }
 
 
                     //Se clicou na opção Sobre nós, vai para o site da koruja
-                    if(view.equals(sobre)||view.equals(premium)|| view.equals(ajuda) ) {
+                    if(view.equals(sobre)) {
                         startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("http://koruja.herokuapp.com/")));
+                                Uri.parse("http://notecam.co/about")));
+                    }
+
+                    //Se clicou na opção Sobre nós, vai para o site da koruja
+                    if(view.equals(ajuda) ) {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("http://notecam.co/help")));
+                    }
+
+                    //Se clicou na opção Virar Premium, vai para o site da koruja
+                    if(view.equals(premium)) {
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + Singleton.PRO_VERSION_PACKAGE)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + Singleton.PRO_VERSION_PACKAGE)));
+                        }
                     }
 
                     //Se clicou na opção Contato, abre leitor de email
@@ -383,7 +413,7 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
 
         }};
 
-    @Override
+    /*@Override
     public void onFragmentInteraction(Uri uri, ContentValues content) {
         if (content != null) {
             if(content.containsKey(Singleton.TITLE))
@@ -405,18 +435,18 @@ public class MateriasActivity extends ActionBarActivity implements Singleton.OnF
                 }
             }
         }
-    }
+    }*/
 
     public void seleciona_option_certo_no_menu(Fragment fragment){
         //Limpa seleção
-        for(LinearLayout v : lista_options_menu)
+        /*for(LinearLayout v : lista_options_menu)
             v.setBackgroundColor(0);
 
         //Se novo fragmento for o materiasFragment
         if(Singleton.getMateriasFragment() != null && fragment.equals(Singleton.getMateriasFragment())) {
             //Seleciona a opção Materia
             lista_options_menu.get(0).setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
-        }
+        }*/
 
     }
 

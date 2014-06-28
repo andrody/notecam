@@ -2,12 +2,14 @@ package helper;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -20,7 +22,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
@@ -44,6 +49,9 @@ import view_fragment.TopicosFragment;
  * Created by Andrew on 19-Apr-14.
  */
 public class Singleton {
+    //ads related
+    public static String ID_BANNER_1 = "ca-app-pub-5295640122765680/7055771450";
+
     public static String TITLE = "title";
     public static String REPLACE_FRAGMENT = "replace_fragment";
     public static String MATERIA = "materia";
@@ -55,13 +63,13 @@ public class Singleton {
     public static int THUMBNAIL_SIZE = 100;
     public static String APPNAME = "Notecam";
     //public static final String NOTECAM_FOLDER = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" +APPNAME;
-    public static final String NOTECAM_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM" + "/" +APPNAME;
+    public static final String NOTECAM_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM" + "/" + APPNAME;
 
     public static String FRAGMENT_TYPE = "fragment_type";
     public static String FRAGMENT_TYPE_MATERIAS = "fragment_materias";
 
 
-    public static String PRO_VERSION_PACKAGE = "instituto.iracema.portactil";
+    public static String PRO_VERSION_PACKAGE = "com.korujastudios.notecamprokey";
     public static String FRAGMENT_TYPE_MATERIA = "fragment_materia";
 
     public static int DIRECT_EDIT_SUBJECT = 0;
@@ -89,13 +97,34 @@ public class Singleton {
     private static PictureTaker pictureTaker;
 
     private static ProgressDialog progress;
-    private static  CustomAsyncTask asyncTask;
+    private static CustomAsyncTask asyncTask;
 
-    public static boolean isPaidVersion(){
+    public static boolean isPaidVersion() {
+
+        PackageManager manager = getMateriasActivity().getPackageManager();
+        if (manager.checkSignatures(getMateriasActivity().getPackageName(), PRO_VERSION_PACKAGE)
+                == PackageManager.SIGNATURE_MATCH) {
+            //Pro key installed, and signatures match
+            return true;
+        }
+
         return false;
     }
 
-    public static void show_only_pro_dialog(String message, String yes_button, String no_button){
+    public static boolean check_google_services(){
+        int isAvailable = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(getMateriasActivity());
+        if (isAvailable == ConnectionResult.SUCCESS) {
+            return true;
+        } else if (GooglePlayServicesUtil.isUserRecoverableError(isAvailable)) {
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable,
+                    getMateriasActivity(), 5);
+            dialog.show();
+        }
+        return false;
+    }
+
+    public static void show_only_pro_dialog(String message, String yes_button, String no_button) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getMateriasActivity());
         builder.setMessage(message)
                 .setCancelable(true)
@@ -120,9 +149,7 @@ public class Singleton {
     }
 
 
-
-
-    public static void resetarSingleton(){
+    public static void resetarSingleton() {
         //addMateriaFragment = null;
         materiasFragment = null;
     }
@@ -270,7 +297,7 @@ public class Singleton {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -303,7 +330,7 @@ public class Singleton {
         resolver.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media.DATA + "=?", new String[]{path});
     }
 
-    public static int get_dp_in_px(int padding_in_dp){
+    public static int get_dp_in_px(int padding_in_dp) {
         final float scale = getMateriasActivity().getResources().getDisplayMetrics().density;
         return (int) (padding_in_dp * scale + 0.5f);
     }
@@ -316,7 +343,7 @@ public class Singleton {
 
     }
 
-    public static void changeFragments(final Fragment fragment){
+    public static void changeFragments(final Fragment fragment) {
         getMateriasActivity().runOnUiThread(new Runnable() {
 
             @Override
@@ -327,12 +354,12 @@ public class Singleton {
         });
     }
 
-    public static void mudarCorHeader(Fragment fragment, int color){
+    public static void mudarCorHeader(Fragment fragment, int color) {
         View fake_action_bar = fragment.getView().findViewById(R.id.fake_action_bar);
         fake_action_bar.setBackgroundColor(color);
     }
 
-    public static ArrayList<Integer> getListaCores(){
+    public static ArrayList<Integer> getListaCores() {
         ArrayList<Integer> cores = new ArrayList<Integer>();
 
         cores.add(getMateriasActivity().getResources().getColor(R.color.pink));
@@ -351,7 +378,7 @@ public class Singleton {
         return cores;
     }
 
-    public static ArrayList<Integer> getListaIcones(){
+    public static ArrayList<Integer> getListaIcones() {
 
         ArrayList<Integer> icones = new ArrayList<Integer>();
         icones.add(R.drawable.lab);
@@ -364,11 +391,11 @@ public class Singleton {
         return icones;
     }
 
-    public static int get_icon(int i){
+    public static int get_icon(int i) {
         return getListaIcones().get(i);
     }
 
-    public static void move_fotos(ArrayList<Foto> fotos, String novo_topico){
+    public static void move_fotos(ArrayList<Foto> fotos, String novo_topico) {
         String photoFolder = Singleton.NOTECAM_FOLDER + "/" + getMateria_selecionada().getName() + "/" + getMateria_selecionada().getName() + "-";
 
         File storageDir = new File(photoFolder + getTopico_selecionado().getName());
@@ -389,13 +416,13 @@ public class Singleton {
             escanear_foto(foto, getTopico_selecionado());
         }
 
-        if(getGaleriaFragment() != null)
+        if (getGaleriaFragment() != null)
             //Setando Titulo do Action Bar
-            ((TextView)getGaleriaFragment().getView().findViewById(R.id.header_text)).setText(novo_topico);
+            ((TextView) getGaleriaFragment().getView().findViewById(R.id.header_text)).setText(novo_topico);
     }
 
 
-    public static void escanear_foto(final Foto foto, final Topico topico){
+    public static void escanear_foto(final Foto foto, final Topico topico) {
 
         //Faz a foto aparecer na galeria de fotos do android
         MediaScannerConnection.scanFile(getMateriasActivity(),
@@ -412,7 +439,7 @@ public class Singleton {
                         BaseAdapter adapter = (BaseAdapter) getTopicosFragment().getLista().getAdapter();
                         adapter.notifyDataSetChanged();
 
-                        if(getGaleriaFragment() != null)
+                        if (getGaleriaFragment() != null)
                             getGaleriaFragment().reload();
                     }
                 }
@@ -420,7 +447,7 @@ public class Singleton {
 
     }
 
-    public static void showProgressDialog(String mensagem){
+    public static void showProgressDialog(String mensagem) {
         setProgress(new ProgressDialog(getMateriasActivity()));
 
         getProgress().setMessage(mensagem);
@@ -431,8 +458,7 @@ public class Singleton {
     }
 
 
-
-    public static void gerar_pdf(final Materia materia,final List<Topico> topicos){
+    public static void gerar_pdf(final Materia materia, final List<Topico> topicos) {
         setAsyncTask(new CustomAsyncTask() {
             @Override
             protected void onProgressUpdate(Integer... values) {
@@ -450,7 +476,6 @@ public class Singleton {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 getProgress().dismiss();
-
 
 
                 //Open PDF

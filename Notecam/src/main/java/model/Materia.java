@@ -185,6 +185,10 @@ public class Materia {
         return Singleton.get_icon(icon_id);
     }
 
+    public int getFakeIcon_id() {
+        return icon_id;
+    }
+
     public void setIcon_id(int icon_id) {
         this.icon_id = icon_id;
     }

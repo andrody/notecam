@@ -28,6 +28,9 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
@@ -44,6 +47,7 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
 
     GridView gridview;
     MateriasAdapter materiasAdapter  = null;
+    private AdView adView;
 
     //Booleana que diz se o ActionMode (LongPress) foi ativado ou não. Caso sim ele ativa as checkboxes dos items da lista
     private boolean fakeActionModeOn = false;
@@ -53,8 +57,26 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+
+        if(adView != null)
+            adView.resume();
         setFakeActionModeOn(false);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        if(adView != null)
+            adView.destroy();
+        super.onDestroy();
+    }
+
+
+    @Override
+    public void onPause() {
+        if(adView != null)
+            adView.pause();
+        super.onPause();
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -134,8 +156,8 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         });
 
         //Marca a opção do menu
-        LinearLayout materias = (LinearLayout)getActivity().findViewById(R.id.menu_option_materias);
-        materias.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
+        //LinearLayout materias = (LinearLayout)getActivity().findViewById(R.id.menu_option_materias);
+        //materias.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
 
     }
 
@@ -196,8 +218,36 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         View cancelar2 = view.findViewById(R.id.cancelar2);
         cancelar2.setOnClickListener(this);
 
+        //Se for versão gratis adiciona ads
+        if(!Singleton.isPaidVersion())
+            add_advertising(view);
+
 
         return view;
+    }
+
+    public void add_advertising(View view){
+        //Adicionando um ad
+        if (Singleton.check_google_services()) {
+            // Criar o adView.
+            adView = new AdView(getActivity());
+            adView.setAdUnitId(Singleton.ID_BANNER_1);
+            adView.setAdSize(AdSize.BANNER);
+
+
+            // Pesquisar seu LinearLayout presumindo que ele foi dado
+            // o atributo android:id="@+id/mainLayout".
+            LinearLayout layout = (LinearLayout) view.findViewById(R.id.topLinearLayout);
+
+            // Adicionar o adView a ele.
+            layout.addView(adView);
+
+            // Iniciar uma solicitação genérica.
+            AdRequest adRequest = new AdRequest.Builder().build();//.addTestDevice("045DDF942A96893E629AA4ABB6A88335").build(); // Meu telefone de teste Galaxy Nexus;
+
+            // Carregar o adView com a solicitação de anúncio.
+            adView.loadAd(adRequest);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -206,18 +256,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             mListener.onFragmentInteraction(uri, null);
         }
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (Singleton.OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
 
 
     @Override
@@ -241,6 +279,9 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         this.fakeActionModeOn = fakeActionModeOn;
 
     }
+
+
+
 
     public void reload() {
         materiasAdapter = new MateriasAdapter(getActivity());

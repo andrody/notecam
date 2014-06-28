@@ -75,7 +75,7 @@ public class ColorPickerFragment extends DialogFragment {
                 }
                 else {
                     Singleton.show_only_pro_dialog("DESCULPAAA!!\n\n Essa cor é apenas para a versão completa, senhor usuario! \n" +
-                            "\nGostaria de pegar a " +
+                            "\nGostaria de desbloquear a " +
                             "VERSÃO COMPLETA?", "Sim!!!", "Agora não...");
                 }
 

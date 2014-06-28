@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 22;
 
     // Database Name
     private static final String DATABASE_NAME = "subjectsManager";
@@ -211,7 +211,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_SUBJECT, materia.getName());
         values.put(KEY_MATERIA_ORIGINAL_NAME, materia.getOriginal_name());
         values.put(KEY_COLOR, materia.getColorNumber());
-        values.put(KEY_ICON, materia.getIcon_id());
+        values.put(KEY_ICON, materia.getFakeIcon_id());
         values.put(KEY_CREATED_AT, getDateTime());
 
 
@@ -299,7 +299,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT, materia.getName());
         values.put(KEY_COLOR, materia.getColorNumber());
-        values.put(KEY_ICON, materia.getIcon_id());
+        values.put(KEY_ICON, materia.getFakeIcon_id());
 
 
         // updating row
