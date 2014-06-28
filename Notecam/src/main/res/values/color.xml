@@ -4,18 +4,58 @@
     <color name="actionbar_title_color">#fff</color>
     <color name="black">#000000</color>
     <color name="action_bar_line_color">#008a9d</color>
+
+
     <color name="red">#e45866</color>
-    <color name="blue">#82c8d9</color>
-    <color name="green">#1abc9c</color>
-    <color name="yellow">#ebb05c</color>
+    <color name="alizarin">#e74c3c</color>
+    <color name="pomegranate">#c0392b</color>
+
+
     <color name="pink">#ea5998</color>
-    <color name="orange">#e9784e</color>
+
+    <color name="amarelo">#f1c40f</color>
+    <color name="casablanca">#F4B350</color>
+    <color name="yellow">#ebb05c</color>
+    <color name="orange">#f39c12</color>
+    <color name="carrot">#e67e22</color>
+    <color name="pumpking">#d35400</color>
+
+
     <color name="roxo">#5965ea</color>
-    <color name="purple">#b16deb</color>
+
+
+
+    <color name="purple">#9b59b6</color>
+    <color name="purple_2">#8e44ad</color>
+    <color name="plum">#913D88</color>
+
+    <color name="wet_asphalt">#34495e</color>
+    <color name="mid_night_blue">#2c3e50</color>
+
+
+
     <color name="gray">#a4a4a4</color>
-    <color name="amarelo">#eadb58</color>
+
+
+
+
+    <color name="marrom">#A38F84</color>
+    <color name="marrom2">#75706B</color>
+
+
     <color name="azul">#50bfea</color>
-    <color name="verde">#58e795</color>
+    <color name="azul_2">#3498db</color>
+    <color name="azul_3">#2980b9</color>
+    <color name="azul_4">#1F3A93</color>
+
+    <color name="verde">#2ecc71</color>
+    <color name="green">#2ecc71</color>
+    <color name="verde_2">#27ae60</color>
+    <color name="turquoise">#1abc9c</color>
+    <color name="turquoise_2">#16a085</color>
+
+
+
     <color name="text_color">#818181</color>
     <color name="text_color2">#d0d0d0</color>
     <color name="text_color_light">#fff</color>

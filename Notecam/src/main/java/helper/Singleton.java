@@ -328,18 +328,38 @@ public class Singleton {
     public static ArrayList<Integer> getListaCores() {
         ArrayList<Integer> cores = new ArrayList<Integer>();
 
+        cores.add(getMateriasActivity().getResources().getColor(R.color.verde_2));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.alizarin));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.azul_2));
         cores.add(getMateriasActivity().getResources().getColor(R.color.pink));
+
+
+        cores.add(getMateriasActivity().getResources().getColor(R.color.marrom));
         cores.add(getMateriasActivity().getResources().getColor(R.color.amarelo));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.plum));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.gray));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.casablanca));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.yellow));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.azul_3));
         cores.add(getMateriasActivity().getResources().getColor(R.color.azul));
         cores.add(getMateriasActivity().getResources().getColor(R.color.verde));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.carrot));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.turquoise));
         cores.add(getMateriasActivity().getResources().getColor(R.color.red));
-        cores.add(getMateriasActivity().getResources().getColor(R.color.roxo));
-        cores.add(getMateriasActivity().getResources().getColor(R.color.blue));
         cores.add(getMateriasActivity().getResources().getColor(R.color.green));
-        cores.add(getMateriasActivity().getResources().getColor(R.color.yellow));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.pomegranate));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.roxo));
         cores.add(getMateriasActivity().getResources().getColor(R.color.orange));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.pumpking));
         cores.add(getMateriasActivity().getResources().getColor(R.color.purple));
-        cores.add(getMateriasActivity().getResources().getColor(R.color.gray));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.wet_asphalt));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.turquoise_2));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.purple_2));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.mid_night_blue));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.marrom2));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.alizarin));
+        cores.add(getMateriasActivity().getResources().getColor(R.color.azul_4));
+
 
         return cores;
     }
