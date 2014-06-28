@@ -18,7 +18,7 @@ import java.util.List;
 import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
-import list.TopicosAdapter;
+import Adapters.TopicosAdapter;
 import model.Materia;
 import model.Topico;
 

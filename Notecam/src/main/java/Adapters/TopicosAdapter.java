@@ -1,4 +1,4 @@
-package list;
+package Adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.ArrayList;

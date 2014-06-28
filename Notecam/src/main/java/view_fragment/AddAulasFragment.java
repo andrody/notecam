@@ -18,7 +18,7 @@ import java.util.List;
 
 import Dialogs.TimePickerFragment;
 import helper.DatabaseHelper;
-import list.ClassAdapter;
+import Adapters.ClassAdapter;
 import model.Aula;
 import model.Materia;
 

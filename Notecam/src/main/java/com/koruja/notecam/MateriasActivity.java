@@ -1,27 +1,23 @@
 package com.koruja.notecam;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.SlowViewPager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,22 +34,20 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import camera.CustomCameraHost;
-import camera.PictureTaker;
+import Adapters.PagerAdapter;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import model.Aula;
 import model.Materia;
-import view_fragment.CameraFragment;
 import view_fragment.MateriasFragment;
-import view_fragment.TopicosFragment;
-import welcome_fragments.WelcomeFragment_1;
-import welcome_fragments.WelcomeFragment_2;
 import welcome_fragments.WelcomeFragment_3;
 
 
-public class MateriasActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener  {
+public class MateriasActivity extends Activity implements ViewPager.OnPageChangeListener  {
 
+    // ----------------------------------------------------------//
+    // --------------------  Variables Declaration---------------//
+    // ----------------------------------------------------------//
 
     private SlowViewPager viewPager = null;
     ActionBarDrawerToggle mDrawerToggle;
@@ -64,14 +58,15 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
     private boolean primeira_vez = true;
     private int mPosition;
 
-    //Referencia para colocar uma custom font
-    private Typeface fontType;
-
     //Cria uma nova conexão com o Banco de Dados
     private DatabaseHelper db = new DatabaseHelper(this);
 
     //Lista de opções do menu
     final ArrayList<LinearLayout> lista_options_menu = new ArrayList<LinearLayout>();
+
+    //Coloca todos os fragmentos nessa lista, para conseguir atualizar o pagerview
+    List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
+
 
     //Handler para atualizar a cada 30 segundos
     Handler handler = new Handler();
@@ -96,13 +91,75 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
         }
     };
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Singleton.IMAGE_PICKER_SELECT)
-            Singleton.getGaleriaFragment().onActivityResult2(requestCode, resultCode, data);
-    }
+    // ----------------------------------------------------------//
+    // --------------------  Override Methods ---------------//
+    // ----------------------------------------------------------//
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        setContentView(R.layout.activity_main);
+
+        Singleton.resetarSingleton();
+        Singleton.setDb(this.db);
+        Singleton.setMateriasActivity(this);
+
+
+        //Seleciona a primeira matéria selecionada
+        if(!db.getAllSubjects().isEmpty())
+            Singleton.setMateria_selecionada(db.getAllSubjects().get(0));
+
+        //Verifica se há alguma matéria criada e armazena a booleana correspondente
+        this.setEmptyFragments(db.getAllSubjects().isEmpty());
+
+
+        setDrawerLayout((DrawerLayout)findViewById(R.id.drawer_layout));
+        drawerView = findViewById(R.id.drawer);
+        setViewPager((SlowViewPager) findViewById(R.id.pager));
+
+        pagerAdapter = new PagerAdapter(getFragmentManager(), this);
+
+        getViewPager().setAdapter(pagerAdapter);
+        getViewPager().setOnPageChangeListener(this);
+
+        setUpClickListenersMenu();
+
+        Button buttonCloseDrawer = (Button)findViewById(R.id.closedrawer);
+        buttonCloseDrawer.setOnClickListener(new OnClickListener(){
+
+            @Override
+            public void onClick(View arg0) {
+                getDrawerLayout().closeDrawers();
+            }});
+
+        //drawerLayout.setDrawerListener(myDrawerListener);
+
+        drawerView.setOnTouchListener(new OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                return true;
+            }
+        });
+
+        //Criar botao de menu no actionbar
+        setUpDrawerToggle();
+
+        checarHorario();
+
+        timedTask.run();
+
+        //Fazer o StatusBar como Overlay
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.flags |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+
+        //setMateriasFragment(new MateriasFragment());
+        //getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
+
+    }
 
     @Override
     protected void onResume() {
@@ -142,78 +199,99 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
 
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Singleton.IMAGE_PICKER_SELECT)
+            Singleton.getGaleriaFragment().onActivityResult2(requestCode, resultCode, data);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
-        setContentView(R.layout.activity_main);
+    @Override
+    public void onAttachFragment (Fragment fragment) {
+        fragList.add(new WeakReference(fragment));
+    }
 
-        Singleton.resetarSingleton();
-        Singleton.setDb(this.db);
-        Singleton.setMateriasActivity(this);
+    //ViewPager.OnPageChangeListener Methods
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        //Seleciona a primeira matéria selecionada
-        if(!db.getAllSubjects().isEmpty())
-            Singleton.setMateria_selecionada(db.getAllSubjects().get(0));
+    }
 
-        //Cria um nova instância da biblioteca de tirar fotos
-        Singleton.setPictureTaker(new PictureTaker(this));
+    @Override
+    public void onPageSelected(int position) {
+        mPosition = position;
+    }
 
-        //Verifica se há alguma matéria criada e armazena a booleana correspondente
-        this.setEmptyFragments(db.getAllSubjects().isEmpty());
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        if(!isEmptyFragments()) {
+            switch (state) {
+                //Se for na posição 1 (Camera), vira fullscreen escondendo o statusbar
+                case ViewPager.SCROLL_STATE_IDLE:
+                    if (mPosition == 1) {
+                        //if(Singleton.getCameraFragment() != null)
+                        //    Singleton.getCameraFragment().reload(null);
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
+                        if (Singleton.isNova_materia_selecionada()) {
+                            Singleton.getCameraFragment().reload(null);
+                            Singleton.setNova_materia_selecionada(false);
+                        }
+                    } else {
+                        if (mPosition == 2) {
+                            try {
+                                Singleton.getTopicosFragment().reload();
+                            }catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
+                            Singleton.setNova_materia_selecionada_topicos(false);
 
-        setDrawerLayout((DrawerLayout)findViewById(R.id.drawer_layout));
-        drawerView = findViewById(R.id.drawer);
-        setViewPager((SlowViewPager) findViewById(R.id.pager));
+                        }
 
-        pagerAdapter = new PagerAdapter(getFragmentManager(), this);
-
-        getViewPager().setAdapter(pagerAdapter);
-        getViewPager().setOnPageChangeListener(this);
-
-        setUpClickListenersMenu();
-
-        Button buttonCloseDrawer = (Button)findViewById(R.id.closedrawer);
-        buttonCloseDrawer.setOnClickListener(new OnClickListener(){
-
-            @Override
-            public void onClick(View arg0) {
-                getDrawerLayout().closeDrawers();
-            }});
-
-        //drawerLayout.setDrawerListener(myDrawerListener);
-
-        drawerView.setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                return true;
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                    }
             }
-        });
+        }
+        else
+            onWelcomePageScrollStateChanged(state);
+    }
+    // ----------------------------------------------------------//
+    // --------------------  General Methods ---------------//
+    // ----------------------------------------------------------//
 
-        //Criar botao de menu no actionbar
-        setUpDrawerToggle();
+    /*
+     Procura em cada classe de cada subject se  o horario atual bate com o horario de alguma aula
+     (Ele para na primeira aula encontrada que bate)
+     */
+    public void checarHorario(){
+        Aula aula = null;
+        java.util.List<Materia> materias = db.getAllSubjects();
+        for(Materia m: materias){
+            aula = m.ChecarHorario();
+            if(aula != null){
+                Singleton.setMateria_em_aula(m);
+                Singleton.setMateria_selecionada(m);
+                if(primeira_vez){
+                    moveFragmentPager(1);
+                }
+                else Toast.makeText(this, getString(R.string.em_aula_de) + m.getName(), Toast.LENGTH_SHORT).show();
 
-        //Set custom font to comicneue
-        fontType = Typeface.createFromAsset(getAssets(), "fonts/ComicNeue-Bold.ttf");
-
-        checarHorario();
-
-        timedTask.run();
-
-        //Fazer o StatusBar como Overlay
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.flags |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-
-        //setMateriasFragment(new MateriasFragment());
-        //getSupportFragmentManager().beginTransaction().add(R.id.mainLinearLayout, getMateriasFragment(), "materias").commit();
-
+                //if(Singleton.materiasFragment != null) Singleton.materiasFragment.updateSubTitle();
+                break;
+            }
+        }
+        if(aula == null)
+            Singleton.setMateria_em_aula(null);
+        primeira_vez = false;
     }
 
     public void setUpClickListenersMenu(){
@@ -300,7 +378,6 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
         }
     }
 
-
     private void setUpDrawerToggle(){
         //ActionBar actionBar = getActionBar();
         //actionBar.setDisplayHomeAsUpEnabled(true);
@@ -341,64 +418,6 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
 
         getDrawerLayout().setDrawerListener(mDrawerToggle);
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        /*if(item.getTitle().equals("Add Materia")){
-
-            //Cria uma nova instância do Fragment addSubjectsFragment
-            setAddSubjectsFragment(new AddMateriaFragment());
-
-            changeFragments(getAddSubjectsFragment(), null);
-        }*/
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    DrawerLayout.DrawerListener myDrawerListener = new DrawerLayout.DrawerListener(){
-
-        @Override
-        public void onDrawerClosed(View drawerView) {
-        }
-
-        @Override
-        public void onDrawerOpened(View drawerView) {
-        }
-
-        @Override
-        public void onDrawerSlide(View drawerView, float slideOffset) {
-        }
-
-        @Override
-        public void onDrawerStateChanged(int newState) {
-            String state;
-            switch(newState){
-                case DrawerLayout.STATE_IDLE:
-                    state = "STATE_IDLE";
-                    break;
-                case DrawerLayout.STATE_DRAGGING:
-                    state = "STATE_DRAGGING";
-                    break;
-                case DrawerLayout.STATE_SETTLING:
-                    state = "STATE_SETTLING";
-                    break;
-                default:
-                    state = "unknown!";
-            }
-
-        }};
-
-
 
     public void seleciona_option_certo_no_menu(Fragment fragment){
         //Limpa seleção
@@ -481,89 +500,8 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
 
     }
 
-    /*
-     Procura em cada classe de cada subject se  o horario atual bate com o horario de alguma aula
-     (Ele para na primeira aula encontrada que bate)
-     */
-    public void checarHorario(){
-        Aula aula = null;
-        java.util.List<Materia> materias = db.getAllSubjects();
-        for(Materia m: materias){
-            aula = m.ChecarHorario();
-            if(aula != null){
-                Singleton.setMateria_em_aula(m);
-                Singleton.setMateria_selecionada(m);
-                if(primeira_vez){
-                    moveFragmentPager(1);
-                }
-                else Toast.makeText(this, getString(R.string.em_aula_de) + m.getName(), Toast.LENGTH_SHORT).show();
-
-                //if(Singleton.materiasFragment != null) Singleton.materiasFragment.updateSubTitle();
-                break;
-            }
-        }
-        if(aula == null)
-            Singleton.setMateria_em_aula(null);
-        primeira_vez = false;
-    }
-
     public void moveFragmentPager(int position){
         this.getViewPager().setCurrentItem(position, true);
-    }
-
-    public DatabaseHelper getDb() {
-        return db;
-    }
-
-    public void setDb(DatabaseHelper db) {
-        this.db = db;
-    }
-
-
-    public MateriasFragment getMateriasFragment() {
-        return Singleton.getMateriasFragment();
-    }
-
-
-    public SlowViewPager getViewPager() {
-        return viewPager;
-    }
-
-    public void setViewPager(SlowViewPager viewPager) {
-        this.viewPager = viewPager;
-    }
-
-    public boolean isEmptyFragments() {
-        return emptyFragments;
-    }
-
-    List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
-    @Override
-    public void onAttachFragment (Fragment fragment) {
-        fragList.add(new WeakReference(fragment));
-    }
-
-    public List<Fragment> getActiveFragments() {
-        ArrayList<Fragment> ret = new ArrayList<Fragment>();
-        for(WeakReference<Fragment> ref : fragList) {
-            Fragment f = ref.get();
-            if(f != null) {
-                    ret.add(f);
-            }
-        }
-        return ret;
-    }
-
-    public void setEmptyFragments(boolean emptyFragments) {
-        //Se acabou de criar uma matéria, Zera o pageview
-        if(this.emptyFragments && !emptyFragments) {
-            this.emptyFragments = emptyFragments;
-            recarregar_view_pager();
-        }
-
-        this.emptyFragments = emptyFragments;
-
-
     }
 
     public void recarregar_view_pager(){
@@ -589,56 +527,58 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
         getViewPager().getAdapter().notifyDataSetChanged();
     }
 
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        mPosition = position;
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        if(!isEmptyFragments()) {
-            switch (state) {
-                //Se for na posição 1 (Camera), vira fullscreen escondendo o statusbar
-                case ViewPager.SCROLL_STATE_IDLE:
-                    if (mPosition == 1) {
-                        //if(Singleton.getCameraFragment() != null)
-                        //    Singleton.getCameraFragment().reload(null);
-                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-
-                        if (Singleton.isNova_materia_selecionada()) {
-                            Singleton.getCameraFragment().reload(null);
-                            Singleton.setNova_materia_selecionada(false);
-                        }
-                    } else {
-                        if (mPosition == 2) {
-                            try {
-                                Singleton.getTopicosFragment().reload();
-                            }catch (NullPointerException e){
-                                e.printStackTrace();
-                            }
-                            Singleton.setNova_materia_selecionada_topicos(false);
-
-                        }
-
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-                    }
-            }
-        }
-        else
-            onWelcomePageScrollStateChanged(state);
-    }
-
     public void onWelcomePageScrollStateChanged(int state){
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+    }
+
+
+    // ----------------------------------------------------------//
+    // --------------------  Gets and Sets ---------------//
+    // ----------------------------------------------------------//
+
+
+    public DatabaseHelper getDb() {
+        return db;
+    }
+
+    public MateriasFragment getMateriasFragment() {
+        return Singleton.getMateriasFragment();
+    }
+
+    public SlowViewPager getViewPager() {
+        return viewPager;
+    }
+
+    public void setViewPager(SlowViewPager viewPager) {
+        this.viewPager = viewPager;
+    }
+
+    public boolean isEmptyFragments() {
+        return emptyFragments;
+    }
+
+    public List<Fragment> getActiveFragments() {
+        ArrayList<Fragment> ret = new ArrayList<Fragment>();
+        for(WeakReference<Fragment> ref : fragList) {
+            Fragment f = ref.get();
+            if(f != null) {
+                    ret.add(f);
+            }
+        }
+        return ret;
+    }
+
+    public void setEmptyFragments(boolean emptyFragments) {
+        //Se acabou de criar uma matéria, Zera o pageview
+        if(this.emptyFragments && !emptyFragments) {
+            this.emptyFragments = emptyFragments;
+            recarregar_view_pager();
+        }
+
+        this.emptyFragments = emptyFragments;
+
+
     }
 
     public DrawerLayout getDrawerLayout() {
@@ -651,111 +591,7 @@ public class MateriasActivity extends ActionBarActivity implements ViewPager.OnP
 
 }
 
-class PagerAdapter extends FragmentPagerAdapter {
 
-    Context context;
-    public Fragment mFragmentAtPos0 = null;
-    public Fragment mFragmentAtPos1 = null;
-    public Fragment mFragmentAtPos2 = null;
-    final private FragmentManager mFragmentManager;
-
-    public PagerAdapter(FragmentManager fm, Context context) {
-        super(fm);
-        mFragmentManager = fm;
-        this.context = context;
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        return super.getItemPosition(object);
-        //return POSITION_NONE;
-    }
-
-    private final String TAG_CAMERA_FRAGMENT = "camera_fragment";
-
-    @Override
-    public Fragment getItem(int position) {
-
-        //Se houver matérias criadas vai para a tela normal
-        if(!Singleton.getMateriasActivity().isEmptyFragments()) {
-
-            if (position == 0) {
-                if(mFragmentAtPos0 == null) {
-                    mFragmentAtPos0 = new MateriasFragment();
-                    Singleton.setMateriasFragment((MateriasFragment) mFragmentAtPos0);
-               }
-                return mFragmentAtPos0;
-
-
-            } else if (position == 1) {
-
-                CameraFragment c = null;
-                if (mFragmentAtPos1 == null) {
-                    c = new CameraFragment(); //CameraFragment.newInstance(false);
-                    c.setHost(new CustomCameraHost(context));
-                    mFragmentAtPos1 = c;
-                }
-                Singleton.setCameraFragment((CameraFragment) mFragmentAtPos1);
-                return mFragmentAtPos1;
-
-
-            } else if (position == 2) {
-
-                if (mFragmentAtPos2 == null) {
-                    mFragmentAtPos2 = TopicosFragment.newInstance(Singleton.getMateria_selecionada().getId());
-                }
-                Singleton.setTopicosFragment((TopicosFragment) mFragmentAtPos2);
-                return mFragmentAtPos2;
-            }
-
-            return mFragmentAtPos0;
-
-        }
-
-        //Se não, vai para a tela de boas vindas
-        else
-            return getWelcomeItem(position);
-    }
-
-    public Fragment getWelcomeItem(int position) {
-
-
-        if (position == 0) {
-            if(mFragmentAtPos0 == null) {
-                mFragmentAtPos0 = new WelcomeFragment_1();
-            }
-            return mFragmentAtPos0;
-
-
-        } else if (position == 1) {
-
-            if(mFragmentAtPos1 == null) {
-                mFragmentAtPos1 = new WelcomeFragment_2();
-            }
-            return mFragmentAtPos1;
-
-        } else if (position == 2) {
-
-            if(mFragmentAtPos2 == null) {
-                mFragmentAtPos2 = new WelcomeFragment_3();
-            }
-            return mFragmentAtPos2;
-
-        }
-
-        return mFragmentAtPos0;
-
-    }
-
-    @Override
-    public int getCount() {
-            return 3;
-    }
-
-    public FragmentManager getmFragmentManager() {
-        return mFragmentManager;
-    }
-}
 
 
 

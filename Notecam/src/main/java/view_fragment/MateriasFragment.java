@@ -1,28 +1,20 @@
 package view_fragment;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
+
 
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.ActionMode;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -31,14 +23,19 @@ import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import Adapters.MateriasAdapter;
 import helper.DatabaseHelper;
 import helper.Singleton;
 
 
 public class MateriasFragment extends Fragment implements View.OnClickListener {
+
+
+    // ----------------------------------------------------------//
+    // --------------------  Variables Declaration---------------//
+    // ----------------------------------------------------------//
 
     GridView gridview;
     MateriasAdapter materiasAdapter  = null;
@@ -49,107 +46,51 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
 
     Resources resources;
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(adView != null)
-            adView.resume();
-        setFakeActionModeOn(false);
-
-    }
-
-    @Override
-    public void onDestroy() {
-        if(adView != null)
-            adView.destroy();
-        super.onDestroy();
-    }
-
-
-    @Override
-    public void onPause() {
-        if(adView != null)
-            adView.pause();
-        super.onPause();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        //Referencia aos Resources (R.strings...)
-        resources = getActivity().getResources();
-
-        //Cria o adapter
-        materiasAdapter = new MateriasAdapter(getActivity());
-
-        //Syncroniza lista com o banco
-        syncDB();
-
-        gridview = (GridView) getActivity().findViewById(R.id.materias_grid_view);
-        gridview.setAdapter(materiasAdapter);
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                //Seleciona ou deseleciona materia se estiver em modo de edição
-                if(fakeActionModeOn){
-                    CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkbox_materia));
-                    checkbox.setChecked(!checkbox.isChecked());
-                }
-                else {
-
-
-                        //Pega a materia selecionada
-                        model.Materia materia = (model.Materia)materiasAdapter.getItem(position);
-                        Singleton.setMateria_selecionada(materia);
-                        Singleton.getCameraFragment().reload(null);
-                        Singleton.getMateriasActivity().getViewPager().setCurrentItem(1, true);
-
-                    }
-                //}
-            }
-        });
-
-        //Seta um evento de Pressionar por longo tempo na lista
-        gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            //Callback
-            public boolean onItemLongClick(AdapterView<?> av, View v,
-                                           int position, long id) {
-
-                //Avisa que estamos no modo de edição (Selecionar e Deletar items)
-                setFakeActionModeOn(true);
-
-
-                //Seta o checkbox do item que foi pressionado como selecionado automaticamente
-                ((CheckBox) v.findViewById(R.id.checkbox_materia)).setChecked(true);
-
-
-                //Atualiza a lista
-                materiasAdapter.notifyDataSetChanged();
-
-                return true;
-            }
-        });
-
-        //Marca a opção do menu
-        //LinearLayout materias = (LinearLayout)getActivity().findViewById(R.id.menu_option_materias);
-        //materias.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
-
-    }
-
     public MateriasFragment(){
 
     }
 
 
 
+
+
+
+    // ----------------------------------------------------------//
+    // --------------------  Override Methods ---------------//
+    // ----------------------------------------------------------//
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            //Abre Drawer Menu
+            case R.id.menu:
+                ((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
+                break;
+
+            //Adiciona nova materia
+            case R.id.add_materia:
+                Singleton.setAddMateriaFragment(new AddMateriaFragment());
+                Singleton.changeFragments(Singleton.getAddMateriaFragment());
+                break;
+
+            //Cancela o Fake Action Mode
+            case R.id.cancelar:
+                setFakeActionModeOn(false);
+                break;
+
+            //Cancela o Fake Action Mode
+            case R.id.deletar:
+                deletar_materias();
+
+                if(!Singleton.getMateriasActivity().isEmptyFragments())
+                    setFakeActionModeOn(false);
+                break;
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_materias, container, false);
@@ -186,6 +127,104 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(adView != null)
+            adView.resume();
+        setFakeActionModeOn(false);
+
+    }
+
+    @Override
+    public void onPause() {
+        if(adView != null)
+            adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        if(adView != null)
+            adView.destroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //Referencia aos Resources (R.strings...)
+        resources = getActivity().getResources();
+
+        //Cria o adapter
+        materiasAdapter = new MateriasAdapter(getActivity());
+
+        //Syncroniza lista com o banco
+        syncDB();
+
+        gridview = (GridView) getActivity().findViewById(R.id.materias_grid_view);
+        gridview.setAdapter(materiasAdapter);
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Seleciona ou deseleciona materia se estiver em modo de edição
+                if(fakeActionModeOn){
+                    CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkbox_materia));
+                    checkbox.setChecked(!checkbox.isChecked());
+                }
+                else {
+
+
+                    //Pega a materia selecionada
+                    model.Materia materia = (model.Materia)materiasAdapter.getItem(position);
+                    Singleton.setMateria_selecionada(materia);
+                    Singleton.getCameraFragment().reload(null);
+                    Singleton.getMateriasActivity().getViewPager().setCurrentItem(1, true);
+
+                }
+                //}
+            }
+        });
+
+        //Seta um evento de Pressionar por longo tempo na lista
+        gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            //Callback
+            public boolean onItemLongClick(AdapterView<?> av, View v,
+                                           int position, long id) {
+
+                //Avisa que estamos no modo de edição (Selecionar e Deletar items)
+                setFakeActionModeOn(true);
+
+
+                //Seta o checkbox do item que foi pressionado como selecionado automaticamente
+                ((CheckBox) v.findViewById(R.id.checkbox_materia)).setChecked(true);
+
+
+                //Atualiza a lista
+                materiasAdapter.notifyDataSetChanged();
+
+                return true;
+            }
+        });
+
+        //Marca a opção do menu
+        //LinearLayout materias = (LinearLayout)getActivity().findViewById(R.id.menu_option_materias);
+        //materias.setBackgroundColor(getResources().getColor(R.color.background_menu_selected));
+
+    }
+
+
+
+
+    // ----------------------------------------------------------//
+    // --------------------  General Methods ---------------//
+    // ----------------------------------------------------------//
+
     public void add_advertising(View view){
         //Adicionando um ad
         if (Singleton.check_google_services()) {
@@ -208,32 +247,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             // Carregar o adView com a solicitação de anúncio.
             adView.loadAd(adRequest);
         }
-    }
-
-
-    public boolean isFakeActionModeOn() {
-        return fakeActionModeOn;
-    }
-
-    public void setFakeActionModeOn(boolean fakeActionModeOn) {
-        if(fakeActionModeOn){
-            getView().findViewById(R.id.fake_action_mode).setVisibility(View.VISIBLE);
-        }
-        else {
-            getView().findViewById(R.id.fake_action_mode).setVisibility(View.GONE);
-        }
-
-        this.fakeActionModeOn = fakeActionModeOn;
-
-    }
-
-
-
-
-    public void reload() {
-        materiasAdapter = new MateriasAdapter(getActivity());
-        gridview.setAdapter(materiasAdapter);
-
     }
 
     //Syncroniza com o banco de dados
@@ -270,36 +283,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         catch (NullPointerException e){
             e.printStackTrace();
         };
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-
-            //Abre Drawer Menu
-            case R.id.menu:
-                ((MateriasActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.LEFT);
-                break;
-
-            //Adiciona nova materia
-            case R.id.add_materia:
-                Singleton.setAddMateriaFragment(new AddMateriaFragment());
-                Singleton.changeFragments(Singleton.getAddMateriaFragment());
-                break;
-
-            //Cancela o Fake Action Mode
-            case R.id.cancelar:
-                setFakeActionModeOn(false);
-                break;
-
-            //Cancela o Fake Action Mode
-            case R.id.deletar:
-                deletar_materias();
-
-                if(!Singleton.getMateriasActivity().isEmptyFragments())
-                    setFakeActionModeOn(false);
-                break;
-        }
     }
 
     public void deletar_materias(){
@@ -342,158 +325,35 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-}
 
-class Materia {
-    int image_id, numero_fotos, color_id;
-    String nome;
-    Materia(String nome, int image_id, int numero_fotos, int color_id) {
-        this.nome = nome;
-        this.image_id = image_id;
-        this.color_id = color_id;
-        this.numero_fotos = numero_fotos;
+
+
+
+
+    // ----------------------------------------------------------//
+    // --------------------  Gets and Sets ---------------//
+    // ----------------------------------------------------------//
+
+    public boolean isFakeActionModeOn() {
+        return fakeActionModeOn;
     }
 
-}
-
-/**
- * O BaseAdapter é responsável por construir as views do gridview
- */
-class MateriasAdapter extends BaseAdapter {
-
-    ArrayList<model.Materia> materias;
-    private HashMap<Integer, View> views = new HashMap<Integer, View>();
-
-    Context context;
-
-    MateriasAdapter(Context context) {
-        this.context = context;
-
-        materias = new ArrayList<model.Materia>();
-    }
-
-    @Override
-    public int getCount() {
-        return materias.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return materias.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    class ViewHolder {
-        TextView myInitialLetter;
-        TextView nome_materia;
-        View back_color;
-        TextView numero_fotos;
-        CheckBox checkbox_materia;
-        Drawable drawable;
-        View icon;
-
-        ViewHolder(View v) {
-            myInitialLetter = (TextView) v.findViewById(R.id.letra_inicial_image);
-            nome_materia = (TextView) v.findViewById(R.id.materia_nome_text);
-            numero_fotos = (TextView) v.findViewById(R.id.materia_numero_fotos_text);
-            icon = v.findViewById(R.id.imagem_materia);
-            checkbox_materia = (CheckBox) v.findViewById(R.id.checkbox_materia);
-            back_color = v.findViewById(R.id.foto_back);
-            drawable  = context.getResources().getDrawable(R.drawable.materia);
-        }
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ViewHolder holder = null;
-        //Se estamos chamando o getView pela primeira vez (Operações custosas)
-        if(row == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.single_materia_item, parent, false);
-            holder = new ViewHolder(row);
-            row.setTag(holder);
+    public void setFakeActionModeOn(boolean fakeActionModeOn) {
+        if(fakeActionModeOn){
+            getView().findViewById(R.id.fake_action_mode).setVisibility(View.VISIBLE);
         }
         else {
-            holder = (ViewHolder) row.getTag();
+            getView().findViewById(R.id.fake_action_mode).setVisibility(View.GONE);
         }
 
-        final model.Materia item = (model.Materia) getItem(position);
+        this.fakeActionModeOn = fakeActionModeOn;
 
-        String nome_materia = "#" + materias.get(position).getName().toLowerCase();
-
-        Paint paint = new Paint();
-
-        //Seleciona o ícone da materia
-        holder.icon.setBackgroundResource(materias.get(position).getIcon_id());
-
-        //Seta o nome e tamanho
-        holder.nome_materia.setText("#" + materias.get(position).getName().toLowerCase());
-        //holder.nome_materia.setTextSize(perfectSize);
-        correctWidth(holder.nome_materia, 200);
-
-        //holder.numero_fotos.setText(fotos.get(position).getNumero_fotos() + " fotos");
-
-
-        holder.drawable.setColorFilter(materias.get(position).getColor(), PorterDuff.Mode.SRC_ATOP);
-
-        //Troca cor de fundo das matérias
-        int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            holder.back_color.setBackgroundDrawable(holder.drawable);
-        } else {
-            holder.back_color.setBackground(holder.drawable);
-        }
-
-
-
-        views.put(item.getId(), row);
-
-        //Se está no modo de edição?
-        boolean checkBoxFlag = ((MateriasActivity)context).getMateriasFragment().isFakeActionModeOn();
-
-        //Se está no modo de edição (deletar) torna o checkbox visivel
-        if(checkBoxFlag) {
-            holder.checkbox_materia.setVisibility(CheckBox.VISIBLE);
-            holder.icon.setVisibility(CheckBox.GONE);
-        }
-        else {
-            holder.checkbox_materia.setVisibility(CheckBox.GONE);
-            holder.icon.setVisibility(CheckBox.VISIBLE);
-            holder.checkbox_materia.setChecked(false);
-
-        }
-
-        return row;
     }
 
-    public void correctWidth(TextView textView, int desiredWidth)
-    {
-        Paint paint = new Paint();
-        Rect bounds = new Rect();
 
-        paint.setTypeface(textView.getTypeface());
-        float textSize = textView.getTextSize();
-        paint.setTextSize(textSize);
-        String text = textView.getText().toString();
-        paint.getTextBounds(text, 0, text.length(), bounds);
 
-        while (bounds.width() > desiredWidth)
-        {
-            textSize--;
-            paint.setTextSize(textSize);
-            paint.getTextBounds(text, 0, text.length(), bounds);
-        }
 
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-    }
-
-    public View getView(int id){
-        return views.get(id);
-    }
 
 }
+
+
