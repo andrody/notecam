@@ -10,6 +10,7 @@ import android.text.format.Time;
 import android.util.Log;
 
 import com.koruja.notecam.MateriasActivity;
+import com.koruja.notecam.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -609,7 +610,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Se não existe tópico cria um
         if (topicos.isEmpty()) {
             Topico t = new Topico(context);
-            t.setName("Geral");
+            t.setName(context.getString(R.string.geral));
             t.setNumber(0);
             t.setSubject_id((int) subject_id);
             t.save(context);

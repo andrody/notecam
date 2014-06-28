@@ -33,6 +33,7 @@ import model.Materia;
 
 public class AddMateriaFragment extends Fragment implements View.OnClickListener {
     private boolean criando_primeira_materia = false;
+    private boolean modo_edicao = false;
 
     @Override
     public void onDetach() {
@@ -50,11 +51,10 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
 
         MateriasActivity activity = Singleton.getMateriasActivity();
 
-        if(!criando_primeira_materia)
+        if (!criando_primeira_materia)
             activity.reload();
         super.onDetach();
     }
-
 
 
     //Armazena o model do Subject em questão
@@ -69,108 +69,47 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
     //Flag para saber se ele está editando da home
     private boolean flagEditFromHome = false;
 
-    public static AddMateriaFragment newInstance(int materia_id) {
-        AddMateriaFragment fragment = new AddMateriaFragment();
-        Bundle args = new Bundle();
-        args.putInt(Singleton.MATERIA_ID, materia_id);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // needed to indicate that the fragment would
-        // like to add items to the Options Menu
-        setHasOptionsMenu(true);
-
-        // update the actionbar to show the up carat/affordance
-        //getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    /**
-     * Cria as opções do header
-     **/
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        menu.clear();
-        inflater.inflate(R.menu.add_materia, menu);
-
-        try {
-            Singleton.setActionBarTitle("Criar ou editar matéria");
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Get item selected and deal with it
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                //called when the up affordance/carat in actionbar is pressed
-                getActivity().onBackPressed();
-                return true;
-            case R.id.colorselect:
-                openColorDialog();
-                return true;
-            case R.id.iconselect:
-                openIconDialog();
-                return true;
-        }
-        return true;
-    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_materia, container, false);
 
         //Referencia para o banco de dados
-        DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
+        DatabaseHelper db = ((MateriasActivity) getActivity()).getDb();
 
         //Cria novo materia
         materia = new Materia(getActivity());
 
-        //Se foi passado algum parametro, adiciona no materia
-        if (getArguments() != null) {
+        //Se é modo edição
+        if (modo_edicao) {
 
-            //Se é modo edição
-            if(getArguments().containsKey(Singleton.MATERIA_ID)){
-                flagEditFromHome = true;
-                int materia_id = getArguments().getInt(Singleton.MATERIA_ID);
+            flagEditFromHome = true;
 
-                //materia.setId(getArguments().getInt(Materia.ID));
-                materia = db.getSubject(Singleton.getMateria_selecionada().getId());
+            //materia.setId(getArguments().getInt(Materia.ID));
+            materia = db.getSubject(Singleton.getMateria_selecionada().getId());
 
-                assert view != null;
-                ((EditText)view.findViewById(R.id.editText_subject)).setText(materia.getName());
+            assert view != null;
+            ((EditText) view.findViewById(R.id.editText_subject)).setText(materia.getName());
 
-                TextView text_criar_materia = (TextView) view.findViewById(R.id.text_criar_materia);
-                text_criar_materia.setText("Pronto");
+            TextView text_criar_materia = (TextView) view.findViewById(R.id.text_criar_materia);
+            text_criar_materia.setText(getActivity().getString(R.string.pronto));
 
-                FrameLayout button_criar_materia = (FrameLayout) view.findViewById(R.id.btn_criar_materia);
-                button_criar_materia.setVisibility(View.VISIBLE);
+            FrameLayout button_criar_materia = (FrameLayout) view.findViewById(R.id.btn_criar_materia);
+            button_criar_materia.setVisibility(View.VISIBLE);
 
-                final FrameLayout container_das_aulas =  (FrameLayout) view.findViewById(R.id.fragment_container).getParent();
-                container_das_aulas.setPadding(0,0,0,Singleton.get_dp_in_px(75));
+            final FrameLayout container_das_aulas = (FrameLayout) view.findViewById(R.id.fragment_container).getParent();
+            container_das_aulas.setPadding(0, 0, 0, Singleton.get_dp_in_px(75));
 
-            }
+
         }
 
         //Se matéria ainda não possui cor
-        if(!materia.isColored()) {
+        if (!materia.isColored()) {
             materia.setRandomColor();
-        }
-        else {
+        } else {
             //Se não possuir cor, o que significa que é modo de edição, muda o Header para "Editar Matéria"
             TextView header_text = (TextView) view.findViewById(R.id.header_text);
-            header_text.setText("Editar Matéria");
+            header_text.setText(getActivity().getString(R.string.editar_materia));
         }
 
         //Faz o header mudar para a cor selecionada
@@ -178,7 +117,7 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         fake_action_bar.setBackgroundColor(materia.getColor());
 
         //Se matéria ainda não possui cor
-        if(!materia.isIconed()) {
+        if (!materia.isIconed()) {
             materia.setRandomIcon();
         }
 
@@ -204,7 +143,7 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         super.onStart();
 
         //Listener do botão "Adicionar Aulas"
-        LinearLayout btn_nova_aula= (LinearLayout) getView().findViewById(R.id.button_addClass);
+        LinearLayout btn_nova_aula = (LinearLayout) getView().findViewById(R.id.button_addClass);
         btn_nova_aula.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,19 +167,18 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         //Listener do EditText "Nome da materia"
         EditText nome_da_materia = (EditText) getView().findViewById(R.id.editText_subject);
 
-        final FrameLayout container_das_aulas =  (FrameLayout) getView().findViewById(R.id.fragment_container).getParent();
+        final FrameLayout container_das_aulas = (FrameLayout) getView().findViewById(R.id.fragment_container).getParent();
 
 
         nome_da_materia.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(count >= 1) {
+                if (count >= 1) {
                     button_criar_materia.setVisibility(View.VISIBLE);
-                    container_das_aulas.setPadding(0,0,0, Singleton.get_dp_in_px(75));
-                }
-                else {
+                    container_das_aulas.setPadding(0, 0, 0, Singleton.get_dp_in_px(75));
+                } else {
                     button_criar_materia.setVisibility(View.INVISIBLE);
-                    container_das_aulas.setPadding(0,0,0,0);
+                    container_das_aulas.setPadding(0, 0, 0, 0);
                 }
             }
 
@@ -266,17 +204,14 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         transaction.replace(R.id.fragment_container, getAddAulasFragment());
         transaction.commit();
 
-        //Inicia o modo ActionMode (Header fica branco e com opções especializadas)
-        //getActivity().startActionMode(mActionModeCallback);
-
         //Fazer teclado desaparecer ao EditText perder foco (Por algum motivo ele não perde sozinho)
-        (getView().findViewById(R.id.editText_subject)).setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        (getView().findViewById(R.id.editText_subject)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if(v.getId() == R.id.editText_subject && !hasFocus) {
-                    InputMethodManager imm =  (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (v.getId() == R.id.editText_subject && !hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
@@ -284,45 +219,33 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         });
     }
 
-    public void openColorDialog(){
-        //Toast.makeText(getActivity(), "teste", Toast.LENGTH_SHORT).show();
-
-        Bundle args = null;
-
-        //Se está em modo de edição
-        /*if(!(materia.getId() <= 0)){
-
-            //Cria um Bundle e passa a cor da materia
-            args = new Bundle();
-            args.putInt(Singleton.COLOR, materia.getColor());
-        }*/
+    public void openColorDialog() {
 
         //Cria um dialog passa os argumentos
         ColorPickerFragment colorDialog = new ColorPickerFragment();
         //colorDialog.setArguments(args);
         colorDialog.setMateria(materia);
-        colorDialog.show(getFragmentManager(), "Selecione uma cor");
-
+        colorDialog.show(getFragmentManager(), getActivity().getString(R.string.select_a_color));
 
 
     }
 
-    public void openIconDialog(){
+    public void openIconDialog() {
 
         //Cria um dialog passa os argumentos
         IconPickerFragment iconDialog = new IconPickerFragment();
         //colorDialog.setArguments(args);
         iconDialog.setMateria(materia);
-        iconDialog.show(getFragmentManager(), "Selecione um icone");
+        iconDialog.show(getFragmentManager(), getActivity().getString(R.string.select_a_icon));
 
     }
 
-    public void criar_ou_editar_materia(){
+    public void criar_ou_editar_materia() {
         //Pega o nome do materia digitado pelo usuario
-        String subjectName = ((EditText)getView().findViewById(R.id.editText_subject)).getText().toString();
+        String subjectName = ((EditText) getView().findViewById(R.id.editText_subject)).getText().toString();
 
         //Se ele clicou no icone de OK e digitou um nome com mais de 1 letra, salva mudanças
-        if(!flagActionModeCancel && subjectName.length() > 0){
+        if (!flagActionModeCancel && subjectName.length() > 0) {
 
             //Primeira letra maiuscula
             String name = Character.toUpperCase(subjectName.charAt(0)) + subjectName.substring(1).toLowerCase();
@@ -330,20 +253,18 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
             //Atualiza o nome do materia no model do materia
             materia.setName(name);
 
-            if(!materia.isColored())
+            if (!materia.isColored())
                 materia.setRandomColor();
 
             //Pega as classes que foram adicionadas/alteradas
             List<Aula> aulas = addAulasFragment.getAdapter().getItems();
 
             //Pega a referência do banco de dados
-            DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
+            DatabaseHelper db = ((MateriasActivity) getActivity()).getDb();
 
             //Se Não existe no DB ainda, então não possui ID
-            if(materia.getId() <= 0){
+            if (materia.getId() <= 0) {
                 materia.setId(db.createSubjectAndClasses(materia, aulas));
-                //List<model.Materia> materias = db.getAllSubjects();
-                //Singleton.setMateria_selecionada(materias.get(materias.size() - 1));
             }
 
             //Se já existe no Banco, apenas da um update
@@ -354,12 +275,11 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
             Singleton.setMateria_selecionada(materia);
             Singleton.setNova_materia_selecionada(true);
 
-            if(((MateriasActivity)getActivity()).isEmptyFragments()){
-                ((MateriasActivity)getActivity()).setEmptyFragments(false);
+            if (((MateriasActivity) getActivity()).isEmptyFragments()) {
+                ((MateriasActivity) getActivity()).setEmptyFragments(false);
                 this.criando_primeira_materia = true;
                 Singleton.changeFragments(new MateriasFragment());
             }
-
 
 
             ((MateriasActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
@@ -375,15 +295,12 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
         if (!criando_primeira_materia)
             getActivity().onBackPressed();
 
-        //else
-        //Volta pra tela anterior
-        //    getActivity().getSupportFragmentManager().popBackStackImmediate();
 
     }
 
 
     //Cria uma nova classe
-    public void addClass(View v){
+    public void addClass(View v) {
         getAddAulasFragment().addElement();
     }
 
@@ -397,7 +314,7 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
 
             //Volta para o fragment anterior
             case R.id.back:
@@ -414,5 +331,13 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
                 openIconDialog();
                 break;
         }
+    }
+
+    public boolean isModo_edicao() {
+        return modo_edicao;
+    }
+
+    public void setModo_edicao(boolean modo_edicao) {
+        this.modo_edicao = modo_edicao;
     }
 }

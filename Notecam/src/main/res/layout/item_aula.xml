@@ -54,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="seg"
+                android:text="@string/seg"
                 android:id="@+id/button_weekday"
                 android:textColor="@color/text_color"
                 android:background="@drawable/custom_btn_flat_light"
@@ -65,7 +65,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="das"
+                android:text="@string/das"
                 android:id="@+id/textView"
                 android:textSize="18sp"
                 android:textColor="@color/text_color"
@@ -87,7 +87,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="às"
+                android:text="@string/as"
                 android:id="@+id/textView4"
                 android:textSize="18sp"
                 android:textColor="@color/text_color"

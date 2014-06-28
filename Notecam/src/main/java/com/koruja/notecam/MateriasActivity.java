@@ -3,7 +3,6 @@ package com.koruja.notecam;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,7 +11,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,14 +46,13 @@ import model.Aula;
 import model.Materia;
 import view_fragment.CameraFragment;
 import view_fragment.MateriasFragment;
-import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
 import welcome_fragments.WelcomeFragment_1;
 import welcome_fragments.WelcomeFragment_2;
 import welcome_fragments.WelcomeFragment_3;
 
 
-public class MateriasActivity extends ActionBarActivity implements MediaScannerConnection.MediaScannerConnectionClient, ViewPager.OnPageChangeListener  {
+public class MateriasActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener  {
 
 
     private SlowViewPager viewPager = null;
@@ -63,11 +60,18 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
     private DrawerLayout drawerLayout;
     View drawerView;
     public PagerAdapter pagerAdapter;
-    private String mTitle = "Notecam";
     private boolean emptyFragments = false;
     private boolean primeira_vez = true;
     private int mPosition;
-    private boolean modo_welcome = false;
+
+    //Referencia para colocar uma custom font
+    private Typeface fontType;
+
+    //Cria uma nova conexão com o Banco de Dados
+    private DatabaseHelper db = new DatabaseHelper(this);
+
+    //Lista de opções do menu
+    final ArrayList<LinearLayout> lista_options_menu = new ArrayList<LinearLayout>();
 
     //Handler para atualizar a cada 30 segundos
     Handler handler = new Handler();
@@ -138,23 +142,7 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
 
     }
 
-    //Referencia para colocar uma custom font
-    private Typeface fontType;
 
-    //Cria uma nova conexão com o Banco de Dados
-    private DatabaseHelper db = new DatabaseHelper(this);
-
-    //Armazena uma referência para o Fragmento de Materias
-    //private MateriasFragment materiasFragment;
-
-    //Armazena uma referência para o Fragmento de uma Materia
-    //private SingleMateriaFragment singleMateriasFragment;
-
-    //Armazena uma referência para o Fragmento de topicos de uma Materia
-    //private TopicosFragment topicosFragment;
-
-    //Lista de opções do menu
-    final ArrayList<LinearLayout> lista_options_menu = new ArrayList<LinearLayout>();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,7 +235,7 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
 
 
         if(!Singleton.isPaidVersion()) {
-            pro.setText("Free Version");
+            pro.setText(getString(R.string.free_version));
             premium.setVisibility(View.VISIBLE);
         }
 
@@ -267,7 +255,7 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
                         intent.setData(startDir);
                         intent.setType("text/csv");
                         intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivity(Intent.createChooser(intent, "Escolha como abrir o diretório"));
+                        startActivity(Intent.createChooser(intent, getString(R.string.choose_how_open_folder)));
                     }
 
 
@@ -381,17 +369,14 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
 
         @Override
         public void onDrawerClosed(View drawerView) {
-            //textPrompt.setText("onDrawerClosed");
         }
 
         @Override
         public void onDrawerOpened(View drawerView) {
-            //textPrompt.setText("onDrawerOpened");
         }
 
         @Override
         public void onDrawerSlide(View drawerView, float slideOffset) {
-            //textPrompt.setText("onDrawerSlide: " + String.format("%.2f", slideOffset));
         }
 
         @Override
@@ -413,29 +398,7 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
 
         }};
 
-    /*@Override
-    public void onFragmentInteraction(Uri uri, ContentValues content) {
-        if (content != null) {
-            if(content.containsKey(Singleton.TITLE))
-                mTitle = content.getAsString(Singleton.TITLE);
 
-            //É para trocar de fragmento?
-            if(content.containsKey(Singleton.REPLACE_FRAGMENT)){
-                //Sim? Mas para qual fragmento?
-                //Materia?
-                if(content.getAsString(Singleton.REPLACE_FRAGMENT).equals(Singleton.MATERIA)) {
-                    int materia_id = content.getAsInteger(Singleton.MATERIA_ID);
-                    //singleMateriasFragment = SingleMateriaFragment.newInstance(materia_id);
-
-                    //Singleton.getCameraFragment().reload(null);
-                    getViewPager().getAdapter().notifyDataSetChanged();
-                    getViewPager().setCurrentItem(1, true);
-                    //TrocaFragments
-                    //changeFragments(singleMateriasFragment, null);
-                }
-            }
-        }
-    }*/
 
     public void seleciona_option_certo_no_menu(Fragment fragment){
         //Limpa seleção
@@ -509,16 +472,12 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
 
     public void reload(){
 
-            //getViewPager().setAdapter(new PagerAdapter(getFragmentManager(), this));
         if(isEmptyFragments())
             changeFragments(pagerAdapter.mFragmentAtPos2, null);
         else {
             changeFragments(Singleton.getMateriasFragment(), null);
 
         }
-
-        //if(Singleton.getMateria_selecionada() != null)
-         //   getSingleMateriasFragment().reload(Singleton.getMateria_selecionada());
 
     }
 
@@ -537,7 +496,7 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
                 if(primeira_vez){
                     moveFragmentPager(1);
                 }
-                else Toast.makeText(this, "Em aula de " + m.getName(), Toast.LENGTH_SHORT).show();
+                else Toast.makeText(this, getString(R.string.em_aula_de) + m.getName(), Toast.LENGTH_SHORT).show();
 
                 //if(Singleton.materiasFragment != null) Singleton.materiasFragment.updateSubTitle();
                 break;
@@ -550,14 +509,6 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
 
     public void moveFragmentPager(int position){
         this.getViewPager().setCurrentItem(position, true);
-    }
-
-    public void toggleMenu(View v) {
-        getDrawerLayout().openDrawer(drawerView);
-    }
-
-    public String getmTitle() {
-        return mTitle;
     }
 
     public DatabaseHelper getDb() {
@@ -573,11 +524,6 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
         return Singleton.getMateriasFragment();
     }
 
-
-
-    public SingleMateriaFragment getSingleMateriasFragment() {
-        return Singleton.singleMateriaFragment;
-    }
 
     public SlowViewPager getViewPager() {
         return viewPager;
@@ -602,9 +548,7 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
         for(WeakReference<Fragment> ref : fragList) {
             Fragment f = ref.get();
             if(f != null) {
-                //if(f.isVisible()) {
                     ret.add(f);
-                //}
             }
         }
         return ret;
@@ -645,57 +589,6 @@ public class MateriasActivity extends ActionBarActivity implements MediaScannerC
         getViewPager().getAdapter().notifyDataSetChanged();
     }
 
-    private String SCAN_PATH ;
-    private static final String FILE_TYPE = "image/*";
-    private MediaScannerConnection conn;
-
-    public void startScan(String path)
-    {
-        SCAN_PATH = path;
-        Log.d("Connected", "success" + conn);
-        if(conn!=null)
-        {
-            conn.disconnect();
-        }
-        conn = new MediaScannerConnection(this,this);
-        //conn.connect();
-        //Intent intent = new Intent(Intent.ACTION_VIEW,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        //intent.setType("image/jpeg");
-        //startActivity(intent);
-
-        // To open up a gallery browser
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivityForResult(intent, 0);
-
-        /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivity(intent);*/
-    }
-
-    @Override
-    public void onMediaScannerConnected() {
-        Log.d("onMediaScannerConnected","success"+conn);
-        conn.scanFile(SCAN_PATH, FILE_TYPE);
-    }
-
-    @Override
-    public void onScanCompleted(String path, Uri uri) {
-        try {
-            Log.d("onScanCompleted",uri + "success"+conn);
-            if (uri != null)
-            {
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.setData(uri);
-                startActivity(intent);
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("content://media/external/images/media/16")));
-            }
-        } finally
-        {
-            conn.disconnect();
-            conn = null;
-        }
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -788,7 +681,7 @@ class PagerAdapter extends FragmentPagerAdapter {
 
             if (position == 0) {
                 if(mFragmentAtPos0 == null) {
-                    mFragmentAtPos0 = MateriasFragment.newInstance();
+                    mFragmentAtPos0 = new MateriasFragment();
                     Singleton.setMateriasFragment((MateriasFragment) mFragmentAtPos0);
                }
                 return mFragmentAtPos0;
@@ -862,10 +755,6 @@ class PagerAdapter extends FragmentPagerAdapter {
     public FragmentManager getmFragmentManager() {
         return mFragmentManager;
     }
-}
-
-interface MateriaPageFragmentListener {
-    void onSwitchToNextFragment(int materia_id);
 }
 
 

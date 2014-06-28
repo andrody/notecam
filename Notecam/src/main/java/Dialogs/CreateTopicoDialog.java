@@ -50,10 +50,6 @@ public class CreateTopicoDialog extends DialogFragment {
         this.topico = topico;
     }
 
-    public interface Communicator {
-        public void onDialogMessage(int color);
-
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -61,16 +57,16 @@ public class CreateTopicoDialog extends DialogFragment {
         LayoutInflater i = getActivity().getLayoutInflater();
         view = i.inflate(R.layout.add_topico,null);
 
-        String title = "Adicionar Tópico";
+        String title = getActivity().getString(R.string.adicionar_topico);
 
         if(topico != null){
             ((EditText)view.findViewById(R.id.topico_input)).setText(topico.getName());
-            title = "Editar Tópico";
+            title = getActivity().getString(R.string.editar_topico);
         }
 
         AlertDialog.Builder b =  new  AlertDialog.Builder(getActivity())
                 .setTitle(title)
-                .setPositiveButton("Salvar",
+                .setPositiveButton(getActivity().getString(R.string.salvar),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 salvarTopico();
@@ -83,7 +79,7 @@ public class CreateTopicoDialog extends DialogFragment {
                             }
                         }
                 )
-                .setNegativeButton("Cancelar",
+                .setNegativeButton(getActivity().getString(R.string.cancelar),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.dismiss();
@@ -109,7 +105,7 @@ public class CreateTopicoDialog extends DialogFragment {
             Random random = new Random();
             int r = (random.nextInt(9999));
 
-            nome_topico = "Topico " + r;
+            nome_topico = getActivity().getString(R.string.topico_) + r;
         }
 
         //Primeira letra maiuscula

@@ -2,6 +2,10 @@ package model;
 
 import android.text.format.Time;
 
+import com.koruja.notecam.R;
+
+import helper.Singleton;
+
 public class Aula {
 
     public static String HORA = "hora";
@@ -44,19 +48,19 @@ public class Aula {
     public static String getWeekDayString(int weekday){
         switch(weekday){
             case 0:
-                return "dom";
+                return Singleton.getMateriasActivity().getString(R.string.dom);
             case 1:
-                return "seg";
+                return Singleton.getMateriasActivity().getString(R.string.seg);
             case 2:
-                return "ter";
+                return Singleton.getMateriasActivity().getString(R.string.ter);
             case 3:
-                return "qua";
+                return Singleton.getMateriasActivity().getString(R.string.qua);
             case 4:
-                return "qui";
+                return Singleton.getMateriasActivity().getString(R.string.qui);
             case 5:
-                return "sex";
+                return Singleton.getMateriasActivity().getString(R.string.sex);
             case 6:
-                return "sab";
+                return Singleton.getMateriasActivity().getString(R.string.sab);
 
         }
         return null;

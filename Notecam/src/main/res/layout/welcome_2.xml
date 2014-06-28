@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Próximo"
+                android:text="@string/proximo"
                 android:id="@+id/textView"
                 android:layout_gravity="center"
                 android:textAlignment="center"
@@ -76,7 +76,7 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Na hora da aula abra o Notecam e tire fotos da matéria"
+            android:text="@string/tutorial_2"
             android:id="@+id/textView2"
             android:layout_gravity="top|center"
             android:textAlignment="center"
@@ -85,8 +85,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:singleLine="false"
-            android:gravity="center"
-            android:layout_marginBottom="30dp" />
+            android:gravity="center" />
 
         <ImageView
             android:layout_width="wrap_content"

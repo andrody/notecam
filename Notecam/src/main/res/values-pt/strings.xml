@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Notecam</string>
+    <string name="subjectActivitie">Subjects</string>
+    <string name="action_add_materia">Add Matéria</string>
+    <string name="navigation_drawer_open">abrir menu</string>
+    <string name="navigation_drawer_close">fechar menu</string>
+    <string name="materias">Materias</string>
+    <string name="exportar_tudo">Exportar Tudo</string>
+    <string name="versao_premium">Obter Versão PRO</string>
+    <string name="about_us">Sobre Nós</string>
+    <string name="menu_do_notecam">Menu do Notecam</string>
+    <string name="deletar">Deletar</string>
+    <string name="exportar">Exportar</string>
+    <string name="action_editar_materia">Editar Materia</string>
+    <string name="action_exportar_materia">Exportar Materia</string>
+    <string name="action_go_folder">Aulas</string>
+    <string name="add_topico">Add Tópico</string>
+    <string name="free_version">Versão Grátis</string>
+    <string name="choose_how_open_folder">Escolha como abrir o diretório</string>
+    <string name="em_aula_de">Em aula de </string>
+    <string name="generating_pdf">Gerando PDF…</string>
+    <string name="digite_nome_topico">Digite o nome do Tópico</string>
+    <string name="falha_somente_selecione_arquivos_locais">Falha! Selecione somente arquivos locais.</string>
+    <string name="erro_ao_carregar_imagem">Erro ao carregar uma imagem, excluindo ela...</string>
+    <string name="pronto">Pronto</string>
+    <string name="editar_materia">Editar Matéria</string>
+    <string name="select_a_color">Selecione uma cor</string>
+    <string name="select_a_icon">Selecione um icone</string>
+    <string name="horario_inicio">Horário de início</string>
+    <string name="horario_fim">Horário de término</string>
+    <string name="dia_da_semana">Dia da semana</string>
+    <string name="domingo">Domingo</string>
+    <string name="segunda">Segunda</string>
+    <string name="terca">Terça</string>
+    <string name="quarta">Quarta</string>
+    <string name="quinta">Quinta</string>
+    <string name="sexta">Sexta</string>
+    <string name="sabado">Sabado</string>
+    <string name="dom">dom</string>
+    <string name="seg">seg</string>
+    <string name="ter">ter</string>
+    <string name="qua">qua</string>
+    <string name="qui">qui</string>
+    <string name="sex">sex</string>
+    <string name="sab">sab</string>
+    <string name="fotos"> fotos</string>
+    <string name="erro_ao_gerar_pdf">Erro ao gerar pdf</string>
+    <string name="fotos_de">Fotos de </string>
+    <string name="fotos__">Fotos, </string>
+    <string name="topicos_abordados">      Tópicos Abordados: </string>
+    <string name="gerado_pelo_app_notecam">Gerado pelo app Notecam</string>
+    <string name="selecione_um_icone">Selecione um ícone</string>
+    <string name="desculpa_icone_apenas_versao_completa">DESCULPAAA!!\n\nEsse ícone é apenas para a versão completa, senhor usuario!\n\nGostaria de desbloquear a VERSÃO COMPLETA?</string>
+    <string name="desculpa_cor_apenas_versao_completa">DESCULPAAA!!\n\nEssa cor é apenas para a versão completa, senhor usuario!\n\nGostaria de desbloquear a VERSÃO COMPLETA?</string>
+    <string name="sim_exc3">Sim!!!</string>
+    <string name="agora_nao">Agora não…</string>
+    <string name="adicionar_topico">Adicionar Tópico</string>
+    <string name="editar_topico">Editar Tópico</string>
+    <string name="salvar">Salvar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="topico_">Topico </string>
+    <string name="selecione_uma_cor">Selecione uma cor</string>
+    <string name="nome_do_topico">Nome do topico</string>
+    <string name="criar_nova_materia">Criar Nova Matéria</string>
+    <string name="nome_da_materia">Nome da Matéria</string>
+    <string name="nova_aula">nova aula</string>
+    <string name="criar_materia">Criar Matéria</string>
+    <string name="compartilhar">Compartilhar</string>
+    <string name="gerar_pdf">Gerar PDF</string>
+    <string name="das">das</string>
+    <string name="as">às</string>
+    <string name="abrir_diretorio">Abrir diretório</string>
+    <string name="proximo">Próximo</string>
+    <string name="tutorial_1">Crie uma matéria e selecione os horários em que ela ocorre</string>
+    <string name="tutorial_2">Na hora da aula abra o Notecam e tire fotos da matéria</string>
+    <string name="tutorial_3">Quando for estudar veja suas fotos ou gere um PDF</string>
+    <string name="ajuda">Ajuda</string>
+    <string name="geral">Geral</string>
+
+
+</resources>
+
+

@@ -1,18 +1,15 @@
 package helper;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -22,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -42,7 +38,6 @@ import view_fragment.AddMateriaFragment;
 import view_fragment.CameraFragment;
 import view_fragment.GaleriaFragment;
 import view_fragment.MateriasFragment;
-import view_fragment.SingleMateriaFragment;
 import view_fragment.TopicosFragment;
 
 /**
@@ -76,7 +71,6 @@ public class Singleton {
     public static int DIRECT_ADD_SUBJECT = 1;
 
     private static MateriasFragment materiasFragment = null;
-    public static SingleMateriaFragment singleMateriaFragment = null;
     private static TopicosFragment topicosFragment = null;
     private static AddMateriaFragment addMateriaFragment = null;
     private static GaleriaFragment galeriaFragment = null;
@@ -150,7 +144,6 @@ public class Singleton {
 
 
     public static void resetarSingleton() {
-        //addMateriaFragment = null;
         materiasFragment = null;
     }
 
@@ -162,10 +155,6 @@ public class Singleton {
     public static void setMateria_selecionada(Materia materia) {
         materia_selecionada = materia;
         setNova_materia_selecionada(true);
-
-        //if(cameraFragment != null) {
-        //    cameraFragment.reload(null);
-        //}
     }
 
     public static PictureTaker getPictureTaker() {
@@ -292,21 +281,6 @@ public class Singleton {
         Singleton.materiasFragment = materiasFragment;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri, ContentValues content);
-    }
-
 
     public static Bitmap getPreview(String uri) {
         File image = new File(uri);
@@ -333,14 +307,6 @@ public class Singleton {
     public static int get_dp_in_px(int padding_in_dp) {
         final float scale = getMateriasActivity().getResources().getDisplayMetrics().density;
         return (int) (padding_in_dp * scale + 0.5f);
-    }
-
-    public static void setActionBarColor(int color) {
-        ActionBar actionBar = getMateriasActivity().getActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(color));
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(true);
-
     }
 
     public static void changeFragments(final Fragment fragment) {
@@ -469,7 +435,7 @@ public class Singleton {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showProgressDialog("Gerando PDF...");
+                showProgressDialog(getMateriasActivity().getString(R.string.generating_pdf));
             }
 
             @Override

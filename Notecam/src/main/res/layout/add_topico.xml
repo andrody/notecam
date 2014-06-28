@@ -26,7 +26,7 @@
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:id="@+id/topico_input"
-                    android:hint="Nome do topico"
+                    android:hint="@string/nome_do_topico"
                     android:singleLine="true"
                     android:layout_gravity="left"
                     android:layout_marginTop="20dp"

@@ -16,8 +16,6 @@ import helper.Singleton;
  * Created by Andrew on 10/24/13.
  */
 public class Materia {
-    public static String ID = "id";
-    public static String NAME = "name";
 
     @Override
     public String toString() {
@@ -30,7 +28,6 @@ public class Materia {
     private int color = -1;
     private int id = -1;
     private int icon_id = -1;
-    private int numero_fotos = 0;
     private String name = "";
     private String original_name;
     Context context;
@@ -177,9 +174,6 @@ public class Materia {
         return i;
     }
 
-    public void setNumero_fotos(int numero_fotos) {
-        this.numero_fotos = numero_fotos;
-    }
 
     public int getIcon_id() {
         return Singleton.get_icon(icon_id);

@@ -193,7 +193,7 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
         CreateTopicoDialog dialog = new CreateTopicoDialog();
         dialog.setMateria(Singleton.getMateria_selecionada());
         dialog.setTopico(Singleton.getTopico_selecionado());
-        dialog.show(getFragmentManager(), "Digite o nome do Tópico");
+        dialog.show(getFragmentManager(), getActivity().getString(R.string.digite_nome_topico));
     }
 
     @Override
@@ -252,7 +252,7 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
             try {
                 new_foto.setPath(getRealPathFromURI(uri));
             }catch (IllegalStateException e){
-                Toast.makeText(getActivity(), "Falha! Selecione somente arquivos locais.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getString(R.string.falha_somente_selecione_arquivos_locais), Toast.LENGTH_SHORT).show();
             }
             new_foto.save();
 
@@ -263,41 +263,6 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
             Singleton.getTopico_selecionado().popularFotos();
             galeriaAdapter.fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
             galeriaAdapter.notifyDataSetChanged();
-
-
-            /*InputStream is = null;
-            try {
-                is = getActivity().getContentResolver().openInputStream(uri);
-                is.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-
-            if(path != null) {
-                File old_file= new File(path);
-
-                String nome = Singleton.getTopico_selecionado().getName() + "_" + CustomCameraHost.get_proxima_foto_numero();
-                String new_path = Singleton.getTopico_selecionado().get_path() + nome + ".jpg";
-                File filename = new File(new_path);
-
-                boolean sucesso = old_file.renameTo(filename);
-                if (!sucesso)
-                    Toast.makeText(getActivity(), "falha ao mover arquivo", Toast.LENGTH_SHORT).show();
-
-                Foto new_foto = new Foto(nome, filename.getAbsolutePath(), Singleton.getTopico_selecionado());
-                new_foto.save();
-                Singleton.getTopico_selecionado().popularFotos();
-
-                //Para aparecer na galeria precisa escanear
-                Singleton.escanear_foto(new_foto, Singleton.getTopico_selecionado());
-            }
-            else {
-                Toast.makeText(getActivity(), "Erro. Somente funciona com imagens armazenados no dispositivo", Toast.LENGTH_LONG).show();
-            }*/
-
 
 
         }
@@ -353,100 +318,6 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
         activity.reload();
         super.onDetach();
     }
-
-    /** * Photo Selection result */
-    /*public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Singleton.IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK) {
-
-            String nome = Singleton.getTopico_selecionado().getName() + "_" + CustomCameraHost.get_proxima_foto_numero();
-            String path = Singleton.getTopico_selecionado().get_path() + nome + ".jpg";
-            File filename = new File(path);
-
-            if (!filename.getParentFile().isDirectory())
-            {
-                filename.getParentFile().mkdirs();
-            }
-
-            //Bitmap bitmap = getBitmapFromCameraData(data, getActivity());
-            Uri uri = data.getData();
-            InputStream is = null;
-            Bitmap bitmap = null;
-            try {
-                is = getActivity().getContentResolver().openInputStream(uri);
-                bitmap = BitmapFactory.decodeStream(is);
-                is.close();
-
-                boolean sucesso = storeImage(bitmap, path);
-                if (sucesso) {
-                    Foto foto = new Foto(nome, path, Singleton.getTopico_selecionado());
-                    Singleton.escanear_foto(foto, Singleton.getTopico_selecionado());
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-
-
-
-            /*FileOutputStream out = null;
-            try {
-                out = new FileOutputStream(filename);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try{
-                    out.close();
-
-                    Foto foto = new Foto(nome, path, Singleton.getTopico_selecionado());
-                    Singleton.escanear_foto(foto, Singleton.getTopico_selecionado());
-
-                } catch(Throwable ignore) {}
-            }*/
-
-        //}
-    //}
-
-    private boolean storeImage(Bitmap imageData, String path) {
-        //get path to external storage (SD card)
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(path);
-
-            BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
-
-            //choose another format if PNG doesn't suit you
-            imageData.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-
-            bos.flush();
-            bos.close();
-
-        } catch (FileNotFoundException e) {
-            return false;
-        } catch (IOException e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /** * Use for decoding camera response data. * * @param data * @param context * @return */
-    /*public static Bitmap getBitmapFromCameraData(Intent data, Context context){
-        Uri selectedImage = data.getData();
-        String[] filePathColumn = { MediaStore.Images.Media.DATA };
-        Cursor cursor = context.getContentResolver().query(selectedImage,filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picturePath = cursor.getString(columnIndex);
-        cursor.close();
-        return BitmapFactory.decodeFile(picturePath);
-    }*/
-
 
 
 }
@@ -526,7 +397,7 @@ class GaleriaAdapter extends BaseAdapter {
                     thumbnail = ThumbnailUtils.extractThumbnail(bitmap, THUMBSIZE, THUMBSIZE);
                 }catch (SecurityException e) {
                     e.printStackTrace();
-                    Toast.makeText(Singleton.getMateriasActivity(), "Erro ao carregar uma imagem, excluindo ela...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Singleton.getMateriasActivity(), context.getString(R.string.erro_ao_carregar_imagem), Toast.LENGTH_SHORT).show();
                 }
             }
 

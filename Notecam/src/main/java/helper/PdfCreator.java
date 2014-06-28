@@ -1,36 +1,26 @@
 package helper;
 //PDF
 
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BadElementException;
+
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.ListItem;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.koruja.notecam.R;
 
@@ -40,11 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import model.Foto;
@@ -73,16 +60,9 @@ public class PdfCreator {
     private static Font font_topico = new Font(Font.FontFamily.HELVETICA, 26,
             Font.NORMAL, BaseColor.WHITE);
 
-    private static Font font_topico_40 = new Font(Font.FontFamily.HELVETICA, 40,
-            Font.NORMAL, BaseColor.WHITE);
-
     private static Font font_rodape = new Font(Font.FontFamily.HELVETICA, 20,
             Font.NORMAL, BaseColor.WHITE);
 
-    private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-            Font.NORMAL, BaseColor.RED);
-    private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
-            Font.BOLD);
     private static Font font_black_transparente = new Font(Font.FontFamily.HELVETICA, 20,
             Font.NORMAL, new BaseColor(47, 47, 47));
 
@@ -91,19 +71,7 @@ public class PdfCreator {
 
     private static Font font_black_transparente_30 = new Font(Font.FontFamily.HELVETICA, 30,
             Font.NORMAL, new BaseColor(47, 47, 47));
-    TextView txt1;
 
-    //pdf
-    /*public int getPreviousPageImageResource() { return R.drawable.left_arrow; }
-    public int getNextPageImageResource() { return R.drawable.right_arrow; }
-    public int getZoomInImageResource() { return R.drawable.zoom_in; }
-    public int getZoomOutImageResource() { return R.drawable.zoom_out; }
-    public int getPdfPasswordLayoutResource() { return R.layout.pdf_file_password; }
-    public int getPdfPageNumberResource() { return R.layout.dialog_pagenumber; }
-    public int getPdfPasswordEditField() { return R.id.etPassword; }
-    public int getPdfPasswordOkButton() { return R.id.btOK; }
-    public int getPdfPasswordExitButton() { return R.id.btExit; }
-    public int getPdfPageNumberEditField() { return R.id.pagenum_edit; }*/
 
     public void criarPDF(Materia materia, List<Topico> topicos) {
         this.materia = materia;
@@ -136,7 +104,7 @@ public class PdfCreator {
 
                 @Override
                 public void run() {
-                    Toast.makeText(Singleton.getMateriasActivity(), "Erro ao gerar pdf", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Singleton.getMateriasActivity(), Singleton.getMateriasActivity().getString(R.string.erro_ao_gerar_pdf), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -153,8 +121,8 @@ public class PdfCreator {
 
     private void addMetaData(Document document) {
         document.addTitle(this.materia.getName());
-        document.addSubject("Fotos of " + this.materia.getName());
-        document.addKeywords("Fotos, " + this.materia.getName());
+        document.addSubject(Singleton.getMateriasActivity().getString(R.string.fotos_de) + this.materia.getName());
+        document.addKeywords(Singleton.getMateriasActivity().getString(R.string.fotos__) + this.materia.getName());
         document.addAuthor("Notecam");
         document.addCreator("Notecam");
     }
@@ -191,24 +159,11 @@ public class PdfCreator {
         //Adicionar "Topicos abordados"
         addEmptyLine(preface, 2);
         font_black_transparente.setSize(24);
-        Paragraph subtitulo = new Paragraph("      Tópicos Abordados: ", font_black_transparente_30);
+        Paragraph subtitulo = new Paragraph("      " + Singleton.getMateriasActivity().getString(R.string.topicos_abordados), font_black_transparente_30);
         preface.add(subtitulo);
 
         updateProgress(14);
 
-
-        /*Image image = null;
-        try {
-            image = Image.getInstance(path);
-            float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
-                    - document.rightMargin() - indentation) / image.getWidth()) * 100;
-
-            image.scalePercent(scaler);
-            document.add(image);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
         addEmptyLine(preface, 1);
 
@@ -258,7 +213,7 @@ public class PdfCreator {
             PdfPCell cell2 = new PdfPCell();
             cell2.setBorderWidth(0);
             Phrase nome = new Phrase(topico.getName(), font_topico);
-            Phrase numero_fotos = new Phrase("   (" + topico.getFotos().size() + " fotos)", font_black_transparente_14);
+            Phrase numero_fotos = new Phrase("   (" + topico.getFotos().size() + Singleton.getMateriasActivity().getString(R.string.fotos) + ")", font_black_transparente_14);
             Paragraph p2 = new Paragraph(new Phrase(topico.getName(), font_topico));
             p2.add(numero_fotos);
             cell2.addElement(p2);
@@ -293,8 +248,8 @@ public class PdfCreator {
         //Celula do topico
         PdfPCell cell2 = new PdfPCell();
         cell2.setBorderWidth(0);
-        Phrase link = new Phrase("www.notecam.com", font_rodape);
-        Paragraph p2 = new Paragraph(new Phrase("Gerado pelo app Notecam", font_rodape));
+        Phrase link = new Phrase("www.notecam.co", font_rodape);
+        Paragraph p2 = new Paragraph(new Phrase(Singleton.getMateriasActivity().getString(R.string.gerado_pelo_app_notecam), font_rodape));
         p2.add(NEWLINE);
         p2.add(link);
                 cell2.addElement(p2);
@@ -370,71 +325,6 @@ public class PdfCreator {
         }
 
 
-
-
-
-
-        /*Anchor anchor = new Anchor("ESTIMATING APP", font_nome_da_materia);
-        anchor.setName("ESTIMATING APP");
-
-        // Second parameter is the number of the chapter
-        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
-
-        Paragraph subPara = new Paragraph("Subcategory 1", subFont);
-        Section subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Hello"));
-
-        subPara = new Paragraph("Subcategory 2", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Paragraph 1"));
-        subCatPart.add(new Paragraph("Paragraph 2"));
-        subCatPart.add(new Paragraph("Paragraph 3"));
-
-        //String path = Singleton.getMateria_selecionada().getTopicos().get(0).getFotos().get(0).getPath();
-
-        //if you would have a chapter indentation
-        int indentation = 0;
-        //whatever
-
-        /*Image image = null;
-        try {
-            image = Image.getInstance(path);
-            float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
-                    - document.rightMargin() - indentation) / image.getWidth()) * 100;
-
-            image.scalePercent(scaler);
-            document.add(image);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        // Add a list
-        /*createList(subCatPart);
-        Paragraph paragraph = new Paragraph();
-        addEmptyLine(paragraph, 5);
-        subCatPart.add(paragraph);
-
-        // Add a table
-        createTable(subCatPart);
-
-        // Now add all this to the document
-        document.add(catPart);
-
-        // Next section
-        anchor = new Anchor("Second Chapter", font_nome_da_materia);
-        anchor.setName("Second Chapter");
-
-        // Second parameter is the number of the chapter
-        catPart = new Chapter(new Paragraph(anchor), 1);
-
-        subPara = new Paragraph("Subcategory", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("This is a very important message"));
-
-        // Now add all this to the document
-        document.add(catPart);*/
-
     }
 
 
@@ -456,50 +346,6 @@ public class PdfCreator {
     }
 
 
-    private void createTable(Section subCatPart)
-            throws BadElementException {
-        PdfPTable table = new PdfPTable(3);
-
-        // t.setBorderColor(BaseColor.GRAY);
-        // t.setPadding(4);
-        // t.setSpacing(4);
-        // t.setBorderWidth(1);
-
-        PdfPCell c1 = new PdfPCell(new Phrase("Job Name:"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Test 001"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase(""));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-        table.setHeaderRows(1);
-
-        table.addCell("Date:");
-        table.addCell("1.1");
-        table.addCell("");
-        table.addCell("Labor Rate:");
-        table.addCell("2.2");
-        table.addCell("");
-        table.addCell("Labor Cost:");
-        table.addCell("3.2");
-        table.addCell("3.3");
-
-        subCatPart.add(table);
-
-    }
-
-    private void createList(Section subCatPart) {
-        com.itextpdf.text.List list = new com.itextpdf.text.List(true, false, 10);
-        list.add(new ListItem("First point"));
-        list.add(new ListItem("Second point"));
-        list.add(new ListItem("Third point"));
-        subCatPart.add(list);
-    }
-
     private void addEmptyLine(Paragraph paragraph, int number) {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
@@ -517,18 +363,6 @@ public class PdfCreator {
         cb.stroke();
         cb.restoreState();
 
-        /*PdfContentByte cb = stamper.getOverContent(page);
-        PdfGState gs = new PdfGState();
-        gs.setBlendMode(PdfGState.BM_DIFFERENCE);
-        cb.setGState(gs);
-        cb.setColorFill(new GrayColor(1.0f));
-        cb.rectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight());
-        cb.fill();
-
-        cb = stamper.getUnderContent(page);
-        cb.setColorFill(new GrayColor(1.0f));
-        cb.rectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight());
-        cb.fill();*/
     }
 
     private File createFileFromInputStream(InputStream inputStream) {

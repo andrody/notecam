@@ -11,8 +11,6 @@ import helper.Singleton;
  * Created by Andrew on 30/04/14.
  */
 public class Foto {
-    public static String ID = "id";
-    public static String NAME = "name";
 
     private boolean checkboxSelecionada = false;
     private Topico topico;
@@ -22,7 +20,6 @@ public class Foto {
     private String path;
     private Uri uri;
     private int createdAt;
-    private Context context;
 
     public Foto(String name){
         this.name = name;
@@ -62,13 +59,7 @@ public class Foto {
         this.id = id;
     }
 
-    public boolean isCheckboxSelecionada() {
-        return checkboxSelecionada;
-    }
 
-    public void setCheckboxSelecionada(boolean checkboxSelecionada) {
-        this.checkboxSelecionada = checkboxSelecionada;
-    }
 
     public int getCreatedAt() {
         return createdAt;

@@ -13,8 +13,6 @@ import helper.Singleton;
  * Created by Andrew on 10/24/13.
  */
 public class Topico {
-    public static String ID = "id";
-    public static String NAME = "name";
 
     private boolean checkboxSelecionada = false;
     private List<Foto> fotos;

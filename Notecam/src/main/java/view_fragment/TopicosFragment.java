@@ -1,21 +1,15 @@
 package view_fragment;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
 
 import java.util.ArrayList;
@@ -25,7 +19,6 @@ import Dialogs.CreateTopicoDialog;
 import helper.DatabaseHelper;
 import helper.Singleton;
 import list.TopicosAdapter;
-import model.Foto;
 import model.Materia;
 import model.Topico;
 
@@ -187,13 +180,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public void openInGallery(String imageId) {
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.buildUpon().appendPath(imageId).build();
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
 
-    private Singleton.OnFragmentInteractionListener mListener;
 
     public static TopicosFragment newInstance(int materia_id) {
         TopicosFragment fragment = new TopicosFragment();
@@ -251,7 +238,6 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
 
@@ -268,7 +254,8 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
             case R.id.editar_materia:
 
                 //Cria uma nova instância do Fragment AddMateriaFragment e passa o id da materia como parametro para edição
-                AddMateriaFragment addMateriaFragment = AddMateriaFragment.newInstance(materia.getId());
+                AddMateriaFragment addMateriaFragment = new AddMateriaFragment();
+                addMateriaFragment.setModo_edicao(true);
                 Singleton.setAddMateriaFragment(addMateriaFragment);
 
                 //Muda o fragment
@@ -360,7 +347,7 @@ public class TopicosFragment extends Fragment implements View.OnClickListener {
         //Cria um dialog passa os argumentos
         CreateTopicoDialog dialog = new CreateTopicoDialog();
         dialog.setMateria(materia);
-        dialog.show(getFragmentManager(), "Digite o nome do Tópico");
+        dialog.show(getFragmentManager(), getActivity().getString(R.string.digite_nome_topico));
     }
 
     public ListView getLista() {

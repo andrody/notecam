@@ -103,7 +103,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Abrir diretório"
+            android:text="@string/abrir_diretorio"
             android:textColor="@color/menu_text_b"
             android:textSize="18dp"
             android:layout_gravity="center" />
@@ -214,7 +214,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ajuda"
+            android:text="@string/ajuda"
             android:textColor="@color/menu_text_b"
             android:textSize="18dp"
             android:layout_gravity="center" />

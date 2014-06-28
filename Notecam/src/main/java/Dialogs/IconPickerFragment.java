@@ -46,7 +46,7 @@ public class IconPickerFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialog_grid, null);
-        getDialog().setTitle("Selecione um ícone");
+        getDialog().setTitle(getActivity().getString(R.string.selecione_um_icone));
 
         //Cria o adapter
         final IconAdapter adapter = new IconAdapter(getActivity(), this);
@@ -72,9 +72,9 @@ public class IconPickerFragment extends DialogFragment {
                 }
 
                 else {
-                    Singleton.show_only_pro_dialog("DESCULPAAA!!\n\n Esse ícone é apenas para a versão completa, senhor usuario! \n" +
-                            "\nGostaria de desbloquear a " +
-                            "VERSÃO COMPLETA?", "Sim!!!", "Agora não...");
+                    Singleton.show_only_pro_dialog(getActivity().getString(R.string.desculpa_icone_apenas_versao_completa) ,
+                            getActivity().getString(R.string.sim_exc3),
+                            getActivity().getString(R.string.agora_nao));
                 }
 
                 //Fecha a tela assim que clicar em uma cor

@@ -1,17 +1,13 @@
 package view_fragment;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.ActionMode;
@@ -39,7 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import helper.DatabaseHelper;
-import helper.PdfCreator;
 import helper.Singleton;
 
 
@@ -79,21 +74,12 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         super.onPause();
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         //Referencia aos Resources (R.strings...)
         resources = getActivity().getResources();
-
-        //Adiciona titulo ao mTitle da Activity
-        if (mListener != null) {
-            ContentValues values = new ContentValues();
-            values.put(Singleton.TITLE, getActivity().getResources().getString(R.string.materias));
-            //mListener.onFragmentInteraction(null, values);
-        }
-
 
         //Cria o adapter
         materiasAdapter = new MateriasAdapter(getActivity());
@@ -107,27 +93,21 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 //Seleciona ou deseleciona materia se estiver em modo de edição
                 if(fakeActionModeOn){
                     CheckBox checkbox = ((CheckBox) view.findViewById(R.id.checkbox_materia));
                     checkbox.setChecked(!checkbox.isChecked());
                 }
                 else {
-                    //Pede ao Activity para mudar fragment (Materia)
-                    //if (mListener != null) {
+
 
                         //Pega a materia selecionada
                         model.Materia materia = (model.Materia)materiasAdapter.getItem(position);
                         Singleton.setMateria_selecionada(materia);
                         Singleton.getCameraFragment().reload(null);
                         Singleton.getMateriasActivity().getViewPager().setCurrentItem(1, true);
-                        //((MateriasActivity)getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
 
-                        //ContentValues values = new ContentValues();
-                        //values.put(Singleton.REPLACE_FRAGMENT, Singleton.MATERIA);
-                        //values.put(Singleton.MATERIA_ID, materia.getId());
-
-                        //mListener.onFragmentInteraction(null, values);
                     }
                 //}
             }
@@ -161,31 +141,11 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private Singleton.OnFragmentInteractionListener mListener;
-
-
-    public static MateriasFragment newInstance() {
-        MateriasFragment fragment = new MateriasFragment();
-        Bundle args = new Bundle();
-        args.putString(Singleton.FRAGMENT_TYPE, Singleton.FRAGMENT_TYPE_MATERIAS);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    public MateriasFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //Tem de habilitar para mudar o ActionBar
-        setHasOptionsMenu(true);
-
-
-
+    public MateriasFragment(){
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -250,19 +210,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri, null);
-        }
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     public boolean isFakeActionModeOn() {
         return fakeActionModeOn;
@@ -324,77 +271,6 @@ public class MateriasFragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         };
     }
-
-    //Callback para quando clica nos ícones do header no ActionMode (Modo de edição)
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-
-            //Adiciona as opções de deletar e compartilhar
-            menu.add(resources.getString(R.string.deletar))
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            menu.add(resources.getString(R.string.exportar))
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-            //Se o botão selecionado pelo usuario for o de deletar
-            if(item.getTitle().equals("Deletar")){
-
-                //Pede todos os subjects do adapter e põe numa lista
-                List<model.Materia> materias = materiasAdapter.materias;
-
-                //Pega a referencia do banco da activity
-                DatabaseHelper db = ((MateriasActivity)getActivity()).getDb();
-
-                //Para cada subject da lista
-                for(model.Materia materia : materias){
-
-                    //Descobre em qual a view corresponde a este subject
-                    View view = materiasAdapter.getView(materia.getId());
-
-                    //Pega uma referência para o checkbox dele
-                    CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox_subject);
-
-                    //Se ele estiver marcado
-                    if(checkBox.isChecked()){
-
-                        //Deleta esse subject e todas as suas classes
-                        db.deleteSubjectAndClasses(materia);
-                    }
-                }
-                syncDB();
-                if(db.getAllSubjects().isEmpty())
-                    MateriasFragment.this.reload();
-
-
-            }
-            mode.finish();
-            return true;
-        }
-
-
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            //Quando o ActionMode sumir, seta a flag como falso
-            setFakeActionModeOn(false);
-
-            //Atualiza a tela
-            syncDB();
-        }
-    };
 
     @Override
     public void onClick(View view) {

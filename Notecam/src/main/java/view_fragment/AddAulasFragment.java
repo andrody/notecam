@@ -37,9 +37,6 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        //Se não houver nenhuma class, imprime isto
-        //setEmptyText("Add a class!");
     }
 
     // Initializes the Fragment
@@ -106,7 +103,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
                 args.putBoolean(Aula.STARTIME, true);
 
                 //Abre o dialog
-                dialogFragment.show(getActivity().getFragmentManager(), "StartTime");
+                dialogFragment.show(getActivity().getFragmentManager(), getActivity().getString(R.string.horario_inicio));
             }
 
             //Se for o botão de End time
@@ -115,7 +112,7 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
                 args.putBoolean(Aula.STARTIME, false);
 
                 //Abre o dialog
-                dialogFragment.show(getActivity().getFragmentManager(), "EndTime");
+                dialogFragment.show(getActivity().getFragmentManager(), getActivity().getString(R.string.horario_fim));
             }
         }
 
@@ -136,10 +133,11 @@ public class AddAulasFragment extends ListFragment implements View.OnClickListen
             AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
 
             //Coloca o titulo
-            b.setTitle("Dia da semana");
+            b.setTitle(getActivity().getString(R.string.dia_da_semana));
 
             //Especifica as opções do dialog
-            String[] types = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta","Sexta", "Sabado"};
+            String[] types = {getActivity().getString(R.string.domingo), getActivity().getString(R.string.segunda), getActivity().getString(R.string.terca),
+                    getActivity().getString(R.string.quarta), getActivity().getString(R.string.quinta),getActivity().getString(R.string.sexta), getActivity().getString(R.string.sabado)};
 
             //Coloca as opções e um ClickListener
             b.setItems(types, new DialogInterface.OnClickListener() {
