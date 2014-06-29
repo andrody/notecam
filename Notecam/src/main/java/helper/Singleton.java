@@ -33,7 +33,6 @@ import java.util.List;
 import model.Foto;
 import model.Materia;
 import model.Topico;
-import camera.PictureTaker;
 import view_fragment.AddMateriaFragment;
 import view_fragment.CameraFragment;
 import view_fragment.GaleriaFragment;
@@ -88,7 +87,6 @@ public class Singleton {
 
     private static boolean primeiraFoto = true;
 
-    private static PictureTaker pictureTaker;
 
     private static ProgressDialog progress;
     private static CustomAsyncTask asyncTask;
@@ -157,13 +155,7 @@ public class Singleton {
         setNova_materia_selecionada(true);
     }
 
-    public static PictureTaker getPictureTaker() {
-        return pictureTaker;
-    }
 
-    public static void setPictureTaker(PictureTaker pictureTaker) {
-        Singleton.pictureTaker = pictureTaker;
-    }
 
     public static Materia getMateria_em_aula() {
         return materia_em_aula;
@@ -367,13 +359,57 @@ public class Singleton {
     public static ArrayList<Integer> getListaIcones() {
 
         ArrayList<Integer> icones = new ArrayList<Integer>();
-        icones.add(R.drawable.lab);
-        icones.add(R.drawable.ic_sobre);
-        icones.add(R.drawable.ic_salvar);
-        icones.add(R.drawable.ic_salvar);
-        icones.add(R.drawable.ic_salvar);
-        icones.add(R.drawable.ic_salvar);
-        icones.add(R.drawable.ic_salvar);
+        icones.add(R.drawable.nic_lab);
+        icones.add(R.drawable.nic_tesoura);
+        icones.add(R.drawable.nic_relogio);
+        icones.add(R.drawable.nic_calculadora);
+        icones.add(R.drawable.nic_certificado);
+        icones.add(R.drawable.nic_brain);
+        icones.add(R.drawable.nic_telescopio);
+        icones.add(R.drawable.nic_globo);
+        icones.add(R.drawable.nic_cores);
+        icones.add(R.drawable.nic_reguatriangular);
+        icones.add(R.drawable.nic_mouse);
+        icones.add(R.drawable.nic_luz);
+        icones.add(R.drawable.nic_grau);
+        icones.add(R.drawable.nic_microscopio);
+        icones.add(R.drawable.nic_bookshelf);
+        icones.add(R.drawable.nic_box);
+        icones.add(R.drawable.nic_diamond);
+        icones.add(R.drawable.nic_roadcone);
+        icones.add(R.drawable.nic_shark);
+        icones.add(R.drawable.nic_skate);
+        icones.add(R.drawable.nic_tooth);
+        icones.add(R.drawable.nic_tree);
+        icones.add(R.drawable.nic_tshirt);
+        icones.add(R.drawable.nic_apple);
+        icones.add(R.drawable.nic_basket);
+        icones.add(R.drawable.nic_carrot);
+        icones.add(R.drawable.nic_coffee);
+        icones.add(R.drawable.nic_coffee2);
+        icones.add(R.drawable.nic_comment);
+        icones.add(R.drawable.nic_comment2);
+        icones.add(R.drawable.nic_document);
+        icones.add(R.drawable.nic_email);
+        icones.add(R.drawable.nic_eraser);
+        icones.add(R.drawable.nic_floppy);
+        icones.add(R.drawable.nic_headphones);
+        icones.add(R.drawable.nic_icecream);
+        icones.add(R.drawable.nic_laptop);
+        icones.add(R.drawable.nic_layers);
+        icones.add(R.drawable.nic_map);
+        icones.add(R.drawable.nic_map_pin);
+        icones.add(R.drawable.nic_pencil);
+        icones.add(R.drawable.nic_ruler);
+        icones.add(R.drawable.nic_screwdriver);
+        icones.add(R.drawable.nic_search);
+        icones.add(R.drawable.nic_suchi);
+        icones.add(R.drawable.nic_tooth);
+        icones.add(R.drawable.nic_website);
+
+
+
+
         return icones;
     }
 

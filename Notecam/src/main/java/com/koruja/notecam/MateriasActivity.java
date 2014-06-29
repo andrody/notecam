@@ -301,6 +301,7 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
         final LinearLayout sobre = (LinearLayout)findViewById(R.id.menu_option_sobre);
         final LinearLayout ajuda = (LinearLayout)findViewById(R.id.menu_option_ajuda);
         final LinearLayout premium = (LinearLayout)findViewById(R.id.menu_option_premium);
+        final LinearLayout twitter = (LinearLayout)findViewById(R.id.menu_option_twitter);
         final TextView pro = (TextView)findViewById(R.id.pro);
         //final LinearLayout notecam = (LinearLayout)findViewById(R.id.notecam);
 
@@ -310,6 +311,7 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
         lista_options_menu.add(sobre);
         lista_options_menu.add(ajuda);
         lista_options_menu.add(premium);
+        lista_options_menu.add(twitter);
 
 
         if(!Singleton.isPaidVersion()) {
@@ -347,6 +349,12 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
                     if(view.equals(ajuda) ) {
                         startActivity(new Intent(Intent.ACTION_VIEW,
                                 Uri.parse("http://notecam.co/help")));
+                    }
+
+                    //Se clicou na opção Sobre nós, vai para o site da koruja
+                    if(view.equals(twitter) ) {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://twitter.com/Notecam")));
                     }
 
                     //Se clicou na opção Virar Premium, vai para o site da koruja
