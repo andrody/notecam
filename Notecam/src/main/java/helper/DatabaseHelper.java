@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.text.format.Time;
-import android.util.Log;
+//import android.util.Log;
 
 import com.koruja.notecam.MateriasActivity;
 import com.koruja.notecam.R;
@@ -238,7 +238,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_SUBJECT + " WHERE "
                 + KEY_ID + " = " + subject_id;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -266,7 +266,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Materia> materias = new ArrayList<Materia>();
         String selectQuery = "SELECT  * FROM " + TABLE_SUBJECT;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -383,7 +383,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_CLASS + " WHERE "
                 + KEY_CLASS_SUBJECTID + " = " + subject_id;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -500,7 +500,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_TOPICO + " WHERE "
                 + KEY_ID + " = " + topico_id;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -528,7 +528,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Topico> topicos = new ArrayList<Topico>();
         String selectQuery = "SELECT  * FROM " + TABLE_TOPICO;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -584,7 +584,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_TOPICO + " WHERE "
                 + KEY_TOPICO_SUBJECT + " = " + subject_id + " ORDER BY " + KEY_CREATED_AT + " DESC";
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -599,7 +599,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 topico.setNumber((c.getInt(c.getColumnIndex(KEY_TOPICO_NUMBER))));
                 topico.setSubject_id((c.getInt(c.getColumnIndex(KEY_TOPICO_SUBJECT))));
                 topico.setCreatedAt(c.getInt(c.getColumnIndex(KEY_CREATED_AT)));
-                Log.e(LOG, "Topico " + topico.getName() + " - Criado em " + topico.getCreatedAt());
+                //Log.e(LOG, "Topico " + topico.getName() + " - Criado em " + topico.getCreatedAt());
 
                 // adding to subject list
                 topicos.add(topico);
@@ -714,7 +714,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_FOTO + " WHERE "
                 + KEY_ID + " = " + foto_id;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -749,7 +749,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Foto> fotos = new ArrayList<Foto>();
         String selectQuery = "SELECT  * FROM " + TABLE_FOTO + " ORDER BY " + KEY_CREATED_AT + " ASC";
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -810,7 +810,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_FOTO + " WHERE "
                 + KEY_FOTO_TOPICO + " = " + topico_id + " ORDER BY " + KEY_CREATED_AT + " ASC";
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

@@ -17,7 +17,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.SlowViewPager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
+//import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -72,7 +72,7 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
     Handler handler = new Handler();
 
     //Refresh a cada 30 segundos
-    Runnable timedTask = new Runnable(){
+    /*Runnable timedTask = new Runnable(){
 
         @Override
         public void run() {
@@ -86,10 +86,10 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
                 }
             }
             else MateriasActivity.this.checarHorario();
-            Log.e("LOG", "checando horario");
+            //Log.e("LOG", "checando horario");
             handler.postDelayed(timedTask, 10000);
         }
-    };
+    };*/
 
     // ----------------------------------------------------------//
     // --------------------  Override Methods ---------------//
@@ -150,7 +150,7 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
 
         checarHorario();
 
-        timedTask.run();
+        //timedTask.run();
 
         //Fazer o StatusBar como Overlay
         WindowManager.LayoutParams params = getWindow().getAttributes();

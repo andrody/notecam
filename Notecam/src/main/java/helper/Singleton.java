@@ -451,7 +451,7 @@ public class Singleton {
                 new String[]{foto.getPath()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String path, Uri uri) {
-                        Log.d("LOG", "scanned : " + path);
+                        //Log.d("LOG", "scanned : " + path);
                         foto.setUri(uri);
                         foto.save();
 
