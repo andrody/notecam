@@ -213,7 +213,7 @@ public class PdfCreator {
             PdfPCell cell2 = new PdfPCell();
             cell2.setBorderWidth(0);
             Phrase nome = new Phrase(topico.getName(), font_topico);
-            Phrase numero_fotos = new Phrase("   (" + topico.getFotos().size() + Singleton.getMateriasActivity().getString(R.string.fotos) + ")", font_black_transparente_14);
+            Phrase numero_fotos = new Phrase("   (" + topico.getFotos().size() + " " + Singleton.getMateriasActivity().getString(R.string.fotos) + ")", font_black_transparente_14);
             Paragraph p2 = new Paragraph(new Phrase(topico.getName(), font_topico));
             p2.add(numero_fotos);
             cell2.addElement(p2);

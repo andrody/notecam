@@ -97,6 +97,9 @@ public class Foto {
     public void delete() {
         Singleton.getDb().deleteFoto(this);
     }
+    public void delete_safe() {
+        Singleton.getDb().deleteFotoSafe(this);
+    }
 
 
 

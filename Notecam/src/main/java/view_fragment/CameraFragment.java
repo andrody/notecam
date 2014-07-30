@@ -12,6 +12,7 @@ import android.hardware.Camera.Face;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -172,4 +173,6 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment i
         drawable.setColorFilter(Singleton.getMateria_selecionada().getColor(), PorterDuff.Mode.SRC_ATOP);
 
     }
+
+
 }

@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.SlowViewPager;
 import android.support.v4.view.ViewPager;
@@ -29,14 +30,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import Adapters.PagerAdapter;
 import helper.DatabaseHelper;
 import helper.Singleton;
+import helper.TrackerName;
 import model.Aula;
 import model.Materia;
 import view_fragment.MateriasFragment;
@@ -57,6 +64,7 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
     private boolean emptyFragments = false;
     private boolean primeira_vez = true;
     private int mPosition;
+    HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
     //Cria uma nova conexão com o Banco de Dados
     private DatabaseHelper db = new DatabaseHelper(this);
@@ -72,7 +80,7 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
     Handler handler = new Handler();
 
     //Refresh a cada 30 segundos
-    /*Runnable timedTask = new Runnable(){
+    Runnable timedTask = new Runnable(){
 
         @Override
         public void run() {
@@ -87,9 +95,9 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
             }
             else MateriasActivity.this.checarHorario();
             //Log.e("LOG", "checando horario");
-            handler.postDelayed(timedTask, 10000);
+            handler.postDelayed(timedTask, 30000);
         }
-    };*/
+    };
 
     // ----------------------------------------------------------//
     // --------------------  Override Methods ---------------//
@@ -97,8 +105,35 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (Singleton.DEVELOPER_MODE) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()   // or .detectAll() for all detectable problems
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build());
+        }
+
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // Get tracker.
+        Tracker t = this.getTracker(TrackerName.APP_TRACKER);
+
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        t.setScreenName("APP_TRACKER");
+
+        // Send a screen view.
+        t.send(new HitBuilders.AppViewBuilder().build());
+
+        //Fim Tracker
 
         setContentView(R.layout.activity_main);
 
@@ -150,7 +185,8 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
 
         checarHorario();
 
-        //timedTask.run();
+        Thread thread = new Thread(timedTask);
+        thread.run();
 
         //Fazer o StatusBar como Overlay
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -268,10 +304,28 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
     // --------------------  General Methods ---------------//
     // ----------------------------------------------------------//
 
+
+    /*
+    * Google Analitics
+    */
+    public synchronized Tracker getTracker(TrackerName trackerId) {
+        if (!mTrackers.containsKey(trackerId)) {
+
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(Singleton.PROPERTY_ID)
+                    : analytics.newTracker(R.xml.global_tracker);
+
+            mTrackers.put(trackerId, t);
+
+        }
+        return mTrackers.get(trackerId);
+    }
+
     /*
      Procura em cada classe de cada subject se  o horario atual bate com o horario de alguma aula
      (Ele para na primeira aula encontrada que bate)
      */
+
     public void checarHorario(){
         Aula aula = null;
         java.util.List<Materia> materias = db.getAllSubjects();
@@ -283,7 +337,7 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
                 if(primeira_vez){
                     moveFragmentPager(1);
                 }
-                else Toast.makeText(this, getString(R.string.em_aula_de) + m.getName(), Toast.LENGTH_SHORT).show();
+                else Toast.makeText(this, getString(R.string.em_aula_de) + " " +  m.getName(), Toast.LENGTH_SHORT).show();
 
                 //if(Singleton.materiasFragment != null) Singleton.materiasFragment.updateSubTitle();
                 break;
@@ -342,13 +396,13 @@ public class MateriasActivity extends Activity implements ViewPager.OnPageChange
                     //Se clicou na opção Sobre nós, vai para o site da koruja
                     if(view.equals(sobre)) {
                         startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("http://notecam.co/about")));
+                                Uri.parse("http://notecam.co")));
                     }
 
                     //Se clicou na opção Sobre nós, vai para o site da koruja
                     if(view.equals(ajuda) ) {
                         startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("http://notecam.co/help")));
+                                Uri.parse("http://www.reddit.com/r/notecam")));
                     }
 
                     //Se clicou na opção Sobre nós, vai para o site da koruja

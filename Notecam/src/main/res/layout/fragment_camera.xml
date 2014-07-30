@@ -67,8 +67,9 @@
         android:adjustViewBounds="false"
         android:id="@+id/change_flash"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp" />
+        android:layout_alignParentRight="true" />
 
     <ImageView
         android:layout_width="100dp"
@@ -100,7 +101,8 @@
         android:layout_alignParentEnd="true"
         android:baselineAlignBottom="false"
         android:adjustViewBounds="false"
-        android:id="@+id/go_to_topicos" />
+        android:id="@+id/go_to_topicos"
+        android:layout_alignParentRight="true" />
 
     <ImageView
         android:layout_width="100dp"

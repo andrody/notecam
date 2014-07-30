@@ -88,6 +88,7 @@ public class GaleriaAdapter extends BaseAdapter {
             exif = new ExifInterface(item.getPath());
             byte[] imageData=exif.getThumbnail();
 
+            boolean outofmemory = false;
 
             Bitmap thumbnail = null;
 
@@ -101,16 +102,22 @@ public class GaleriaAdapter extends BaseAdapter {
                 }catch (SecurityException e) {
                     e.printStackTrace();
                     Toast.makeText(Singleton.getMateriasActivity(), context.getString(R.string.erro_ao_carregar_imagem), Toast.LENGTH_SHORT).show();
+                }catch (OutOfMemoryError e) {
+                    e.printStackTrace();
+                    outofmemory = true;
+                    Toast.makeText(Singleton.getMateriasActivity(), context.getString(R.string.erro_ao_carregar_imagem), Toast.LENGTH_SHORT).show();
                 }
             }
 
             //Se imagem foi deletada por algum motivo
             if (imageData == null && thumbnail == null) {
-                item.delete();
-                Singleton.getTopico_selecionado().popularFotos();
-                fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
-                //Singleton.getGaleriaFragment().reload();
-                this.notifyDataSetChanged();
+                if(!outofmemory) {
+                    item.delete_safe();
+                    Singleton.getTopico_selecionado().popularFotos();
+                    fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
+                    //Singleton.getGaleriaFragment().reload();
+                    this.notifyDataSetChanged();
+                }
             }
             else {
 
@@ -130,6 +137,11 @@ public class GaleriaAdapter extends BaseAdapter {
 
         } catch (IOException e) {
             e.printStackTrace();
+
+            //Se deletou arquivo fora do notecam
+            item.delete_safe();
+            Singleton.getTopico_selecionado().popularFotos();
+            fotos = (ArrayList<Foto>) Singleton.getTopico_selecionado().getFotos();
         }
 
 

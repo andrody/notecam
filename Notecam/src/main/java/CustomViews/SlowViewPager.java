@@ -19,7 +19,11 @@ public class SlowViewPager extends ViewPager {
 
     @Override
     void setCurrentItemInternal(int item, boolean smoothScroll, boolean always) {
-        setCurrentItemInternal(item, smoothScroll, always, VELOCITY);
+        try {
+            setCurrentItemInternal(item, smoothScroll, always, VELOCITY);
+        }catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
 }

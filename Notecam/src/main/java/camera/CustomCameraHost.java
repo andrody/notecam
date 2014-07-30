@@ -1,10 +1,12 @@
 package camera;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
+import com.koruja.notecam.R;
 
 import java.io.File;
 
@@ -30,6 +32,9 @@ public class CustomCameraHost extends SimpleCameraHost {
 
         Foto foto = new Foto(getPhotoName(), getPhotoDirectory() + "/" + getPhotoFilename(), Singleton.getTopico_selecionado());
         Singleton.escanear_foto(foto, Singleton.getTopico_selecionado());
+
+
+        Singleton.toast(Singleton.getMateriasActivity().getString(R.string.foto_salva));
     }
 
     @Override
@@ -53,5 +58,10 @@ public class CustomCameraHost extends SimpleCameraHost {
     @Override
     protected boolean scanSavedImage() {
         return false;
+    }
+
+    @Override
+    public float maxPictureCleanupHeapUsage() {
+        return 0.9f;
     }
 }

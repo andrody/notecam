@@ -23,7 +23,8 @@
     <string name="generating_pdf">Generating PDF…</string>
     <string name="digite_nome_topico">Type the topic name</string>
     <string name="falha_somente_selecione_arquivos_locais">Error! Select only local files.</string>
-    <string name="erro_ao_carregar_imagem">Erro loading image. Deleting image...</string>
+    <string name="erro_ao_carregar_imagem">Error when loading image. Sorry!</string>
+    <string name="erro_ao_carregar_imagem_memory">Error when loading image. No memory avaliable, sorry!</string>
     <string name="pronto">Save</string>
     <string name="editar_materia">Edit Subject</string>
     <string name="select_a_color">Select the color</string>
@@ -79,6 +80,7 @@
     <string name="ajuda">Help</string>
     <string name="geral">General</string>
     <string name="twitter">Twitter</string>
+    <string name="foto_salva">Photo Saved</string>
 
 
 </resources>

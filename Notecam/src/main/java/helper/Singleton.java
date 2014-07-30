@@ -10,15 +10,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -47,6 +52,7 @@ public class Singleton {
     public static String ID_BANNER_1 = "ca-app-pub-5295640122765680/7055771450";
 
     public static String TITLE = "title";
+    public static boolean DEVELOPER_MODE = false;
     public static String REPLACE_FRAGMENT = "replace_fragment";
     public static String MATERIA = "materia";
     public static String MATERIA_ID = "materia_id";
@@ -64,6 +70,7 @@ public class Singleton {
 
 
     public static String PRO_VERSION_PACKAGE = "com.korujastudios.notecamprokey";
+    public static String PROPERTY_ID = "UA-52480230-1";
     public static String FRAGMENT_TYPE_MATERIA = "fragment_materia";
 
     public static int DIRECT_EDIT_SUBJECT = 0;
@@ -138,6 +145,24 @@ public class Singleton {
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    /**
+     * @return screen size int[width, height]
+     *
+     * */
+    public static int[] getScreenSize(){
+        Point size = new Point();
+        WindowManager w = getMateriasActivity().getWindowManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2){
+            w.getDefaultDisplay().getSize(size);
+            return new int[]{size.x, size.y};
+        }else{
+            Display d = w.getDefaultDisplay();
+            //noinspection deprecation
+            return new int[]{d.getWidth(), d.getHeight()};
+        }
     }
 
 
@@ -458,8 +483,16 @@ public class Singleton {
                         if (topico != null)
                             topico.popularFotos();
 
-                        BaseAdapter adapter = (BaseAdapter) getTopicosFragment().getLista().getAdapter();
-                        adapter.notifyDataSetChanged();
+                        getMateriasActivity().runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                BaseAdapter adapter = (BaseAdapter) getTopicosFragment().getLista().getAdapter();
+                                adapter.notifyDataSetChanged();
+
+                            }
+                        });
+
 
                         if (getGaleriaFragment() != null)
                             getGaleriaFragment().reload();
@@ -467,6 +500,18 @@ public class Singleton {
                 }
         );
 
+    }
+
+    public static void toast(final String text) {
+        getMateriasActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                Toast.makeText(Singleton.getMateriasActivity(), text, Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
     }
 
     public static void showProgressDialog(String mensagem) {

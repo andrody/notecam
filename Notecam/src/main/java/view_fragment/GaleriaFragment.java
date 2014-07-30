@@ -58,7 +58,13 @@ public class GaleriaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        galeriaAdapter.notifyDataSetChanged();
+        /*getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                galeriaAdapter.notifyDataSetChanged();
+            }
+        });*/
         setFakeActionModeOn(false);
     }
 

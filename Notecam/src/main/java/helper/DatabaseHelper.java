@@ -706,6 +706,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
+   * Deleting foto
+   */
+    public void deleteFotoSafe(Foto foto) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        assert db != null;
+        db.delete(TABLE_FOTO, KEY_ID + " = ?",
+                new String[] { String.valueOf(foto.getId()) });
+    }
+
+    /*
     * get single foto
     */
     public Foto getFoto(long foto_id) {

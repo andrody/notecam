@@ -43,9 +43,11 @@ public class AddMateriaFragment extends Fragment implements View.OnClickListener
             childFragmentManager.set(this, null);
 
         } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
 

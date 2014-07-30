@@ -23,7 +23,9 @@
     <string name="generating_pdf">Gerando PDF…</string>
     <string name="digite_nome_topico">Digite o nome do Tópico</string>
     <string name="falha_somente_selecione_arquivos_locais">Falha! Selecione somente arquivos locais.</string>
-    <string name="erro_ao_carregar_imagem">Erro ao carregar uma imagem, excluindo ela...</string>
+    <string name="erro_ao_carregar_imagem">Erro ao carregar uma imagem. Foi mal!</string>
+    <string name="erro_ao_carregar_imagem_memory">Erro ao carregar uma imagem, sem memória disponível, foi mal!!</string>
+
     <string name="pronto">Pronto</string>
     <string name="editar_materia">Editar Matéria</string>
     <string name="select_a_color">Selecione uma cor</string>
@@ -78,6 +80,7 @@
     <string name="tutorial_3">Quando for estudar veja suas fotos ou gere um PDF</string>
     <string name="ajuda">Ajuda</string>
     <string name="geral">Geral</string>
+    <string name="foto_salva">Foto salva</string>
 
 
 </resources>
